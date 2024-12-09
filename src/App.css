@@ -1,0 +1,22 @@
+#root {
+  --black: #333333 ;
+  
+}
+
+li{
+  list-style: none;
+}
+
+a{
+  text-decoration: none;
+}
+
+a:visited{
+  color: inherit;
+}
+
+img:not(.logo, .button-cart img, .search-cont img, .user-cont img){
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+}

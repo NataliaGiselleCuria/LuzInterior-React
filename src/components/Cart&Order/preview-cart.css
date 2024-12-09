@@ -1,0 +1,66 @@
+#preview-cart {
+    position: absolute;
+    position: fixed;
+    z-index: 98;
+    width: 100vw;
+    height: 100%;
+    top: 0;
+    background-color: #0000002b;
+    display: flex;
+    justify-content: flex-end;
+    overflow: hidden;
+    transition: opacity 0.5s ease; /* Controla el fade */
+}
+
+#preview-cart.hidden {
+    opacity: 0; /* Oculta el componente cuando está en estado de cierre */
+    pointer-events: none; /* Desactiva la interacción cuando está oculto */
+}
+
+#preview-cart.visible {
+    opacity: 1;
+}
+
+.prev-cart-content {
+    position: relative;
+    overflow: scroll;
+    z-index: 99;
+    width: 20%;
+    height: 100%;
+    background-color: white;
+    right: -100%;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+}
+
+#preview-cart.show .prev-cart-content {
+    animation-name: openCart;
+}
+
+#preview-cart.hide .prev-cart-content {
+    animation-name: closeCart;
+}
+
+@keyframes openCart {
+    from {
+        right: -100%;
+    }
+    to {
+        right: 0;
+    }
+}
+
+@keyframes closeCart {
+    from {
+        right: 0;
+    }
+    to {
+        right: -100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .prev-cart-content {
+        width: 80%;
+    }
+}
