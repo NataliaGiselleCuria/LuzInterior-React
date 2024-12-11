@@ -83,6 +83,10 @@ ul.dropdown-search li:last-child {
     margin-bottom: 10px;
 }
 
+.dropdown-item:hover{
+    color: black!important;
+}
+
 .navbar-toggler, .navbar-toggler:focus{
     outline: none!important;
     border: none!important;

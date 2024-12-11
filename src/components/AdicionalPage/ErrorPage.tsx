@@ -7,7 +7,7 @@ const ErrorPage = () => {
     const message = location.state?.message || 'Algo salió mal';
 
   return (
-    <div>
+    <div className="cont container">
       <h1>ERROR</h1>
       <h2>{message}</h2>
       <p>Lo sentimos, no pudimos encontrar lo que buscabas.</p>

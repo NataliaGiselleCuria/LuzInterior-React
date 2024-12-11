@@ -20,7 +20,7 @@ const PasswordRecover = () => {
   };
 
   return (
-    <div>
+    <div className="cont container">
       <h2>Recuperar contraseña</h2>
       <form onSubmit={handleSubmit(handleRecover)}>
         <p>Ingrese su email</p>

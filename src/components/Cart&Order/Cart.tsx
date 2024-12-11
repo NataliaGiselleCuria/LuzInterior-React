@@ -8,7 +8,7 @@ const Cart = () => {
   const { totalPrice } = useCart();
  
   return (
-    <div>
+    <div className="cont container">
       <h2>Carrito</h2>
       <div>
       <ProductsInCart></ProductsInCart>

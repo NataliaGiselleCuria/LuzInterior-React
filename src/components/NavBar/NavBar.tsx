@@ -1,18 +1,13 @@
 
-import { Link } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'
 import { useApi } from '../../context/ApiProvider'
-import { useState } from 'react';
-import { Product } from '../../Interfaces/interfaces';
-import cartImg from '../../assets/cart2.png'
-import userImg from '../../assets/user.png'
-
-
-import logo from '../../assets/logo.png' // reemplazar cuando tengas el png original
-import './navBar.css'
 import { useCart } from '../../context/CartProvider';
 import { useUser } from '../../context/UserContext';
 import SearchBar from '../Tools/SearchBar';
+import logo from '../../assets/logo.png' // reemplazar cuando tengas el png original
+import cartImg from '../../assets/cart2.png'
+import userImg from '../../assets/user.png'
+import './navBar.css'
 
 export interface NavBarProps {
     openCart: () => void;
@@ -98,8 +93,6 @@ const NavBar: React.FC<NavBarProps> = ({ openCart }) => {
                                 <SearchBar products={products}/>
                             </li>
                         </ul>
-
-
                     </div>
                 </span>
                 <span className='icons-navbar'>

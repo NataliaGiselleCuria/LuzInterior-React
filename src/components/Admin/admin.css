@@ -1,0 +1,72 @@
+
+
+/* lista de productos */
+.search-container{
+    display: flex;
+    justify-content: center;
+}
+
+.admin-prod-search{
+    width: 95%;
+    margin: auto; 
+}
+
+.list-products{
+    width: 95%;
+    margin: auto;
+    padding: 0;
+}
+
+.li-product{
+ border-bottom: 1px solid rgb(212, 210, 210);
+ padding: 20px;
+ margin: 16px 0;
+}
+
+.li-product-cont {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.li-product-cont-info{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.li-product-cont-description{
+    display: flex;
+    flex-direction: column;
+}
+
+.li-product-cont .ul-row-nopadding{
+    height: 200px;
+    width: 100%;
+    overflow: auto;
+    padding: 10px 0;
+    margin-bottom: 6px;
+}
+
+.li-product-cont .ul-row-nopadding li{
+    width: 250px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.priority-mark{
+    position: absolute;
+    background-color: white;
+    padding: 2px 5px;
+    border: 1px solid grey;
+    bottom: 0;
+    right: 0;
+}
+
+/* Agregar productos */
+
+.add-prod span{
+    display: flex;
+    gap: 6px
+}

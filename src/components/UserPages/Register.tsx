@@ -43,7 +43,7 @@ const Register = () => {
     };
 
     return (
-        <div>
+        <div className="cont container">
             <h2>Nuevo usuario</h2>
             <p>¿Ya tienes un usuario?<span><Link to='/mayoristas'>Iniciar sesión</Link></span></p>
             <form onSubmit={handleSubmit(handleRegister)}>

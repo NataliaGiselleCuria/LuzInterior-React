@@ -4,7 +4,8 @@ import { useCart } from "../../context/CartProvider";
 import QuantitySelector from "./QuantitySelector";
 import useCurrencyFormat from "../CustomHooks/currencyFormat";
 import { useUser } from "../../context/UserContext";
-
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 const ProductsInCart = () => {
 
@@ -25,7 +26,7 @@ const ProductsInCart = () => {
 
           return (
             <li key={item.product.id}>
-              <img src={`${dev}${item.product.img_url[0].url}`} alt={item.product.name} />
+              <LazyLoadImage src={`${dev}${item.product.img_url[0].url}`} alt={item.product.name} />
               <h3>{item.product.name}</h3>
               {isLogin && <p>Precio unitario: {formatCurrency(item.product.price)}</p>}
               

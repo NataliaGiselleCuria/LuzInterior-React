@@ -148,7 +148,7 @@ const CheckOut = () => {
   };
 
   return (
-    <div>
+    <div className="cont container">
       <h2>Generar orden de pedido</h2>
       {(!isLogin) ?
         <>

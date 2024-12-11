@@ -5,6 +5,8 @@ import { useCart } from "../../context/CartProvider";
 import { useState } from "react";
 import { useUser } from "../../context/UserContext";
 import useCurrencyFormat from "../CustomHooks/currencyFormat";
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 interface ProductItemProps {
     openCart: () => void;
@@ -47,7 +49,7 @@ const ProductItem: React.FC < ProductItemProps > = ({ openCart }) => {
             <p><Link to='/'>Inicio</Link>/<Link to={`/productos/categoria/${productItem.category}`}>{productItem.category}</Link>/<span>{productItem.name}</span></p>
             <h2> { productItem.id }</h2>
             <div>
-            <img src={`${dev}${productItem.img_url[0].url}`} alt={productItem.name} />
+            <LazyLoadImage src={`${dev}${productItem.img_url[0].url}`} alt={productItem.name} />
                 <h3>{productItem.name}</h3>
                 <h4>{productItem.id}</h4>
                 {isLogin && <p>Precio: {formatCurrency(productItem.price)}</p>}

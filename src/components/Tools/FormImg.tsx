@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { FormImgsProduct } from "../../Interfaces/interfaces";
 import SortableImageList from "./SortableImagesList";
 import { useApi } from "../../context/ApiProvider";
+import './tools.css'
 
 interface ImageFormProps {
   productId: string;
@@ -89,11 +90,10 @@ const FormImg: React.FC<ImageFormProps> = ({ productId, setData }) => {
   }, [productId, products, dev]);
 
 return (
-  <div>
-    <h2>Subir Imágenes</h2>
+  <div className="ul-row-nopadding img-form">
+    <h4>Subir Imágenes</h4>
     <form onSubmit={addImage}>
       <div>
-        <label htmlFor="file">Subir imagen:</label>
         <input
           type="file"
           id="url"

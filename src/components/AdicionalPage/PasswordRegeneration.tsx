@@ -48,7 +48,7 @@ const PasswordRegeneration = () => {
   };
 
   return (
-    <div>
+    <div className="cont container">
       <h2>Restablecer contraseña</h2>
       {token ? (
         <form onSubmit={handleSubmit(handleResetPassword)}>

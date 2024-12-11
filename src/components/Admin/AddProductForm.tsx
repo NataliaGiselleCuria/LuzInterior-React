@@ -7,6 +7,7 @@ import { useProduct } from "../../context/ProductProvider";
 import ModalMesagge from "../Tools/ModalMesagge";
 import useModal from "../CustomHooks/modal";
 import useVerifyToken from "../CustomHooks/verefyToken";
+import './admin.css'
 
 
 const AddProductForm = () => {
@@ -107,33 +108,35 @@ const AddProductForm = () => {
 
     return (
         <>
-            <form>
+            <form className="add-prod">
                 <p>Categorias actuales:</p>
-                <ul>
+                <ul className="ul-row-nopadding">
                     {categories.map((category, index) => (
                         <li key={index}>{category}</li>
                     ))}
                 </ul>
+                <div className="ul-row-nopadding">
                 <span>
-                    <label htmlFor="id">Identificador único</label>
+                    <label htmlFor="id">ID: </label>
                     <input id="id" type="text" {...register('id', { required: true })}></input>
                 </span>
                 <span>
-                    <label htmlFor="name">Nombre</label>
+                    <label htmlFor="name">Nombre: </label>
                     <input id="name" type="text" {...register('name', { required: true })}></input>
                 </span>
                 <span>
-                    <label htmlFor="category">Categoría</label>
+                    <label htmlFor="category">Categoría: </label>
                     <input id="category" type="text" {...register('category', { required: true })}></input>
                 </span>
                 <span>
-                    <label htmlFor="price">Precio</label>
+                    <label htmlFor="price">Precio: </label>
                     <input id="price" type="number" {...register('price', { required: true })}></input>
                 </span>
-                <span>
-                    <label htmlFor="description">Descripción</label>
-                    <input id="description" type="text" {...register('description', { required: true })}></input>
-                </span>
+                </div>
+                <div className="li-product-cont-description">
+                    <label htmlFor="description">Descripción: </label>
+                    <textarea id="description" {...register('description', { required: true })}></textarea>
+                </div>
             </form>
             <button type="button" onClick={addImg}>Agregar imagenes</button>
             {productId && (

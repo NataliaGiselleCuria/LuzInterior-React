@@ -1,5 +1,9 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
+import trash from '../../assets/trash.png'
+import './tools.css'
 
 interface SortableItemProps {
   id: string;
@@ -25,17 +29,19 @@ const SortableItem: React.FC<SortableItemProps> = ({ id, img, onRemove }) => {
   };
 
   return (
-    <>
-    <li key={img.id} ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <img
-        src={img.preview}
-        alt={`Imagen ${img.priority}`}
-        style={{ width: "50px", height: "50px", objectFit: "cover" }}
-      />
-      <span>Prioridad: {img.priority}</span> 
-    </li>
-     <button onClick={() => {onRemove(img.id)}}> Eliminar </button>
-   </>
+    <div className="li-img-prod">
+      <li key={img.id} ref={setNodeRef} style={style} {...attributes} {...listeners}>
+        <LazyLoadImage
+          className='img-prod'
+          src={img.preview}
+          alt={`Imagen ${img.priority}`}
+        />
+        <span>Prioridad: {img.priority}</span>
+      </li>
+      <button onClick={() => { onRemove(img.id) }}>
+        <img className="el-100w el-100h fix-img" src={trash} alt="eliminar"></img>
+        </button>
+    </div>
   );
 };
 

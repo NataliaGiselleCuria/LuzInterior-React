@@ -2,7 +2,7 @@
 
 const ListaDePrecios = () => {
   return (
-    <div>
+    <div className="cont container">
       <h2>Lista de precios</h2>
     </div>
   )

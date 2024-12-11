@@ -14,7 +14,7 @@ const OrdersUser = () => {
   }, [isLogin, navigate]);
 
   return (
-    <div>
+    <div className="cont container">
       <h2>Tus pedidos</h2>
     </div>
   )

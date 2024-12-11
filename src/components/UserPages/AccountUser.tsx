@@ -87,7 +87,7 @@ const AccountUser = () => {
   }, [isLogin, navigate]);
 
   return (
-    <div>
+    <div className="cont container">
       <h3>{userActive?.name}</h3>
       <h2>Mi cuenta</h2>
       <div>

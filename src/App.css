@@ -13,10 +13,35 @@ a{
 
 a:visited{
   color: inherit;
+  background-color: none;
 }
 
-img:not(.logo, .button-cart img, .search-cont img, .user-cont img){
-  width: 200px;
-  height: 200px;
+a:active{
+  color: black;
+  background: white!important;
+}
+
+.ul-row-nopadding{
+  display: flex;
+  padding: 0;
+  gap: 10px;
+}
+
+.el-100h{
+  height: 100%;
+}
+
+.el-100w{
+  width: 100%;
+}
+
+.fix-img{
   object-fit: contain;
+}
+
+
+@media (min-width: 1400px) {
+  .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
+      max-width: 1520px;
+  }
 }

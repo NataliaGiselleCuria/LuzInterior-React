@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { AdminProducts } from "./AdminProducts";
-
+import './admin.css';
 
 export const AdminPanel = () => {
 
@@ -21,10 +21,10 @@ export const AdminPanel = () => {
     }
     
     return (
-        <>
+        <div className="cont container">
             <h3>AdminPanel</h3>
             <div className="nav-opc">
-                <ul>
+                <ul className="ul-row-nopadding">
                    <li><button onClick={() =>setSelectedOption('cuenta')}>Cuenta</button></li>
                    <li><button onClick={() =>setSelectedOption('usuarios')}>Usuarios</button></li>
                    <li><button onClick={() =>setSelectedOption('pedidos')}>Pedidos</button></li>
@@ -34,6 +34,6 @@ export const AdminPanel = () => {
             <div className="opc-render">
             {selectedOption && renderOpc(selectedOption)} 
             </div>
-        </>
+        </div>
     )
 }

@@ -31,7 +31,7 @@ const Wholesalers = () => {
   };
 
   return (
-    <div>
+    <div className="cont container">
       <div>
         {!isLogin ?
           <>

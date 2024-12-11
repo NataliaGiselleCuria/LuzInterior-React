@@ -22,13 +22,14 @@ export const AdminProducts = () => {
                         <div className="accordion-body">
                             <div className="search-container">
                                 <input
+                                    className="admin-prod-search"
                                     type="text"
                                     value={searchQuery}
                                     onChange={handleSearchChange}
                                     placeholder="Buscar productos..."
                                 />
                             </div>
-                            <ul>
+                            <ul className="list-products">
                                 {filteredProducts.map((prod) => (
                                     <ItemListProduct key={prod.id} product={prod} />
                                 ))}

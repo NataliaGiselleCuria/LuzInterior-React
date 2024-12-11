@@ -171,47 +171,52 @@ const ItemListProduct = ({ product }: ItemListProductProps) => {
 
   return (
     <>
-      <li>
+      <li className="li-product">
         {!isEditingProduct && !isEditingImages ? (
           <>
-            <div>
-              <div>
-                <span>{product.id}</span>
-                <span>{product.name}</span>
-                <span>{product.category}</span>
-                <span>{product.price}</span>
+            <div className="li-product-cont">
+              <div className="li-product-cont-info">
+                <span>ID: {product.id}</span>
+                <span>Nombre: {product.name}</span>
+                <span>Categoría: {product.category}</span>
+                <span>Precio: {product.price}</span>
               </div>
-              <div>
+              <div className="li-product-cont-description">
+                <span>Descripción:</span>
                 <span>{product.description}</span>
               </div>
               <div>
-                <ul>
+                <ul className="ul-row-nopadding">
                   {product.img_url.map((img, index) => (
-                    <li key={`${product.name} - ${index}`}>
-                      <img id={img.id_img} src={`${dev}${img.url}`} alt={`${product.name} - ${img.id_img}`} />
+                    <li className="el-100h " key={`${product.name} - ${index}`}>
+                      <img className="el-100h el-100w fix-img" id={img.id_img} src={`${dev}${img.url}`} alt={`${product.name} - ${img.id_img}`} />
+                      {img.priority === 1 &&
+                        <span className="priority-mark">Portada</span>
+                      }
                     </li>
                   ))}
                 </ul>
               </div>
             </div>
             <div>
-              <button onClick={() => deleteProduct(product.id)}>Eliminar</button>
               <button onClick={() => editProductInfo(product.id)}>Editar Información</button>
               <button onClick={() => editProductImages(product.id)}>Editar Imágenes</button>
             </div>
+            <button onClick={() => deleteProduct(product.id)}>Eliminar producto</button>
           </>
         ) : (
           <>
             {isEditingProduct && (
               <form>
-                <div>
-                  <input id="id" type="text" {...register('id', { required: true })} defaultValue={product.id}></input>
-                  <input id="name" type="text" {...register('name', { required: true })} defaultValue={product.name}></input>
-                  <input id="category" type="text" {...register('category', { required: true })} defaultValue={product.category}></input>
-                  <input id="price" type="number" {...register('price', { required: true })} defaultValue={product.price}></input>
+                <div className="li-product-cont-info">
+                  <span>ID: <input id="id" type="text" {...register('id', { required: true })} defaultValue={product.id}></input></span>
+                  <span>Nombre: <input id="name" type="text" {...register('name', { required: true })} defaultValue={product.name}></input></span>
+                  <span>Categoría: <input id="category" type="text" {...register('category', { required: true })} defaultValue={product.category}></input></span>
+                  <span>Precio: <input id="price" type="number" {...register('price', { required: true })} defaultValue={product.price}></input></span>
                 </div>
-                <div>
-                  <input id="description" type="text" {...register('description', { required: true })} defaultValue={product.description}></input>
+                <div className="li-product-cont-description">
+                  <span>Descripción:</span>
+                  <textarea id="description" {...register('description', { required: true })} defaultValue={product.description}></textarea>
                 </div>
                 <button type="submit" onClick={handleSubmit(onSubmitProductInfo)}>Guardar Información</button>
               </form>
@@ -219,13 +224,11 @@ const ItemListProduct = ({ product }: ItemListProductProps) => {
 
             {isEditingImages && (
               <div>
-                <div>
-                  <span>{product.id}</span>
-                  <span>{product.name}</span>
+                <div className="li-product-cont-info">
+                  <span>ID: {product.id}</span>
+                  <span>Nombre: {product.name}</span>
                 </div>
-                <ul>
-                  <FormImg productId={idEditingProduct} setData={setData} />
-                </ul>
+                <FormImg productId={idEditingProduct} setData={setData} />
                 <button type="button" onClick={() => onSubmitImages(data.images)}>Guardar Imágenes</button>
               </div>
             )}

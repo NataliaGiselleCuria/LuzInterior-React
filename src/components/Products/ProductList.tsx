@@ -2,7 +2,8 @@ import { Link, useParams } from "react-router-dom";
 import { useApi } from "../../context/ApiProvider"
 import { useUser } from "../../context/UserContext";
 import useCurrencyFormat from "../CustomHooks/currencyFormat";
-
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 const ProductList = () => {
 
@@ -16,7 +17,7 @@ const ProductList = () => {
         : products;
 
     return (
-        <div>
+        <div className="cont container">
             <h2>{category ? `${category}` : 'Todos los Productos'}</h2>
             {!category && (
                 <div>
@@ -37,7 +38,7 @@ const ProductList = () => {
                     
                         <li key={product.id}>
                             <Link to={`/productos/id/${product.id}`}>
-                                <img src={`${dev}${product.img_url[0]?.url}`} alt={product.name} />
+                                <LazyLoadImage src={`${dev}${product.img_url[0]?.url}`} alt={product.name} />
                                 <h3>{product.name}</h3>
                                 <h4>{product.id}</h4>
                                 {isLogin && <p>Precio: {formatCurrency(product.price)}</p>}

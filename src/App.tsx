@@ -10,19 +10,20 @@ import Cart from './components/Cart&Order/Cart';
 import Wholesalers from './components/UserPages/Wholesalers';
 import PasswordRecover from './components/AdicionalPage/PasswordRecover';
 import ErrorPage from './components/AdicionalPage/ErrorPage';
-
-import 'bootstrap/dist/css/bootstrap.css';
-import './App.css';
 import Register from './components/UserPages/Register';
 import PriceList from './components/UserPages/PriceList';
 import SuccessRegister from './components/AdicionalPage/SuccessRegister';
 import PasswordRegeneration from './components/AdicionalPage/PasswordRegeneration';
-import { useUser } from './context/UserContext';
 import AccountUser from './components/UserPages/AccountUser';
 import OrdersUser from './components/UserPages/OrdersUser';
 import CheckOut from './components/Cart&Order/CheckOut';
 import AdminRoute from './components/Admin/AdminRoute';
+
+import { useUser } from './context/UserContext';
 import { AdminPanel } from './components/Admin/AdminPanel';
+
+import 'bootstrap/dist/css/bootstrap.css';
+import './App.css';
 
 function App() {
   const { checkToken, getUserActive } = useUser();
