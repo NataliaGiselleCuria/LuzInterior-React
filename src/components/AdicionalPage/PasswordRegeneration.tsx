@@ -10,7 +10,7 @@ interface ResetPasswordInput {
 
 const PasswordRegeneration = () => {
 
-  const { dev, prod } = useApi();
+  const { dev } = useApi();
 
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token"); 

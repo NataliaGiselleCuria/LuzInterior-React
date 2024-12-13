@@ -4,7 +4,7 @@ import { useApi } from '../../context/ApiProvider'
 import { useCart } from '../../context/CartProvider';
 import { useUser } from '../../context/UserContext';
 import SearchBar from '../Tools/SearchBar';
-import logo from '../../assets/logo.png' // reemplazar cuando tengas el png original
+// import logo from '../../assets/logo.png' // reemplazar cuando tengas el png original
 import cartImg from '../../assets/cart2.png'
 import userImg from '../../assets/user.png'
 import './navBar.css'

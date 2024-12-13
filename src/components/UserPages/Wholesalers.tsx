@@ -4,9 +4,6 @@ import { useUser } from "../../context/UserContext"
 import { useState } from "react";
 import { LoginFormInputs } from "../../Interfaces/interfaces";
 
-interface Props {
-  msg:string
-}
 const Wholesalers = () => {
 
   const { isLogin, userLogin } = useUser();

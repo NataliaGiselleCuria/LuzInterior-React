@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const OrdersUser = () => {
 
-  const { isLogin, userActive } = useUser();
+  const { isLogin } = useUser();
   const navigate = useNavigate();
 
   useEffect(() => {

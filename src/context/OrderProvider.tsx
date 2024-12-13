@@ -14,7 +14,7 @@ interface Props {
 export const OrderProvider = ({ children }: Props) => {
 
     const { checkToken } = useUser();
-    const { dev, prod} = useApi();
+    const { dev} = useApi();
     const [order, setOrder] = useState<Order | null>(null);
 
     const addProductsToOrder = (user: Users, cart: ProductInCart[], totalPrice: number, address: Address, shipping: Shipping) => {

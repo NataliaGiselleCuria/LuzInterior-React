@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useUser } from "../../context/UserContext";
-import { useNavigate } from "react-router-dom";
 import { Address } from "../../Interfaces/interfaces";
 import useVerifyToken from "./verefyToken";
 

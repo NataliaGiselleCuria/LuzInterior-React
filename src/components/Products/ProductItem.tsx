@@ -15,7 +15,7 @@ interface ProductItemProps {
 const ProductItem: React.FC < ProductItemProps > = ({ openCart }) => {
 
     const { isLogin } = useUser();
-    const { products, dev, prod } = useApi();
+    const { products, dev } = useApi();
     const { addToCart} = useCart();
 
     const formatCurrency = useCurrencyFormat();

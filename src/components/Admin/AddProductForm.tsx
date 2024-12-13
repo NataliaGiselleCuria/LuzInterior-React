@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { FormImgsProduct, FormProduct, Product } from "../../Interfaces/interfaces";
+import { FormImgsProduct, FormProduct} from "../../Interfaces/interfaces";
 import { useState } from "react";
 import FormImg from "../Tools/FormImg";
 import { useApi } from "../../context/ApiProvider";
@@ -51,17 +51,19 @@ const AddProductForm = () => {
             return;
         }
 
-        console.log('imagenes de producto nuevo:', data.images)
+       
 
         try {
             const response = await saveProductAndImages(dataForm, data.images);
 
+            console.log('enviando:', dataForm, data.images)
             if (response.success) {
                 openModal("Éxito", "Producto e imágenes guardados exitosamente.", closeModal);
                 setData({ productDetails: null, images: [] });
                 setProductId(null);
                 reset();
-
+                console.log('guardado:', dataForm, data.images)
+                
             } else {
                 openModal(
                     "Error", `Error al guardar el producto e imágenes: ${response.message}`, closeModal

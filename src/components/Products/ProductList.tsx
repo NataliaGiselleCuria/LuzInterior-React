@@ -8,7 +8,7 @@ import 'react-lazy-load-image-component/src/effects/blur.css';
 const ProductList = () => {
 
     const { isLogin } = useUser();
-    const { products, categories, dev, prod } = useApi();
+    const { products, categories, dev } = useApi();
     const { category } = useParams<{ category?: string }>();
     const formatCurrency = useCurrencyFormat();
 

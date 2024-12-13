@@ -12,7 +12,7 @@ interface ImageFormProps {
 
 const FormImg: React.FC<ImageFormProps> = ({ productId, setData }) => {
 
-  const { dev, prod, products } = useApi();
+  const { dev, products } = useApi();
   const { register, reset } = useForm<FormImgsProduct>();
   const [images, setImages] = useState<(FormImgsProduct & { preview: string })[]>([]);
   const [currentFile, setCurrentFile] = useState<File | null>(null);

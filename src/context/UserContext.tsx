@@ -11,7 +11,7 @@ interface Props {
 
 export const UserProvider = ({ children }: Props) => {
 
-    const { users, fetchUserData, dev, prod } = useApi();
+    const { users, fetchUserData, dev } = useApi();
     const [isLogin, setIsLogin] = useState(false);
     const [userActive, setUserActive] = useState<Users | null>(null);
     const getUserActive = useCallback(async (token: string, email: string): Promise<ApiResponse> => {

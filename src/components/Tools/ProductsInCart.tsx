@@ -10,7 +10,7 @@ import 'react-lazy-load-image-component/src/effects/blur.css';
 const ProductsInCart = () => {
 
   const { isLogin } = useUser();
-  const { dev, prod } = useApi();
+  const { dev } = useApi();
   const { cart, updateQuantity, removeFromCart, totalPrice } = useCart();
   const formatCurrency = useCurrencyFormat();
 

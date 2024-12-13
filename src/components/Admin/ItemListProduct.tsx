@@ -13,7 +13,7 @@ export interface ItemListProductProps {
 }
 
 const ItemListProduct = ({ product }: ItemListProductProps) => {
-  const { dev, prod, products } = useApi();
+  const { dev, products } = useApi();
   const { deleteProduct, updateProduct, uploadImages } = useProduct();
   const { modalConfig, openModal, closeModal } = useModal();
   const { validateToken } = useVerifyToken();

@@ -12,7 +12,7 @@ interface Props {
 
 export const ProductProvider = ({ children }: Props) => {
 
-  const { dev, prod, products, setProducts } = useApi();
+  const { dev, setProducts } = useApi();
   const { validateToken } = useVerifyToken();
 
   const refreshProducts = async() => {

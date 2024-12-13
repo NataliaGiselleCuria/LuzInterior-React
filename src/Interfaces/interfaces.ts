@@ -122,7 +122,6 @@ export interface ApiResponse {
 //context type
 export type ApiContextType = {
     dev: string;
-    prod: string;
     products: Product[];
     setProducts:  React.Dispatch<React.SetStateAction<Product[]>>;
     users: Users[];
