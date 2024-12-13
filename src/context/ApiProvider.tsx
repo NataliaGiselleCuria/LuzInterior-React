@@ -15,9 +15,9 @@ export const ApiProvider = ({ children }: Props) => {
     const [shipping, setShipping] = useState<Shipping[]>([]);
     const [settings, setSettings] = useState<Settings[]>([]);
 
-    const dev = 'http://localhost/LuzInterior/API';
+    const dev = import.meta.env.VITE_API_URL;
+    // const dev = 'http://localhost/LuzInterior/API';
     // const dev = 'https://luz-interior.free.nf/API/';
-    // const dev = process.env.BASE_URL || 'http://localhost/LuzInterior/API';
 
 
     useEffect(() => {
