@@ -16,9 +16,6 @@ export const ApiProvider = ({ children }: Props) => {
     const [settings, setSettings] = useState<Settings[]>([]);
 
     const dev = import.meta.env.VITE_API_URL;
-    // const dev = 'http://localhost/LuzInterior/API';
-    // const dev = 'https://luz-interior.free.nf/API/';
-
 
     useEffect(() => {
         const fetchData = async () => {
