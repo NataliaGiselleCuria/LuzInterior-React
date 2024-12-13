@@ -6,7 +6,7 @@ export default defineConfig(({ mode }) => ({
   plugins: [react()],
   base:'/',
   build: {
-    outDir: 'htdocs', // Directorio de salida
+    outDir: 'dist', // Directorio de salida
   },
   define: {
     'process.env.BASE_URL': JSON.stringify(
