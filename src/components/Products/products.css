@@ -1,0 +1,14 @@
+
+/* Lista de productos */
+.prod-img{
+    height: 250px;
+    width: 250px;
+}
+
+
+/* Detalle de producto */
+
+.prod-img-detail{
+    height: 400px;
+    width: 400px;
+}

@@ -1,4 +1,4 @@
-import { ProductInCart, Product } from "../Interfaces/interfaces";
+import { ProductInCart, Products } from "../Interfaces/interfaces";
 
 export type CartState = {
     cart: ProductInCart[];
@@ -6,10 +6,11 @@ export type CartState = {
 };
 
 type CartAction =
-    | { type: 'add_to_cart'; payload: { product: Product; quantity: number } }
+    | { type: 'add_to_cart'; payload: { product: Products; quantity: number } }
     | { type: 'remove_from_cart'; payload: { productId: string } } // Product ID
     | { type: 'clear_cart' }
-    | { type: 'update_quantity'; payload: { productId: string; quantity: number } };
+    | { type: 'update_quantity'; payload: { productId: string; quantity: number } }
+    | { type: "set_cart"; payload: ProductInCart[] }; 
 
     export const calculateTotalPrice = (cart: ProductInCart[]): number => {
         return cart.reduce(
@@ -75,6 +76,12 @@ export const cartReducer = (state: CartState, action: CartAction): CartState => 
                 totalPrice: 0,
             };
         }
+
+        case "set_cart":
+            return {
+                ...state,
+                cart: action.payload,
+            };
     }
 
     return state

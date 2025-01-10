@@ -2,7 +2,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form";
 import { useUser } from "../../context/UserContext"
 import { useState } from "react";
-import { LoginFormInputs } from "../../Interfaces/interfaces";
+import { FormLogin } from "../../Interfaces/interfaces";
 
 const Wholesalers = () => {
 
@@ -13,9 +13,9 @@ const Wholesalers = () => {
   const location = useLocation();
   const from = location.state?.from || '/';
 
-  const { register, handleSubmit } = useForm<LoginFormInputs>();
+  const { register, handleSubmit } = useForm<FormLogin>();
 
-  const handleLogin = async (data: LoginFormInputs) => {
+  const handleLogin = async (data: FormLogin) => {
     const { email, password } = data;
     const loginResult = await userLogin(email, password);
 

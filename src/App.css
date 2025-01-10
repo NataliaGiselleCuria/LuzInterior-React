@@ -3,8 +3,8 @@
   
 }
 
-li{
-  list-style: none;
+p{
+  margin: 0;
 }
 
 a{
@@ -16,9 +16,8 @@ a:visited{
   background-color: none;
 }
 
-a:active{
-  color: black;
-  background: white!important;
+li{
+  list-style: none;
 }
 
 .ul-row-nopadding{
@@ -27,11 +26,18 @@ a:active{
   gap: 10px;
 }
 
-.el-100h{
+.ul-column-nopadding{
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  gap: 10px;
+}
+
+.h100{
   height: 100%;
 }
 
-.el-100w{
+.w100{
   width: 100%;
 }
 

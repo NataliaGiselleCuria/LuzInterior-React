@@ -24,6 +24,7 @@ import { AdminPanel } from './components/Admin/AdminPanel';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
+import Gallery from './components/Galery/Gallery';
 
 function App() {
   const { checkToken, getUserActive } = useUser();
@@ -88,7 +89,7 @@ function AppWithNavBar({ openCart, cartOpen, closeCart }: any) {
         <Route path="/mis_pedidos" element={<OrdersUser />} />
         <Route path="/carrito" element={<Cart />} />
         <Route path="/checkout" element={<CheckOut />} />
-        <Route path="/galeria" element="" />
+        <Route path="/galeria" element={<Gallery />} />
         <Route path="/contacto" element="" />
         <Route path="/error" element={<ErrorPage />} />
         <Route path="/admin" element={<AdminRoute><AdminPanel /></AdminRoute>} />

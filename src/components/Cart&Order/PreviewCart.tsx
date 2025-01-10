@@ -1,8 +1,8 @@
 
 import { Link } from 'react-router-dom';
-import './preview-cart.css'
 import { useEffect, useState } from 'react';
 import ProductsInCart from '../Tools/ProductsInCart';
+import './cart.css'
 
 interface PreviewCartProps {
   cartOpen: boolean;
@@ -27,7 +27,7 @@ const PreviewCart: React.FC < PreviewCartProps > = ({ cartOpen, onClose }) => {
     <div id="preview-cart" className={`${cartOpen ? "show" : "hide"} ${isVisible ? "visible" : "hidden"}`} onClick={onClose}>
       <div className="prev-cart-content" onClick={(e) => e.stopPropagation()}>
         <h2>carrito</h2> 
-        <ProductsInCart></ProductsInCart>
+        <ProductsInCart price='total' editable={true}></ProductsInCart>
         <Link to='/carrito'onClick={onClose}>Ver carrito</Link>
       </div>
       

@@ -1,6 +1,7 @@
 import { createContext, ReactNode, useContext, useEffect, useMemo, useReducer } from "react";
-import { CartContextType, Product, ProductInCart } from "../Interfaces/interfaces";
+import { CartContextType, Products, ProductInCart } from "../Interfaces/interfaces";
 import { cartReducer, CartState, calculateTotalPrice } from "./Reducers";
+import { useApi } from "./ApiProvider";
 
 export const CartContext = createContext<CartContextType>({} as CartContextType);
 
@@ -16,6 +17,7 @@ const initialCartState: CartState = {
 export const CartProvider = ({ children }: CartContextProps) => {
 
     const [state, dispatch] = useReducer(cartReducer, initialCartState);
+    const { products } = useApi();
 
     const totalPrice = useMemo(() => {
         return calculateTotalPrice(state.cart);
@@ -23,9 +25,23 @@ export const CartProvider = ({ children }: CartContextProps) => {
 
     useEffect(() => {
         localStorage.setItem('cart', JSON.stringify(state.cart));
-      }, [state.cart]);
+    }, [state.cart]);
 
-    const addToCart = (product: Product, quantity: number) => {
+    const removeUnavailableProductsFromCart = (storeProducts: Products[]) => {
+        const availableProductsInCart = state.cart.filter(cartItem =>
+            storeProducts.some(storeProduct => storeProduct.id === cartItem.product.id)
+        );
+        dispatch({ type: 'set_cart', payload: availableProductsInCart });
+    };
+
+    useEffect(() => {
+
+        if (products && products.length > 0) {
+            removeUnavailableProductsFromCart(products);
+        }
+    }, [products]);
+
+    const addToCart = (product: Products, quantity: number) => {
         dispatch({ type: 'add_to_cart', payload: { product, quantity } });
     };
 
@@ -41,9 +57,9 @@ export const CartProvider = ({ children }: CartContextProps) => {
         dispatch({ type: 'clear_cart' });
     };
 
-    useEffect(() => {
-        console.log('carrito:', state.cart)
-    },[state.cart])
+    // useEffect(() => {
+    //     console.log('carrito:', state.cart)
+    // },[state.cart])
 
     const cartValue = useMemo(() => {
     

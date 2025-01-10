@@ -12,14 +12,29 @@ import './admin.css'
 
 const AddProductForm = () => {
 
-    const { categories } = useApi();
+    const { categories, products } = useApi();
     const { saveProductAndImages, registerProduct } = useProduct();
-    const { register, handleSubmit, getValues, reset } = useForm<FormProduct>({});
-    const [productId, setProductId] = useState<string | null>(null);
+    const { register, handleSubmit, setValue, getValues, setError, clearErrors , reset } = useForm<FormProduct>({});
+    const [ productId, setProductId ] = useState<string | null>(null);
     const { modalConfig, openModal, closeModal } = useModal();
     const { validateToken } = useVerifyToken();
+    const [ isIdValid, setIsIdValid]  = useState(true);
+    const [ data, setData ] = useState<{ productDetails: FormProduct | null; images: FormImgsProduct[]; }>({ productDetails: null, images: [] });
 
-    const [data, setData] = useState<{ productDetails: FormProduct | null; images: FormImgsProduct[]; }>({ productDetails: null, images: [] });
+    const handleIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const enteredId = event.target.value;
+        const idExists = products.some((product) => product.id === enteredId);
+
+        if (idExists) {
+            setIsIdValid(false);
+            setError("id", { type: "manual", message: "El ID ya está registrado" });
+        } else {
+            setIsIdValid(true);
+            clearErrors("id");
+        }
+
+        setValue("id", enteredId); // Actualiza el valor del campo en React Hook Form
+    };
 
     const addImg = () => {
         const values = getValues();
@@ -51,18 +66,14 @@ const AddProductForm = () => {
             return;
         }
 
-       
-
         try {
             const response = await saveProductAndImages(dataForm, data.images);
 
-            console.log('enviando:', dataForm, data.images)
             if (response.success) {
                 openModal("Éxito", "Producto e imágenes guardados exitosamente.", closeModal);
                 setData({ productDetails: null, images: [] });
                 setProductId(null);
                 reset();
-                console.log('guardado:', dataForm, data.images)
                 
             } else {
                 openModal(
@@ -120,27 +131,28 @@ const AddProductForm = () => {
                 <div className="ul-row-nopadding">
                 <span>
                     <label htmlFor="id">ID: </label>
-                    <input id="id" type="text" {...register('id', { required: true })}></input>
+                    <input id="id" type="text" {...register('id', { required: true })} onChange={handleIdChange}></input>
+                    {!isIdValid && <p style={{ color: "red" }}>El ID ya está registrado</p>}
                 </span>
                 <span>
                     <label htmlFor="name">Nombre: </label>
-                    <input id="name" type="text" {...register('name', { required: true })}></input>
+                    <input id="name" type="text" {...register('name', { required: true })} disabled={!isIdValid}></input>
                 </span>
                 <span>
                     <label htmlFor="category">Categoría: </label>
-                    <input id="category" type="text" {...register('category', { required: true })}></input>
+                    <input id="category" type="text" {...register('category', { required: true })} disabled={!isIdValid}></input>
                 </span>
                 <span>
                     <label htmlFor="price">Precio: </label>
-                    <input id="price" type="number" {...register('price', { required: true })}></input>
+                    <input id="price" type="number" {...register('price', { required: true })} disabled={!isIdValid}></input>
                 </span>
                 </div>
                 <div className="li-product-cont-description">
                     <label htmlFor="description">Descripción: </label>
-                    <textarea id="description" {...register('description', { required: true })}></textarea>
+                    <textarea id="description" {...register('description', { required: true })} disabled={!isIdValid}></textarea>
                 </div>
             </form>
-            <button type="button" onClick={addImg}>Agregar imagenes</button>
+            <button type="button" onClick={addImg} disabled={!isIdValid}>Agregar imagenes</button>
             {productId && (
                 <>
                     <div>

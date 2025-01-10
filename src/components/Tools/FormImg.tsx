@@ -63,8 +63,6 @@ const FormImg: React.FC<ImageFormProps> = ({ productId, setData }) => {
 
   useEffect(() => {
     const productToEdit = products.find((product) => product.id === productId);
-  
-    console.log('productToEdit:', productToEdit)
     
     if (productToEdit) {
       const formattedImages = productToEdit.img_url.map((img, index) => ({

@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useMemo } from "react";
-import { FormImgsProduct, FormProduct, ProductContextType, Response } from "../Interfaces/interfaces";
+import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { FormImgsProduct, FormProduct, ListPrice, ProductContextType, Response } from "../Interfaces/interfaces";
 import { useApi } from "./ApiProvider";
 import useVerifyToken from "../components/CustomHooks/verefyToken";
 
@@ -15,7 +15,7 @@ export const ProductProvider = ({ children }: Props) => {
   const { dev, setProducts } = useApi();
   const { validateToken } = useVerifyToken();
 
-  const refreshProducts = async() => {
+  const refreshProducts = async () => {
     const updateProducts = await fetch(`${dev}/index.php?action=products`);
     const data = await updateProducts.json();
     setProducts(data);
@@ -40,15 +40,15 @@ export const ProductProvider = ({ children }: Props) => {
         body: JSON.stringify(data),
       });
 
-      if (!response.ok) {
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
         const errorData = await response.json();
         return { success: false, message: errorData.message || "Error al registrar el producto." };
       }
 
       refreshProducts();
 
-      const result = await response.json();
-      
       return {
         success: result.success,
         message: result.message || "Producto registrado exitosamente.",
@@ -88,16 +88,17 @@ export const ProductProvider = ({ children }: Props) => {
         }),
       });
 
-      if (!response.ok) {
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
         const errorData = await response.json();
         return { success: false, message: errorData.message || "Error al actualizar el producto." };
       }
 
       refreshProducts();
 
-      const result = await response.json();
       return { success: result.success, message: result.message || "Producto actualizado correctamente." };
-      
+
     } catch (error) {
       const errorMessage =
         error instanceof TypeError
@@ -105,7 +106,7 @@ export const ProductProvider = ({ children }: Props) => {
           : "Ocurrió un problema inesperado.";
       return { success: false, message: errorMessage };
     }
-   
+
   };
 
   const deleteProduct = async (productId: string): Promise<Response> => {
@@ -128,14 +129,15 @@ export const ProductProvider = ({ children }: Props) => {
         body: JSON.stringify({ productId }),
       });
 
-      if (!response.ok) {
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
         const errorData = await response.json();
         return { success: false, message: errorData.message || "Error al eliminar el producto." };
       }
 
       refreshProducts();
 
-      const result = await response.json();
       return {
         success: result.success,
         message: result.message || "Producto eliminado exitosamente.",
@@ -162,11 +164,12 @@ export const ProductProvider = ({ children }: Props) => {
     const formData = new FormData();
     formData.append("productId", productId);
 
+    
     images.forEach((image, index) => {
       if (image.url instanceof File) {
-        formData.append(`image${index}`, image.url); 
+        formData.append(`image${index}`, image.url);
       } else {
-        formData.append(`existingImageId${index}`, image.id); 
+        formData.append(`existingImageId${index}`, image.id);
       }
       formData.append(`priority${index}`, image.priority.toString());
     });
@@ -174,7 +177,7 @@ export const ProductProvider = ({ children }: Props) => {
     deletedImages.forEach((image, index) => {
       formData.append(`deletedImages[${index}]`, image.id.toString());
     });
-    
+
     try {
       const token = localStorage.getItem('token')
 
@@ -186,12 +189,12 @@ export const ProductProvider = ({ children }: Props) => {
         body: formData,
       });
 
-      if (!response.ok) {
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
         const errorData = await response.json();
         return { success: false, message: errorData.message || "Error al subir imágenes." };
       }
-
-      const result = await response.json();
 
       refreshProducts();
 
@@ -236,7 +239,9 @@ export const ProductProvider = ({ children }: Props) => {
         body: formData,
       });
 
-      if (!response.ok) {
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
         const errorData = await response.json();
         return {
           success: false,
@@ -245,8 +250,6 @@ export const ProductProvider = ({ children }: Props) => {
       }
 
       refreshProducts();
-
-      const result = await response.json();
 
       return {
         success: result.success,
@@ -263,12 +266,106 @@ export const ProductProvider = ({ children }: Props) => {
     }
   };
 
+  const updateProductPrices = async (percentage: number, productIds: number[] = []): Promise<Response> => {
+    const isTokenValid = await validateToken();
+
+    if (!isTokenValid) {
+      return { success: false, message: "Token inválido." };
+    }
+
+    try {
+      const token = localStorage.getItem('token')
+
+      const response = await fetch(`${dev}/index.php?action=update-price`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ percentage, productIds }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        const errorData = await response.json();
+        return {
+          success: false,
+          message: errorData.message || "Error al actualizar los precios.",
+        };
+      }
+
+      refreshProducts();
+
+      return {
+        success: result.success,
+        message: result.message || "Precios actualizados exitosamente.",
+
+      };
+    } catch (error) {
+      return { success: false, message: 'Error al actualizar los precios.' };
+    }
+  }
+
+  const updateListPrice = async (data: ListPrice): Promise<Response> => {
+    const isTokenValid = await validateToken();
+
+    if (!isTokenValid) {
+      return { success: false, message: "Token inválido." };
+    }
+
+    const token = localStorage.getItem('token')
+    const date = new Date();
+
+    try {
+      const formData = new FormData();
+      formData.append("date", date.toISOString());
+      if (data.list_price[0]) {
+        formData.append("list_price", data.list_price[0]);
+      }
+
+      for (let [key, value] of formData.entries()) {
+        console.log(key, value);
+      }
+
+      const response = await fetch(`${dev}/index.php?action=update-list-price`, {
+        method: "POST",
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      const result = await response.json();
+      console.log(result)
+
+      if (!response.ok || !result.success) {
+        return { success: false, message: result.message || `Error al actualizar la lista ded precios: ${result.mesagge}` };
+      }
+
+      return {
+        success: result.success,
+        message: result.message || "Lista de precios actualizada exitosamente.",
+      };
+
+    } catch (error) {
+      const errorMessage =
+        error instanceof TypeError
+          ? `Error de conexión: ${error.message}`
+          : `Ocurrió un problema inesperado: ${error}`;
+
+      return { success: false, message: errorMessage };
+    }
+  };
+
   const value = useMemo(() => ({
     registerProduct,
     deleteProduct,
     updateProduct,
     uploadImages,
-    saveProductAndImages
+    saveProductAndImages,
+    updateProductPrices,
+    updateListPrice,
   }), []);
 
   return <ProductContext.Provider value={value}>{children}</ProductContext.Provider>;

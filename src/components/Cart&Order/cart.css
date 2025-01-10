@@ -23,10 +23,11 @@
 
 .prev-cart-content {
     position: relative;
-    overflow: scroll;
+    overflow-y: scroll;
     z-index: 99;
-    width: 20%;
+    width: 300px;
     height: 100%;
+    padding: 20px;
     background-color: white;
     right: -100%;
     animation-duration: 0.5s;
@@ -63,4 +64,9 @@
     .prev-cart-content {
         width: 80%;
     }
+}
+
+
+.prod-chekout-container{
+
 }

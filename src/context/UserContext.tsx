@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { NavigateFunction } from 'react-router-dom';
-import { RegisterFormInputs, Response, UserContextType, ApiResponse, Users } from "../Interfaces/interfaces";
+import { FormRegister, Response, UserContextType, ApiResponse, Users } from "../Interfaces/interfaces";
 import { useApi } from "./ApiProvider";
 
 export const UserContext = createContext<UserContextType>({} as UserContextType);
@@ -11,31 +11,30 @@ interface Props {
 
 export const UserProvider = ({ children }: Props) => {
 
-    const { users, fetchUserData, dev } = useApi();
+    const { users, setUsers, fetchUserData, dev } = useApi();
     const [isLogin, setIsLogin] = useState(false);
     const [userActive, setUserActive] = useState<Users | null>(null);
-    const getUserActive = useCallback(async (token: string, email: string): Promise<ApiResponse> => {
 
+    const getUserActive = useCallback(async (token: string, email: string): Promise<ApiResponse> => {
+        // setIsLogin(true); // Inicia el estado de carga
         try {
             const userActiveResponse = await fetchUserData(token, email);
 
             if (userActiveResponse.success && userActiveResponse.user) {
                 setUserActive(userActiveResponse.user);
+                console.log('userActive', userActive);
                 return { success: true, message: "Inicio de sesión exitoso", user: userActiveResponse.user };
-
             } else {
                 return { success: false, message: "No se pudieron obtener los datos del usuario" };
-
             }
-
         } catch (error) {
             const errorMessage = error instanceof TypeError
                 ? "Error de conexión. Verifique su conexión a internet."
                 : "Ocurrió un problema inesperado.";
             return { success: false, message: errorMessage };
+        } finally {
+            // setIsLogin(false); // Finaliza el estado de carga
         }
-
-
     }, []);
 
     const userLogout = (navigate: NavigateFunction) => {
@@ -130,17 +129,19 @@ export const UserProvider = ({ children }: Props) => {
         }
     };
 
-    const userRegister = async (data: RegisterFormInputs): Promise<Response> => {
+    const userRegister = async (data: FormRegister): Promise<Response> => {
         try {
             const response = await fetch(`${dev}/index.php?action=register-user`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(data)
+                body: JSON.stringify({data})
             });
 
-            if (!response.ok) {
+            const result = await response.json();
+
+            if (!response.ok  || !result.success) {
                 const errorData = await response.json();
 
                 if (errorData.message) {
@@ -156,7 +157,6 @@ export const UserProvider = ({ children }: Props) => {
                 };
             }
 
-            const result = await response.json();
             return {
                 success: result.success,
                 message: result.message || "Usuario registrado exitosamente"
@@ -226,10 +226,107 @@ export const UserProvider = ({ children }: Props) => {
         }
     };
 
-    useEffect(() => {
-        console.log("activo:", userActive);
-       
-    }, [userActive]);
+    const refreshUser = async() => {
+        const updateUsers = await fetch(`${dev}/index.php?action=users`);
+        const data = await updateUsers.json();
+        setUsers(data);
+    }
+
+    const updateUserApproved = async (id: number): Promise<Response> => {
+        try {
+            const token = localStorage.getItem('token')
+
+            const response = await fetch(`${dev}/index.php?action=change-approved`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify({ id }),
+            });
+
+            const result = await response.json();
+
+            refreshUser();
+
+            return {
+                success: result.success,
+                message: result.success
+                    ? "Información actualizada."
+                    : result.message || "Error en la actualización de la información",
+            };
+
+        } catch (error) {
+            return {
+                success: false,
+                message: "No se pudo conectar con el servidor.",
+            };
+        }
+    }
+
+    const updateUserRole = async (id:number) : Promise<Response> => {
+        try {
+            const token = localStorage.getItem('token')
+
+            const response = await fetch(`${dev}/index.php?action=change-role`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify({ id }),
+            });
+
+            const result = await response.json();
+
+            refreshUser();
+
+            return {
+                success: result.success,
+                message: result.success
+                    ? "Información actualizada."
+                    : result.message || "Error en la actualización de la información",
+            };
+
+        } catch (error) {
+            return {
+                success: false,
+                message: "No se pudo conectar con el servidor.",
+            };
+        }
+    }
+
+    const deletUser = async(id:number): Promise<Response> => {
+        try {
+            const token = localStorage.getItem('token')
+
+            const response = await fetch(`${dev}/index.php?action=delete-user`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify({ id }),
+            });
+
+            const result = await response.json();
+
+            refreshUser();
+
+            return {
+                success: result.success,
+                message: result.success
+                    ? "Información actualizada."
+                    : result.message || "Error en la actualización de la información",
+            };
+
+        } catch (error) {
+            return {
+                success: false,
+                message: "No se pudo conectar con el servidor.",
+            };
+        }
+    }
 
     const userValue = useMemo(() => ({
         isLogin,
@@ -240,7 +337,10 @@ export const UserProvider = ({ children }: Props) => {
         userLogin,
         userRegister,
         recoverPassword,
-        updateUserInfo
+        updateUserInfo,
+        updateUserApproved,
+        updateUserRole,
+        deletUser
     }),
         [isLogin,
             users,

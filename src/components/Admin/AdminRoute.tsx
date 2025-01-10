@@ -7,10 +7,14 @@ interface Props {
 }
 
 const AdminRoute = ({ children }:Props) => {
+    const { userActive, isLogin } = useUser();
 
-    const { userActive } = useUser();
+    if (userActive?.role === 'admin') {
+        return children;
+    }
 
-    return userActive?.role=== 'admin' ? children : <Navigate to="/" />;
+    console.log(`Error en el rol del usuario: ${userActive?.role}`);
+    return <Navigate to="/" />;
     
 };
 

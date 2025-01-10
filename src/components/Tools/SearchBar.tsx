@@ -1,15 +1,15 @@
 import React from 'react';
-import { Product } from '../../Interfaces/interfaces';
+import { Products, Users } from '../../Interfaces/interfaces';
 import { Link } from 'react-router-dom';
 import search from '../../assets/search.png'
-import { useSearchProducts } from '../CustomHooks/searchProduct';
+import { useSearch } from '../CustomHooks/useSearch';
 
 interface SearchBarProps {
-  products: Product[];
+  data: (Products | Users)[];
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ products }) => {
-  const { searchQuery, filteredProducts, handleSearchChange } = useSearchProducts(products);
+const SearchBar: React.FC<SearchBarProps> = ({ data }) => {
+  const { searchQuery, filteredResults, handleSearchChange } = useSearch(data);
 
   return (
     <div className="search-cont">
@@ -19,21 +19,29 @@ const SearchBar: React.FC<SearchBarProps> = ({ products }) => {
           type="text"
           value={searchQuery}
           onChange={handleSearchChange}
-          placeholder="Buscar productos..."
+          placeholder="Buscar ..."
           className="search-input"
         />
       </span>
-      {filteredProducts.length > 0 && (
+      {filteredResults.length > 0 && (
         <ul className="dropdown-search">
-          {filteredProducts.map((product: Product) => (
-            <li key={product.id}>
-              <Link to={`/productos/id/${product.id}`}>{product.name}</Link>
-            </li>
+          {filteredResults.map((item) => (
+           <li key={item.id}>
+           {isProduct(item) ? (
+                <Link to={`/productos/id/${item.id}`}>{item.name}</Link>
+              ) : (
+                <p>{item.name}</p>
+              )}
+         </li>
           ))}
         </ul>
       )}
     </div>
   );
 };
+
+const isProduct = (item: Products | Users): item is Products => {
+  return (item as Products).name !== undefined;
+}
 
 export default SearchBar;

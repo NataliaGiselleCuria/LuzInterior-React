@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../context/UserContext"
-import { AccountInformationFormInputs, PersonalInformationFormInputs } from "../../Interfaces/interfaces";
+import { FormAccountInformation, FormPersonalInformation } from "../../Interfaces/interfaces";
 import FormAddresses from "../Tools/FormAddresses";
 import { useUpdateUserInfo } from "../CustomHooks/updateUserInfo";
 import useModal from "../CustomHooks/modal";
@@ -17,7 +17,7 @@ const AccountUser = () => {
   const navigate = useNavigate();
 
 
-  const { register: personalRegister, handleSubmit: personalHandleSubmit, formState: { errors: personalErrors }, reset: resetPersonal } = useForm<PersonalInformationFormInputs>({
+  const { register: personalRegister, handleSubmit: personalHandleSubmit, formState: { errors: personalErrors }, reset: resetPersonal } = useForm<FormPersonalInformation>({
     defaultValues: {
       name: userActive?.name,
       cuit: userActive?.cuit,
@@ -25,7 +25,7 @@ const AccountUser = () => {
     },
   });
 
-  const { register: accountRegister, handleSubmit: accountHandleSubmit } = useForm<AccountInformationFormInputs>();
+  const { register: accountRegister, handleSubmit: accountHandleSubmit } = useForm<FormAccountInformation>();
 
   useEffect(() => {
     if (userActive) {
@@ -38,7 +38,7 @@ const AccountUser = () => {
   }, [userActive]);
 
 
-  const handlePersonalInformation = async (data: PersonalInformationFormInputs) => {
+  const handlePersonalInformation = async (data: FormPersonalInformation) => {
     if (userActive) {
       await handleUpdateInformation(
         data,
@@ -48,7 +48,7 @@ const AccountUser = () => {
     }
   };
 
-  const handleAccountInformation = async (data: AccountInformationFormInputs) => {
+  const handleAccountInformation = async (data: FormAccountInformation) => {
     if (userActive) {
       await handleUpdateInformation(
         data,
@@ -119,6 +119,7 @@ const AccountUser = () => {
             {personalErrors.cuit && <p className="error">{personalErrors.cuit.message}</p>}
           </span>
           <span>
+          <label htmlFor="telefono">Teléfono</label>
             <input
               id="tel"
               type="text"
@@ -157,7 +158,7 @@ const AccountUser = () => {
         {userActive?.addresses
           .sort((a, b) => (b.default_address ? 1 : 0) - (a.default_address ? 1 : 0))
           .map((address) => (
-            <div key={address.id_address}>
+            <div key={address.id}>
               <span>
                 <p>{address.name_address}</p>
                 <p>{address.street}</p>
@@ -168,7 +169,7 @@ const AccountUser = () => {
               </span>
               <span>
                 <button onClick={() => openModalAddress(address)}>Editar</button>
-                <button onClick={() => deleteAddress(address.id_address)}>Eliminar</button>
+                <button onClick={() => deleteAddress(address.id)}>Eliminar</button>
               </span>
             </div>
           ))}

@@ -3,22 +3,20 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"
 import { useUser } from "../../context/UserContext";
-import { RegisterFormInputs } from "../../Interfaces/interfaces";
+import { FormRegister } from "../../Interfaces/interfaces";
 import useModal from "../CustomHooks/modal";
 import ModalMesagge from "../Tools/ModalMesagge";
-
-
 
 const Register = () => {
 
     const { userRegister } = useUser();
     const [errorMessage, setErrorMessage] = useState("");
-    const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormInputs>();
+    const { register, handleSubmit, formState: { errors } } = useForm<FormRegister>();
     const { modalConfig, openModal, closeModal } = useModal();
 
     const navigate = useNavigate();
 
-    const handleRegister = async (data: RegisterFormInputs) => {
+    const handleRegister = async (data: FormRegister) => {
 
         if (data.password !== data.repeatPass) {
             setErrorMessage("Las contraseñas no coinciden.");
@@ -37,7 +35,6 @@ const Register = () => {
 
         } catch (error) {
             openModal( "Error", "Ocurrió un error al intentar registrar el usuario. Intente nuevamente más tarde.", closeModal);
-            console.error("Error al registrar el usuario:", error);
         }
 
     };

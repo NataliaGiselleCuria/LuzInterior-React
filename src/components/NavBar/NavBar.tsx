@@ -4,8 +4,8 @@ import { useApi } from '../../context/ApiProvider'
 import { useCart } from '../../context/CartProvider';
 import { useUser } from '../../context/UserContext';
 import SearchBar from '../Tools/SearchBar';
-// import logo from '../../assets/logo.png' // reemplazar cuando tengas el png original
-import cartImg from '../../assets/cart2.png'
+ import logo from '../../assets/logo2.png' 
+import cartImg from '../../assets/cart.png'
 import userImg from '../../assets/user.png'
 import './navBar.css'
 
@@ -60,7 +60,7 @@ const NavBar: React.FC<NavBarProps> = ({ openCart }) => {
         <nav id='nav' className='navbar navbar-expand-md bg-body-tertiary' >
             <div className='container nav-cont'>
                 <Link to='/'>
-                    <img className='logo' src="https://static.wixstatic.com/media/68801d_f296e78e486a4e64a8224a9a5cb0a1af~mv2.png/v1/fill/w_100,h_55,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/LOGO%20LUZ%20INTERIOR%20SRL%20MAYORISTAS.png" alt="Logo Luz Interior" />
+                    <img className='h100' src={logo} alt="Logo Luz Interior" />
                 </Link>
                 <span className='nav-links'>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,7 +90,7 @@ const NavBar: React.FC<NavBarProps> = ({ openCart }) => {
                                 <Link to='/contacto' className="nav-link">Contato</Link>
                             </li>
                             <li>
-                                <SearchBar products={products}/>
+                                <SearchBar data={products}/>
                             </li>
                         </ul>
                     </div>
@@ -98,13 +98,13 @@ const NavBar: React.FC<NavBarProps> = ({ openCart }) => {
                 <span className='icons-navbar'>
                     <span className='cart-cont'>
                         <button className='button-cart' onClick={openCart}>
-                            <img src={cartImg} alt="carrito"></img>
+                            <img className='h100' src={cartImg} alt="carrito"></img>
                             <div className='cart-num'>{cart.length}</div>
                         </button>
                     </span>
                     <span className='user-cont'>
                         <button className="button-login">
-                            <img src={userImg} alt="usuario" />
+                            <img className='h100' src={userImg} alt="usuario" />
                             {getDropdownContent()}
                         </button>
                     </span>

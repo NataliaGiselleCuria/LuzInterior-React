@@ -7,27 +7,28 @@ import { useUser } from "../../context/UserContext";
 import useCurrencyFormat from "../CustomHooks/currencyFormat";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
+import './products.css'
 
 interface ProductItemProps {
     openCart: () => void;
 }
 
-const ProductItem: React.FC < ProductItemProps > = ({ openCart }) => {
+const ProductItem: React.FC<ProductItemProps> = ({ openCart }) => {
 
     const { isLogin } = useUser();
     const { products, dev } = useApi();
-    const { addToCart} = useCart();
+    const { addToCart } = useCart();
 
     const formatCurrency = useCurrencyFormat();
     const [quantityToAdd, setQuantityToAdd] = useState(1);
 
     const { id } = useParams<{ id: string }>();
     const productItem = products.find((product) => product.id === id);
-    
+
     const navigate = useNavigate();
     if (!productItem) {
         navigate('/error', { state: { message: 'Producto no encontrado' } });
-        return null; 
+        return null;
     }
 
     const handleQuantityChange = (newQuantity: number) => {
@@ -45,11 +46,11 @@ const ProductItem: React.FC < ProductItemProps > = ({ openCart }) => {
     }
 
     return (
-        <div>
+        <div className="cont container">
             <p><Link to='/'>Inicio</Link>/<Link to={`/productos/categoria/${productItem.category}`}>{productItem.category}</Link>/<span>{productItem.name}</span></p>
-            <h2> { productItem.id }</h2>
+            <h2> {productItem.id}</h2>
             <div>
-            <LazyLoadImage src={`${dev}${productItem.img_url[0].url}`} alt={productItem.name} />
+                <LazyLoadImage className='prod-img-detail' src={`${dev}${productItem.img_url[0].url}`} alt={productItem.name} />
                 <h3>{productItem.name}</h3>
                 <h4>{productItem.id}</h4>
                 {isLogin && <p>Precio: {formatCurrency(productItem.price)}</p>}

@@ -4,6 +4,7 @@ import { useUser } from "../../context/UserContext";
 import useCurrencyFormat from "../CustomHooks/currencyFormat";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
+import './products.css'
 
 const ProductList = () => {
 
@@ -38,7 +39,7 @@ const ProductList = () => {
                     
                         <li key={product.id}>
                             <Link to={`/productos/id/${product.id}`}>
-                                <LazyLoadImage src={`${dev}${product.img_url[0]?.url}`} alt={product.name} />
+                                <LazyLoadImage  className='prod-img' src={`${dev}${product.img_url[0]?.url}`} alt={product.name} />
                                 <h3>{product.name}</h3>
                                 <h4>{product.id}</h4>
                                 {isLogin && <p>Precio: {formatCurrency(product.price)}</p>}

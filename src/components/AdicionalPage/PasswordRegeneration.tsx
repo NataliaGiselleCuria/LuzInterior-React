@@ -27,9 +27,11 @@ const PasswordRegeneration = () => {
     }
 
     try {
+
       const response = await fetch(`${dev}/index.php?action=reset-password`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json",},      
+        
         body: JSON.stringify({
           token,
           newPassword: data.newPassword,
@@ -37,10 +39,14 @@ const PasswordRegeneration = () => {
       });
 
       const result = await response.json();
-      setMessage(result.message);
-      setTimeout(() => {
-         navigate("/mayoristas");
-      }, 1000);
+
+      if (!response.ok || !result.success) {
+        setMessage(result.message || "Error inesperado.");
+        return;
+      }
+
+      setMessage(result.message); // Éxito
+      setTimeout(() => navigate("/mayoristas"), 1000);
 
     } catch (error) {
       setMessage("Hubo un error al intentar restablecer la contraseña.");

@@ -1,12 +1,12 @@
 /* formulario direcciones */
 .modal {
-    position: absolute;
-    width: 100dvw;
-    height: 100dvh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #00000054;
+    position: absolute!important;
+    width: 100dvw!important;
+    height: 100dvh!important;
+    display: flex!important;
+    align-items: center!important;
+    justify-content: center!important;
+    background-color: #00000054!important;
 }
 
 .form-modal {
@@ -14,7 +14,6 @@
     background-color: white;
     display: flex;
     flex-direction: column;
-
 }
 
 /* modal de mensajes */

@@ -11,7 +11,7 @@ const Cart = () => {
     <div className="cont container">
       <h2>Carrito</h2>
       <div>
-      <ProductsInCart></ProductsInCart>
+      <ProductsInCart price='total' editable={true}></ProductsInCart>
       </div>
       <p>Total: ${totalPrice}</p>
       <Link to='/checkout'><button>Realizar orden de compra</button></Link>

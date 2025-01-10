@@ -1,11 +1,12 @@
 #nav {
-    background-color: var(--black)!important;
+    background-color: var(--black) !important;
     color: white;
     height: 110px;
     position: relative;
 }
 
-#nav li a, #nav li{
+#nav li a,
+#nav li {
     color: white;
 }
 
@@ -13,7 +14,10 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-   
+}
+
+.nav-cont a{
+    height: 60%;
 }
 
 .navbar-collapse {
@@ -23,11 +27,11 @@
     gap: 10px;
 }
 
-.navbar-collapse ul{
-    align-items: center!important;
+.navbar-collapse ul {
+    align-items: center !important;
 }
 
-.nav-links{
+.nav-links {
     height: 50%;
 }
 
@@ -39,29 +43,27 @@ ul.dropdown-menu.show {
 
 input.search-input {
     background: transparent;
-    border: none;  
+    border: none;
     color: white;
-    padding-left: 10px;
+    margin-left: 5px;
+    padding-left: 5px;
+    border-bottom: 1px solid #a1a1a1;
 }
 
-input.search-input:focus-visible{
+input.search-input:focus-visible {
     outline: none;
-   
+
 }
 
-.search-cont{
+.search-cont {
     position: relative;
     height: 70%;
     display: flex;
     flex-direction: column;
-    align-items: flex-start; 
+    align-items: flex-start;
 }
 
-.search-input{
-    border-bottom: 1px solid #838383;
-}
-
-.search-cont img{
+.search-cont img {
     height: 16px;
 }
 
@@ -83,55 +85,56 @@ ul.dropdown-search li:last-child {
     margin-bottom: 10px;
 }
 
-.dropdown-item:hover{
+.dropdown-item:active, .dropdown-item:hover{
     color: black!important;
+    background: white!important;
+}
+  
+
+.navbar-toggler,
+.navbar-toggler:focus {
+    outline: none !important;
+    border: none !important;
+    transition: none !important;
+    box-shadow: none !important;
 }
 
-.navbar-toggler, .navbar-toggler:focus{
-    outline: none!important;
-    border: none!important;
-    transition: none!important;
-    box-shadow: none!important;
-}
-
-.navbar-toggler-icon{
-    background-image: url(../../assets/menu_icon.png)!important;
+.navbar-toggler-icon {
+    background-image: url(../../assets/menu_icon.png) !important;
     padding: 0;
 }
 
-.icons-navbar{
+.icons-navbar {
     height: 28%;
     position: absolute;
     right: 10%;
-    top: 20px;
+    top: 15px;
     display: flex;
     align-items: flex-start;
     gap: 12px;
 }
 
-.button-cart, .button-login {
-    height: 85%;  
-    align-self: flex-end; 
+.button-cart,
+.button-login {
+    height: 85%;
+    align-self: flex-end;
     background: none;
-    border: none; 
+    border: none;
     padding: 0;
 }
 
-.cart-cont, .user-cont  {
+.cart-cont,
+.user-cont {
     height: 100%;
     display: flex;
     gap: 2px;
 }
 
-.button-cart{
+.button-cart {
     position: relative;
 }
 
-.button-cart img {
-    height: 100%;
-}
-
-.cart-num{
+.cart-num {
     position: absolute;
     top: -10px;
     right: -10px;
@@ -155,7 +158,7 @@ ul.dropdown-search li:last-child {
     color: white;
 }
 
-.button-login a{
+.button-login a {
     height: 100%;
     display: flex;
     align-items: flex-end;
@@ -163,22 +166,20 @@ ul.dropdown-search li:last-child {
 
 }
 
-.user-cont img {
-    height: 92%;
+.drop-user {
+    left: -55px !important;
 }
-
-
 
 
 
 @media (max-width: 768px) {
 
-    #nav{
+    #nav {
         height: 70px;
-       
+
     }
 
-    .nav-cont{
+    .nav-cont {
         flex-direction: row;
     }
 
@@ -187,31 +188,38 @@ ul.dropdown-search li:last-child {
         top: 70px;
         left: 0;
         width: 100dvw;
-        height: fit-content;  
-       
+        height: fit-content;
+
     }
 
-    .navbar-collapse ul{
+    .navbar-collapse ul {
         padding: 0 15px;
-        align-items: flex-start!important;
+        align-items: flex-start !important;
     }
 
     .nav-links {
         height: auto;
     }
 
-    ul.dropdown-search{
+    ul.dropdown-search {
         position: relative;
         left: -15px;
         top: 0;
     }
 
-    .icons-navbar{
+    .icons-navbar {
         position: unset;
         height: 60%;
     }
 
-    .button-text{
+    .button-text {
         display: none;
     }
+
+    .drop-user {
+        right: 0 !important;
+        margin-top: -5px !important;
+        margin-left: 70%
+    }
+
 }

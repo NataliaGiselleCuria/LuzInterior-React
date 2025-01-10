@@ -1,8 +1,9 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { Address, Order, OrderContextType, ProductInCart, Shipping, Response, Users } from "../Interfaces/interfaces";
+import { createContext, useContext, useMemo, useState } from "react";
+import { Address, Orders, OrderContextType, ProductInCart, Shipping, Response, Users } from "../Interfaces/interfaces";
 import { useApi } from "./ApiProvider";
 import { useUser } from "./UserContext";
 import { NavigateFunction } from "react-router-dom";
+import useVerifyToken from "../components/CustomHooks/verefyToken";
 
 
 export const OrderContext = createContext<OrderContextType>({} as OrderContextType);
@@ -14,27 +15,31 @@ interface Props {
 export const OrderProvider = ({ children }: Props) => {
 
     const { checkToken } = useUser();
-    const { dev} = useApi();
-    const [order, setOrder] = useState<Order | null>(null);
+    const { dev, refreshOrders } = useApi();
+    const { validateToken } = useVerifyToken();
+    const [order, setOrder] = useState<Orders | null>(null);
+
 
     const addProductsToOrder = (user: Users, cart: ProductInCart[], totalPrice: number, address: Address, shipping: Shipping) => {
-        const newOrder: Order = {
+        const newOrder: Orders = {
+            id: user.id + Math.random(),
             user: user,
             products: cart,
             total_price: totalPrice,
             date: new Date(),
             address: address,
             shipping: shipping,
-            state: 'En proceso'
+            state: 'En proceso',
+            new: true
         };
 
         setOrder(newOrder);
     }
 
-    const sendOrder = async (data: Order, navigate: NavigateFunction): Promise<Response> => {
+    const sendOrder = async (data: Orders, navigate: NavigateFunction): Promise<Response> => {
         try {
             const token = localStorage.getItem('token')
-            
+
             if (!token) {
                 checkToken("", navigate);
                 return { success: false, message: "Credenciales incorrectas" };
@@ -57,6 +62,7 @@ export const OrderProvider = ({ children }: Props) => {
                     const result = await response.json();
 
                     if (result.success) {
+                        refreshOrders();
                         return { success: true, message: "Orden enviada correctamente" };
 
                     } else {
@@ -74,18 +80,140 @@ export const OrderProvider = ({ children }: Props) => {
         }
     }
 
-    useEffect(() => {
-        console.log('orden:', order)
-    }, [order])
+    const updateOrderState = async (orderId: number, newState: string): Promise<Response> => {
+        const isTokenValid = await validateToken();
 
+        if (!isTokenValid) {
+            return { success: false, message: "Token inválido." };
+        }
+
+        const token = localStorage.getItem('token')
+
+        try {
+            const response = await fetch(`${dev}/index.php?action=update-state-order`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify({orderId, newState}),
+            });
+
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                const errorData = await response.json();
+                return { success: false, message: errorData.message || "Error al actualizar el estado de la orden." };
+            }
+
+            return {
+                success: result.success,
+                message: result.message || "Estado de la orden modificado exitosamente.",
+            };
+
+        } catch (error) {
+            const errorMessage =
+                error instanceof TypeError
+                    ? "Error de conexión. Verifique su conexión a internet e intente nuevamente."
+                    : "Ocurrió un problema inesperado.";
+
+            return { success: false, message: errorMessage };
+        }
+    }
+
+    const updateNew = async (orderId: number): Promise<Response> => {
+        const isTokenValid = await validateToken();
+
+        if (!isTokenValid) {
+            return { success: false, message: "Token inválido." };
+        }
+
+        const token = localStorage.getItem('token')
+
+        try {
+            const response = await fetch(`${dev}/index.php?action=update-new`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify({orderId,}),
+            });
+
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                const errorData = await response.json();
+                return { success: false, message: errorData.message || "Error alcualizar la orden." };
+            }
+
+            refreshOrders();
+            return {
+                success: result.success,
+                message: result.message || "La orden se alcualizar exitosamente.",
+            };
+
+        } catch (error) {
+            const errorMessage =
+                error instanceof TypeError
+                    ? "Error de conexión. Verifique su conexión a internet e intente nuevamente."
+                    : "Ocurrió un problema inesperado.";
+
+            return { success: false, message: errorMessage };
+        }
+    }
+
+    const deleteOrder = async(orderId: number): Promise<Response> => {
+        const isTokenValid = await validateToken();
+
+        if (!isTokenValid) {
+            return { success: false, message: "Token inválido." };
+        }
+
+        const token = localStorage.getItem('token')
+
+        try {
+            const response = await fetch(`${dev}/index.php?action=delete-order`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify({orderId,}),
+            });
+
+            const result = await response.json();
+
+            if (!response.ok  || !result.success) {
+                const errorData = await response.json();
+                return { success: false, message: errorData.message || "Error al eliminar la orden." };
+            }
+
+            refreshOrders();
+            return {
+                success: result.success,
+                message: result.message || "La orden se eliminó exitosamente.",
+            };
+
+        } catch (error) {
+            const errorMessage =
+                error instanceof TypeError
+                    ? "Error de conexión. Verifique su conexión a internet e intente nuevamente."
+                    : "Ocurrió un problema inesperado.";
+
+            return { success: false, message: errorMessage };
+        }
+    }
+    
     const value = useMemo(() => ({
-        order,
+        
         addProductsToOrder,
         sendOrder,
+        updateOrderState,
+        updateNew,
+        deleteOrder,
     }),
-        [order]);
-
-
+        []);
 
     return <OrderContext.Provider value={value}>{children}</OrderContext.Provider>;
 }

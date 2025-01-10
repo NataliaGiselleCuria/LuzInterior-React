@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useApi } from "../../context/ApiProvider";
 import { useProduct } from "../../context/ProductProvider";
-import { FormImgsProduct, FormProduct, Product } from "../../Interfaces/interfaces"
+import { FormImgsProduct, FormProduct, Products } from "../../Interfaces/interfaces"
 import { useForm } from "react-hook-form";
 import FormImg from "../Tools/FormImg";
 import useVerifyToken from "../CustomHooks/verefyToken";
@@ -9,7 +9,7 @@ import useModal from "../CustomHooks/modal";
 import ModalMesagge from "../Tools/ModalMesagge";
 
 export interface ItemListProductProps {
-  product: Product;
+  product: Products;
 }
 
 const ItemListProduct = ({ product }: ItemListProductProps) => {
@@ -20,9 +20,9 @@ const ItemListProduct = ({ product }: ItemListProductProps) => {
   const [data, setData] = useState<{ productDetails: FormProduct | null; images: FormImgsProduct[]; }>({ productDetails: null, images: [] });
   const [isEditingProduct, setIsEditingProducts] = useState(false);
   const [isEditingImages, setIsEditingImages] = useState(false);
-  const [idEditingProduct, setIdEditingProducts] = useState("");
+  const [idEditingProduct, setIdEditingProduct] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
-  const { register, handleSubmit } = useForm<Product>({});
+  const { register, handleSubmit } = useForm<Products>({});
 
   useEffect(() => {
     if (product) {
@@ -53,7 +53,6 @@ const ItemListProduct = ({ product }: ItemListProductProps) => {
   };
 
   const onSubmitImages = (images: FormImgsProduct[]) => {
-    console.log("Imágenes para guardar:", images);
 
     setData((prevData) => ({
       ...prevData,
@@ -109,8 +108,6 @@ const ItemListProduct = ({ product }: ItemListProductProps) => {
           priority: original.priority,
         }));
 
-      console.log(deletedImages)
-
       if (data.images && data.images.length > 0) {
         const imageResponse = await uploadImages(idEditingProduct, data.images, deletedImages);
         if (!imageResponse.success) {
@@ -140,7 +137,7 @@ const ItemListProduct = ({ product }: ItemListProductProps) => {
       setIsEditingProducts(false);
       setIsEditingImages(false);
     } catch (error) {
-      openModal("Error", "Error inesperado al actualizar el producto.", closeModal);
+      openModal("Error", `Error inesperado al actualizar el producto: ${error}`, closeModal);
     }
   };
 
@@ -149,9 +146,9 @@ const ItemListProduct = ({ product }: ItemListProductProps) => {
     if (!isTokenValid) {
       return false;
     }
-    setIdEditingProducts(id);
+    setIdEditingProduct(id);
     setIsEditingProducts(true);
-    setIsEditingImages(false); // Cerrar la edición de imágenes si se abre la edición de información
+    setIsEditingImages(false);
   };
 
   const editProductImages = async (id: string) => {
@@ -159,7 +156,7 @@ const ItemListProduct = ({ product }: ItemListProductProps) => {
     if (!isTokenValid) {
       return false;
     }
-    setIdEditingProducts(id);
+    setIdEditingProduct(id);
     setIsEditingImages(true);
     setIsEditingProducts(false);
   };
@@ -171,7 +168,7 @@ const ItemListProduct = ({ product }: ItemListProductProps) => {
 
   return (
     <>
-      <li className="li-product">
+      <li className="li-acordeon">
         {!isEditingProduct && !isEditingImages ? (
           <>
             <div className="li-product-cont">
@@ -188,8 +185,8 @@ const ItemListProduct = ({ product }: ItemListProductProps) => {
               <div>
                 <ul className="ul-row-nopadding">
                   {product.img_url.map((img, index) => (
-                    <li className="el-100h " key={`${product.name} - ${index}`}>
-                      <img className="el-100h el-100w fix-img" id={img.id_img} src={`${dev}${img.url}`} alt={`${product.name} - ${img.id_img}`} />
+                    <li className="h100 " key={`${product.name} - ${index}`}>
+                      <img className="h100 w100 fix-img" id={img.id_img} src={`${dev}${img.url}`} alt={`${product.name} - ${img.id_img}`} />
                       {img.priority === 1 &&
                         <span className="priority-mark">Portada</span>
                       }
