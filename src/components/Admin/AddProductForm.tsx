@@ -5,8 +5,8 @@ import FormImg from "../Tools/FormImg";
 import { useApi } from "../../context/ApiProvider";
 import { useProduct } from "../../context/ProductProvider";
 import ModalMesagge from "../Tools/ModalMesagge";
-import useModal from "../CustomHooks/modal";
-import useVerifyToken from "../CustomHooks/verefyToken";
+import useModal from "../../CustomHooks/modal";
+import useVerifyToken from "../../CustomHooks/verefyToken";
 import './admin.css'
 
 
@@ -73,8 +73,7 @@ const AddProductForm = () => {
                 openModal("Éxito", "Producto e imágenes guardados exitosamente.", closeModal);
                 setData({ productDetails: null, images: [] });
                 setProductId(null);
-                reset();
-                
+                reset();               
             } else {
                 openModal(
                     "Error", `Error al guardar el producto e imágenes: ${response.message}`, closeModal
@@ -101,6 +100,9 @@ const AddProductForm = () => {
                 openModal(
                     "Éxito", "Producto guardados exitosamente.", () => closeModal()
                 );
+                setData({ productDetails: null, images: [] });
+                setProductId(null);
+                reset();           
             } else {
                 openModal(
                     "Error", `Error al guardar el producto: ${response.message}`, () => closeModal()
@@ -151,6 +153,10 @@ const AddProductForm = () => {
                     <label htmlFor="description">Descripción: </label>
                     <textarea id="description" {...register('description', { required: true })} disabled={!isIdValid}></textarea>
                 </div>
+                <span>
+                    <label htmlFor="description">Marcar como novedad: </label>
+                    <input type="checkbox" id="novelty" {...register('novelty')} disabled={!isIdValid}></input>
+                </span>
             </form>
             <button type="button" onClick={addImg} disabled={!isIdValid}>Agregar imagenes</button>
             {productId && (

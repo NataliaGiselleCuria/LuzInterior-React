@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"
 import { useUser } from "../../context/UserContext";
 import { FormRegister } from "../../Interfaces/interfaces";
-import useModal from "../CustomHooks/modal";
+import useModal from "../../CustomHooks/modal";
 import ModalMesagge from "../Tools/ModalMesagge";
 
 const Register = () => {
@@ -28,7 +28,7 @@ const Register = () => {
 
             if (result.success) {
                 setErrorMessage("");
-                navigate("/registro_finalizado");
+                navigate("/registro_finalizado");              
             } else {
                 setErrorMessage(result.message);
             }

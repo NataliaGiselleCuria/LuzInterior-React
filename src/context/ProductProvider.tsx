@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import React, { createContext, useContext, useMemo } from "react";
 import { FormImgsProduct, FormProduct, ListPrice, ProductContextType, Response } from "../Interfaces/interfaces";
 import { useApi } from "./ApiProvider";
-import useVerifyToken from "../components/CustomHooks/verefyToken";
+import useVerifyToken from "../CustomHooks/verefyToken";
 
 
 export const ProductContext = createContext<ProductContextType>({} as ProductContextType);
@@ -29,6 +29,7 @@ export const ProductProvider = ({ children }: Props) => {
     }
 
     const token = localStorage.getItem('token')
+    console.log(data)
 
     try {
       const response = await fetch(`${dev}/index.php?action=register-product`, {
@@ -91,8 +92,7 @@ export const ProductProvider = ({ children }: Props) => {
       const result = await response.json();
 
       if (!response.ok || !result.success) {
-        const errorData = await response.json();
-        return { success: false, message: errorData.message || "Error al actualizar el producto." };
+        return { success: false, message: result.message || "Error al actualizar el producto." };
       }
 
       refreshProducts();
@@ -181,12 +181,15 @@ export const ProductProvider = ({ children }: Props) => {
     try {
       const token = localStorage.getItem('token')
 
+      console.log(formData)
+      
       const response = await fetch(`${dev}/index.php?action=upload-images-products`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
         },
         body: formData,
+        
       });
 
       const result = await response.json();
@@ -215,6 +218,7 @@ export const ProductProvider = ({ children }: Props) => {
       return { success: false, message: "Token inválido." };
     }
 
+    console.log(productData)
     const formData = new FormData();
 
     formData.append("id", productData.id);
@@ -222,6 +226,7 @@ export const ProductProvider = ({ children }: Props) => {
     formData.append("price", productData.price.toString());
     formData.append("category", productData.category);
     formData.append("description", productData.description);
+    formData.append("novelty", productData.novelty ? "true" : "false");
 
     images.forEach((image, index) => {
       formData.append(`image${index}`, image.url); // `url` aquí representa el archivo
@@ -324,10 +329,6 @@ export const ProductProvider = ({ children }: Props) => {
         formData.append("list_price", data.list_price[0]);
       }
 
-      for (let [key, value] of formData.entries()) {
-        console.log(key, value);
-      }
-
       const response = await fetch(`${dev}/index.php?action=update-list-price`, {
         method: "POST",
         headers: {
@@ -337,7 +338,6 @@ export const ProductProvider = ({ children }: Props) => {
       });
 
       const result = await response.json();
-      console.log(result)
 
       if (!response.ok || !result.success) {
         return { success: false, message: result.message || `Error al actualizar la lista ded precios: ${result.mesagge}` };

@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useUser } from "../../context/UserContext"
 import { FormAccountInformation, FormPersonalInformation } from "../../Interfaces/interfaces";
 import FormAddresses from "../Tools/FormAddresses";
-import { useUpdateUserInfo } from "../CustomHooks/updateUserInfo";
-import useModal from "../CustomHooks/modal";
+import { useUpdateUserInfo } from "../../CustomHooks/updateUserInfo";
+import useModal from "../../CustomHooks/modal";
 import ModalMesagge from "../Tools/ModalMesagge";
 
 

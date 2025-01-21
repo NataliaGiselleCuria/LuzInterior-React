@@ -3,11 +3,13 @@
     color: white;
     height: 110px;
     position: relative;
+    padding: 0;
 }
 
 #nav li a,
 #nav li {
     color: white;
+    font-weight: 200;
 }
 
 .nav-cont {
@@ -16,8 +18,16 @@
     height: 100%;
 }
 
+.nav-logo{
+    height: 80%;
+    margin: auto;
+}
+
 .nav-cont a{
     height: 60%;
+    margin: auto;
+    display: flex;
+    align-items: center;
 }
 
 .navbar-collapse {
@@ -39,6 +49,7 @@ ul.dropdown-menu.show {
     border: none;
     background-color: var(--black);
     border-radius: 0 0 6px 6px;
+    height: auto;
 }
 
 input.search-input {
@@ -46,8 +57,7 @@ input.search-input {
     border: none;
     color: white;
     margin-left: 5px;
-    padding-left: 5px;
-    border-bottom: 1px solid #a1a1a1;
+    border-bottom: 1px solid var(--grey);
 }
 
 input.search-input:focus-visible {
@@ -166,21 +176,21 @@ ul.dropdown-search li:last-child {
 
 }
 
-.drop-user {
-    left: -55px !important;
-}
-
-
 
 @media (max-width: 768px) {
 
     #nav {
         height: 70px;
-
     }
 
     .nav-cont {
         flex-direction: row;
+        align-items: center;
+    }
+
+    .nav-cont a{
+        margin: 0;
+        
     }
 
     .navbar-collapse {
@@ -189,15 +199,30 @@ ul.dropdown-search li:last-child {
         left: 0;
         width: 100dvw;
         height: fit-content;
+    }
 
+    .dropdown-menu.drop-user.show, .navbar-collapse{
+        height: 100dvh;
+        background-image: url(/src/assets/tortuga-agua.png);
+        background-repeat: no-repeat;
+        background-blend-mode: overlay;
+        background-position: bottom right;
+        background-attachment: fixed;
+        background-size: 50%;
+    }
+    
+    .nav-logo{
+        height: 100%;
+        margin: 0;
     }
 
     .navbar-collapse ul {
         padding: 0 15px;
         align-items: flex-start !important;
+        padding-bottom: 15px;
     }
 
-    .nav-links {
+    .nav-links a {
         height: auto;
     }
 
@@ -209,7 +234,7 @@ ul.dropdown-search li:last-child {
 
     .icons-navbar {
         position: unset;
-        height: 60%;
+        height: 40%;
     }
 
     .button-text {

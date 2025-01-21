@@ -1,11 +1,13 @@
 import React from 'react';
-import { Products, Users } from '../../Interfaces/interfaces';
+import { Orders, Products, Users } from '../../Interfaces/interfaces';
 import { Link } from 'react-router-dom';
+import { useSearch } from '../../CustomHooks/useSearch';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 import search from '../../assets/search.png'
-import { useSearch } from '../CustomHooks/useSearch';
 
 interface SearchBarProps {
-  data: (Products | Users)[];
+  data: (Products | Users | Orders)[];
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({ data }) => {
@@ -14,7 +16,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ data }) => {
   return (
     <div className="search-cont">
       <span className='search-input'>
-        <img src={search} alt='buscador'></img>
+        <LazyLoadImage src={search} alt='buscador'></LazyLoadImage>
         <input
           type="text"
           value={searchQuery}
@@ -26,13 +28,13 @@ const SearchBar: React.FC<SearchBarProps> = ({ data }) => {
       {filteredResults.length > 0 && (
         <ul className="dropdown-search">
           {filteredResults.map((item) => (
-           <li key={item.id}>
-           {isProduct(item) ? (
+            <li key={item.id}>
+              {isProduct(item) ? (
                 <Link to={`/productos/id/${item.id}`}>{item.name}</Link>
-              ) : (
+              ) : 'name' in item ? (
                 <p>{item.name}</p>
-              )}
-         </li>
+              ) : null}
+            </li>
           ))}
         </ul>
       )}
@@ -40,7 +42,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ data }) => {
   );
 };
 
-const isProduct = (item: Products | Users): item is Products => {
+const isProduct = (item: Products | Users | Orders): item is Products => {
   return (item as Products).name !== undefined;
 }
 

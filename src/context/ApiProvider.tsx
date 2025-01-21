@@ -93,8 +93,7 @@ export const ApiProvider = ({ children }: Props) => {
                 },
                 body: JSON.stringify({ email }),
             });
-            const data = await response.json(); 
-            console.log(data);
+            const data = await response.json();
             return data;
         } catch (error) {
             throw new Error("Error al obtener los datos del usuario");
@@ -156,29 +155,39 @@ export const ApiProvider = ({ children }: Props) => {
         }
     };
 
-    useEffect(() => {
-   
+    const refreshGallery = async() => {
+        try {
+            const updateGallery = await fetch(`${dev}/index.php?action=gallery`);
+            const data = await updateGallery.json();
+            setGallery(data);
+        } catch (error) {
+            throw new Error("Error al obtener las imagenes de la galería");
+        }
+    }
 
-        getFile();
-        
+    useEffect(() => {
+        getFile();        
       }, []);
     
-      const getFile = async () => {
-        try {
-          const response = await fetch(`${dev}/index.php?action=get-list-price`); // Ajusta la ruta del endpoint PHP
-          const data = await response.json();
-    
-          const list = `${dev}/${data.fileUrl}`;
-          console.log(list)
-          if (data.success) {
-            setFileUrl(list); // Guarda la URL del archivo
-          } else {
-            console.error(data.message);
-          }
-        } catch (error) {
-          console.error('Error fetching the file URL:', error);
+    const getFile = async () => {
+    try {
+        const response = await fetch(`${dev}/index.php?action=get-list-price`); // Ajusta la ruta del endpoint PHP
+        const data = await response.json();
+
+        const list = `${dev}/${data.fileUrl}`;
+        if (data.success) {
+        setFileUrl(list); // Guarda la URL del archivo
+        } else {
+        console.error(data.message);
         }
-      };
+    } catch (error) {
+        console.error('Error fetching the file URL:', error);
+    }
+    };
+
+    useEffect(() => {
+       console.log(products)        
+      }, [products]);
 
     const apiValue = useMemo(() => ({
         products,
@@ -198,6 +207,7 @@ export const ApiProvider = ({ children }: Props) => {
         dev,
         fetchUserData,
         refreshOrders,
+        refreshGallery,
         getFile
        
     }),

@@ -2,12 +2,13 @@
 import { useUser } from "../../context/UserContext";
 import { useForm } from "react-hook-form";
 import { FormAccountInformation, FormSocial } from "../../Interfaces/interfaces";
-import useModal from "../CustomHooks/modal";
-import { useUpdateUserInfo } from "../CustomHooks/updateUserInfo";
+import useModal from "../../CustomHooks/modal";
+import { useUpdateUserInfo } from "../../CustomHooks/updateUserInfo";
 import ModalMesagge from "../Tools/ModalMesagge";
 import { useApi } from "../../context/ApiProvider";
-import React, { useEffect, useState } from "react";
-import useVerifyToken from "../CustomHooks/verefyToken";
+import React from "react";
+import useVerifyToken from "../../CustomHooks/verefyToken";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 
 const AdminAccount = () => {
@@ -37,6 +38,7 @@ const AdminAccount = () => {
         const labels: Record<string, string> = {
             email: "Correo Electrónico",
             store_address: "Dirección de la Tienda",
+            map: "Mapa ionteractivo",
             tel: "Teléfono",
         };
         return labels[name] ?? name; // Devuelve la clave original si no hay coincidencia
@@ -49,7 +51,6 @@ const AdminAccount = () => {
             });
         }
 
-        console.log(companyInfo)
     }, [companyInfo, companyValues]);
 
     const companySubmit = async (data: Record<string, string>) => {
@@ -94,7 +95,6 @@ const AdminAccount = () => {
         const updateProducts = await fetch(`${dev}/index.php?action=social`);
         const data = await updateProducts.json();
         setSocial(data);
-        console.log(social)
     }
 
     const socialSubmit = async (data: FormSocial) => {
@@ -103,11 +103,7 @@ const AdminAccount = () => {
         if (!isTokenValid) {
             return { success: false, message: "Token inválido." };
         }
-
-        console.log(data)
-
         try {
-
             const token = localStorage.getItem('token')
 
             const formData = new FormData();
@@ -127,7 +123,6 @@ const AdminAccount = () => {
 
             if (!response.ok || !result.success) {
                 openModal("Error", `Error al actualizar la información" ${result.message}`, closeModal);
-                console.log(response)
                 return
             } else {
                 openModal("Éxito", "Información actualizada correctamente", closeModal);
@@ -165,6 +160,12 @@ const AdminAccount = () => {
             openModal("Error", `No se pudo eliminar la red social" , ${error}`, closeModal);
         }
     };
+
+    const openInfoMap = () => {
+        openModal("Mapa interactivo", 
+            "Este mapa se verá en la página de Contacto. Modifique el valor de este campo si cambia la Dirección de la tienda. Para insertar el nuevo valor, ingresa a Google Maps y busca en el mapa la nueva dirección. Haz clic en el botón de compartir (ícono de enlace), selecciona la opción 'Insertar un mapa' y copia el código <iframe> generado o el enlace de inserción. Pega este enlace en el campo de 'Mapa interactivo' y guarda los cambios.", 
+            closeModal);
+    } 
    
 
     return (
@@ -196,6 +197,7 @@ const AdminAccount = () => {
                             />
                         </div>
                     ))}
+                    <button type='button' onClick={() => openInfoMap()}> Info mapa interactivo</button>
                     <button type="submit">Guardar Cambios</button>
                 </form>
             </div>
@@ -237,7 +239,7 @@ const AdminAccount = () => {
                                 <span>
                                     <p>{item.id}</p>
                                     <p>{item.url}</p>
-                                    <img src={`${dev}/${item.img_social}`} alt={item.id} width="50" height="50" />
+                                    <LazyLoadImage src={`${dev}/${item.img_social}`} alt={item.id} width="50" height="50" />
                                 </span>
                                 <span>
                                     <button onClick={() => deleteSocial(item.id)}>Eliminar</button>

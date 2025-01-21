@@ -35,7 +35,10 @@ export const cartReducer = (state: CartState, action: CartAction): CartState => 
                         : item
                 );
             } else {
-                updatedCart = [...state.cart, { product, quantity }];
+                updatedCart = [
+                    ...state.cart,
+                    { product, product_id: product.id, quantity }
+                ];
             }
             
             return {

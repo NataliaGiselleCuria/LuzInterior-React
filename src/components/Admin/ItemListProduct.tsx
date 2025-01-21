@@ -4,9 +4,10 @@ import { useProduct } from "../../context/ProductProvider";
 import { FormImgsProduct, FormProduct, Products } from "../../Interfaces/interfaces"
 import { useForm } from "react-hook-form";
 import FormImg from "../Tools/FormImg";
-import useVerifyToken from "../CustomHooks/verefyToken";
-import useModal from "../CustomHooks/modal";
+import useVerifyToken from "../../CustomHooks/verefyToken";
+import useModal from "../../CustomHooks/modal";
 import ModalMesagge from "../Tools/ModalMesagge";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 export interface ItemListProductProps {
   product: Products;
@@ -33,6 +34,7 @@ const ItemListProduct = ({ product }: ItemListProductProps) => {
           category: product.category,
           price: product.price,
           description: product.description,
+          novelty:product.novelty,
         },
         images: product.img_url.map((img) => ({
           id: img.id_img,
@@ -115,7 +117,6 @@ const ItemListProduct = ({ product }: ItemListProductProps) => {
         }
       }
 
-      // Gestión de mensajes
       if (productUpdateSuccess && imageUpdateSuccess) {
         openModal("Éxito", "Producto e imágenes actualizados correctamente.", closeModal);
       } else if (productUpdateSuccess && !imageUpdateSuccess) {
@@ -186,7 +187,7 @@ const ItemListProduct = ({ product }: ItemListProductProps) => {
                 <ul className="ul-row-nopadding">
                   {product.img_url.map((img, index) => (
                     <li className="h100 " key={`${product.name} - ${index}`}>
-                      <img className="h100 w100 fix-img" id={img.id_img} src={`${dev}${img.url}`} alt={`${product.name} - ${img.id_img}`} />
+                      <LazyLoadImage className="h100 w100 fix-img" id={img.id_img} src={`${dev}${img.url}`} alt={`${product.name} - ${img.id_img}`} />
                       {img.priority === 1 &&
                         <span className="priority-mark">Portada</span>
                       }
@@ -215,6 +216,10 @@ const ItemListProduct = ({ product }: ItemListProductProps) => {
                   <span>Descripción:</span>
                   <textarea id="description" {...register('description', { required: true })} defaultValue={product.description}></textarea>
                 </div>
+                <div>
+                  <span>Marcar como novedad:<input id="novelty" type="checkbox" {...register('novelty')} defaultChecked={product.novelty}></input></span>
+                </div>
+
                 <button type="submit" onClick={handleSubmit(onSubmitProductInfo)}>Guardar Información</button>
               </form>
             )}

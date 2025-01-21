@@ -1,10 +1,10 @@
 
 import { useApi } from "../../context/ApiProvider";
 import { useCart } from "../../context/CartProvider";
-import QuantitySelector from "./QuantitySelector";
-import useCurrencyFormat from "../CustomHooks/currencyFormat";
 import { useUser } from "../../context/UserContext";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import QuantitySelector from "./QuantitySelector";
+import useCurrencyFormat from "../../CustomHooks/currencyFormat";
 import 'react-lazy-load-image-component/src/effects/blur.css';
 
 interface Props {

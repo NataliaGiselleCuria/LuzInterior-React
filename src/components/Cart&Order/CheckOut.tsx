@@ -7,13 +7,13 @@ import { useCart } from "../../context/CartProvider";
 import { useOrder } from "../../context/OrderProvider";
 import { useUser } from "../../context/UserContext";
 import { Address, Orders, Shipping } from "../../Interfaces/interfaces";
-import { useUpdateUserInfo } from "../CustomHooks/updateUserInfo";
-import useCurrencyFormat from "../CustomHooks/currencyFormat";
+import { useUpdateUserInfo } from "../../CustomHooks/updateUserInfo";
+import useCurrencyFormat from "../../CustomHooks/currencyFormat";
 import ProductsInCart from "../Tools/ProductsInCart";
 import FormAddresses from "../Tools/FormAddresses";
-import useModal from "../CustomHooks/modal";
+import useModal from "../../CustomHooks/modal";
 import ModalMesagge from "../Tools/ModalMesagge";
-import useVerifyToken from "../CustomHooks/verefyToken";
+import useVerifyToken from "../../CustomHooks/verefyToken";
 import './cart.css'
 
 

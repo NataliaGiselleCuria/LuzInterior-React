@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, ReactNode, useCallback, useContext, useMemo, useState } from "react";
 import { NavigateFunction } from 'react-router-dom';
 import { FormRegister, Response, UserContextType, ApiResponse, Users } from "../Interfaces/interfaces";
 import { useApi } from "./ApiProvider";
@@ -22,7 +22,6 @@ export const UserProvider = ({ children }: Props) => {
 
             if (userActiveResponse.success && userActiveResponse.user) {
                 setUserActive(userActiveResponse.user);
-                console.log('userActive', userActive);
                 return { success: true, message: "Inicio de sesión exitoso", user: userActiveResponse.user };
             } else {
                 return { success: false, message: "No se pudieron obtener los datos del usuario" };
@@ -130,6 +129,7 @@ export const UserProvider = ({ children }: Props) => {
     };
 
     const userRegister = async (data: FormRegister): Promise<Response> => {
+
         try {
             const response = await fetch(`${dev}/index.php?action=register-user`, {
                 method: 'POST',
@@ -142,12 +142,11 @@ export const UserProvider = ({ children }: Props) => {
             const result = await response.json();
 
             if (!response.ok  || !result.success) {
-                const errorData = await response.json();
-
-                if (errorData.message) {
+               
+                if (result.message) {
                     return {
                         success: false,
-                        message: errorData.message
+                        message: result.message
                     };
                 }
 

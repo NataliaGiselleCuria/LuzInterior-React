@@ -1,6 +1,41 @@
 #root {
-  --black: #333333 ;
-  
+  --black: #3a3a3a ;
+  --grey: #7d7d7d;
+  --light: rgb(226, 222, 210);
+  --font-light: rgb(93 90 82);
+
+}
+
+html{
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #3a3a3a rgb(226, 222, 210);
+ 
+}
+  /* width */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background:  rgb(226, 222, 210);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #3a3a3a;
+}
+
+body{
+  font-family: "Roboto Flex", serif;
+  font-weight: 300;
+}
+
+h1,h2,h3,h4,h5 {
+  font-family: "DM Serif Text", serif;
+  margin: 0;
 }
 
 p{
@@ -16,20 +51,23 @@ a:visited{
   background-color: none;
 }
 
+ul{
+  padding: 0;
+}
+
 li{
   list-style: none;
 }
 
 .ul-row-nopadding{
   display: flex;
-  padding: 0;
+  align-items: center;
   gap: 10px;
 }
 
 .ul-column-nopadding{
   display: flex;
   flex-direction: column;
-  padding: 0;
   gap: 10px;
 }
 
@@ -45,9 +83,47 @@ li{
   object-fit: contain;
 }
 
+.general-button {
+  background: var(--black);
+  border: none;
+  border-radius: 4px;
+  padding: 5px 30px;
+  color: white;
+  font-weight: 300;
+  filter: drop-shadow(2px 1px 2px #7d7d7dbf);
+}
+
+.general-button:hover{
+  background-color: var(--light);
+  filter: none;
+}
+
+.general-button:hover a{
+  color: var(--font-light)!important;
+}
+
+.title-page{
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 25px 0;
+}
+
+.title-page h1{
+  text-transform: uppercase;
+  filter: drop-shadow(2px 1px 2px #7d7d7dbf);
+  white-space: nowrap;
+}
+
+.route {
+  display: flex;
+  align-items: center;
+  height: 50px;
+  gap: 5px;
+}
 
 @media (min-width: 1400px) {
   .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
-      max-width: 1520px;
+      max-width: 1620px;
   }
 }

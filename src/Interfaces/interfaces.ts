@@ -7,6 +7,7 @@ export interface Products {
     price: number;
     description: string;
     img_url: { id_img: string, url: File; priority: number }[];
+    novelty:boolean;
 }
 
 export interface Users {
@@ -117,6 +118,7 @@ export interface FormProduct {
     category: string;
     price: number;
     description: string;
+    novelty:boolean;
 }
 
 export interface FormImgsProduct {
@@ -170,6 +172,7 @@ export type ApiContextType = {
     categories: string[];
     fetchUserData: (token: string, email: string) => Promise<ApiResponse>;  
     refreshOrders: () => Promise<void>;
+    refreshGallery: () => Promise<void>;
     fileUrl:string;
     getFile: () => void;
 }

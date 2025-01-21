@@ -3,7 +3,8 @@ import { Address, Orders, OrderContextType, ProductInCart, Shipping, Response, U
 import { useApi } from "./ApiProvider";
 import { useUser } from "./UserContext";
 import { NavigateFunction } from "react-router-dom";
-import useVerifyToken from "../components/CustomHooks/verefyToken";
+import useVerifyToken from "../CustomHooks/verefyToken";
+import { useCart } from "./CartProvider";
 
 
 export const OrderContext = createContext<OrderContextType>({} as OrderContextType);
@@ -16,8 +17,9 @@ export const OrderProvider = ({ children }: Props) => {
 
     const { checkToken } = useUser();
     const { dev, refreshOrders } = useApi();
+    const { clearCart } = useCart();
     const { validateToken } = useVerifyToken();
-    const [order, setOrder] = useState<Orders | null>(null);
+    const [ order, setOrder ] = useState<Orders | null>(null);
 
 
     const addProductsToOrder = (user: Users, cart: ProductInCart[], totalPrice: number, address: Address, shipping: Shipping) => {
@@ -63,6 +65,7 @@ export const OrderProvider = ({ children }: Props) => {
 
                     if (result.success) {
                         refreshOrders();
+                        clearCart();
                         return { success: true, message: "Orden enviada correctamente" };
 
                     } else {
@@ -212,6 +215,7 @@ export const OrderProvider = ({ children }: Props) => {
         updateOrderState,
         updateNew,
         deleteOrder,
+        order
     }),
         []);
 

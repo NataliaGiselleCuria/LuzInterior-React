@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Orders, Products, Users } from '../../Interfaces/interfaces';
+import { Orders, Products, Users } from '../Interfaces/interfaces';
 
 export const useSearch = (data: (Products | Users | Orders)[], showAll: boolean = false) => {
     const [searchQuery, setSearchQuery] = useState('');

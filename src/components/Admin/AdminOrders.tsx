@@ -2,10 +2,10 @@
 import { useEffect, useState } from 'react';
 import { useApi } from '../../context/ApiProvider'
 import { useOrder } from '../../context/OrderProvider';
-import useModal from '../CustomHooks/modal';
-import useVerifyToken from '../CustomHooks/verefyToken';
+import useModal from '../../CustomHooks/modal';
+import useVerifyToken from '../../CustomHooks/verefyToken';
 import ModalMesagge from '../Tools/ModalMesagge';
-import { useSearch } from '../CustomHooks/useSearch';
+import { useSearch } from '../../CustomHooks/useSearch';
 import { Orders } from '../../Interfaces/interfaces';
 import ItemListOrder from './ItemListOrder';
 

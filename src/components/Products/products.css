@@ -1,14 +1,112 @@
+/* Page List products */
+.prod-list-cont {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: 20px;
+    justify-items: center;
+    justify-content: center;
+    margin-top: 55px;
+}
 
-/* Lista de productos */
-.prod-img{
-    height: 250px;
-    width: 250px;
+.prod-list .container .ul-row-nopadding li {
+    width: fit-content;
+}
+
+li.prod-list-li {
+    height: 700px;
+    width: 520px;
+    max-width: 90dvw;
+}
+
+li.categories {  
+    width: 155px;
+    text-align: center;
+    border: 1px solid var(--light);
+}
+
+li.categories:hover {
+    background-color: var(--light);
+
+}
+
+/* Product Card */
+.prod-card-cont .img-cont {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80%;
+    width: 100%;
+    overflow: hidden;
+}
+
+.prod-card-img {
+    object-fit: cover;
+    display: block;
+    height: 100%;
+    image-rendering: auto;
+}
+
+.novelty-mark {
+    position: absolute;
+    top: 0;
+    right: 50px;
+    background-color: var(--light);
+    color: black;
+    padding: 2px 10px;
+}
+
+.prod-card-description{
+    height: 20%;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+}
+
+.prod-card-description h4,
+.prod-card-description h5 {
+    font-family: 'Roboto Flex', sans-serif !important;
+    font-size: 18px;
+    color: var(--black);
+    padding: 4px;
+    padding-bottom: 0;
+}
+
+.prod-card-description span{
+    display: flex;
+    align-items: baseline;
+    border-bottom: 1px solid var(--black);
+}
+
+.prod-card-description p {
+    font-size:large;
+    padding-top: 4px;
 }
 
 
-/* Detalle de producto */
 
-.prod-img-detail{
+
+.prod-img-detail {
     height: 400px;
     width: 400px;
+}
+
+@media (max-width: 500px) {
+
+    li.prod-list-li {
+        height: 600px;
+        max-height: 90dvh;       
+    }
+
+    .prod-card-description span{
+        flex-direction: column;
+        align-items: center;
+        border: none;
+    }
+
+    .prod-card-description h4{
+        border-bottom: 1px solid var(--black);
+    }
 }

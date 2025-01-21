@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useApi } from "../../context/ApiProvider"
 import { ListPrice, Products } from "../../Interfaces/interfaces";
-import { useSearch } from "../CustomHooks/useSearch";
+import { useSearch } from "../../CustomHooks/useSearch";
 import AddProductForm from "./AddProductForm";
 import ItemListProduct from "./ItemListProduct";
-import useVerifyToken from "../CustomHooks/verefyToken";
-import useModal from "../CustomHooks/modal";
+import useVerifyToken from "../../CustomHooks/verefyToken";
+import useModal from "../../CustomHooks/modal";
 import ModalMesagge from "../Tools/ModalMesagge";
 import { useProduct } from "../../context/ProductProvider";
 import { useForm } from "react-hook-form";

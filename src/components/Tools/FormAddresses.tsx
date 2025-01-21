@@ -3,8 +3,8 @@ import { Address } from "../../Interfaces/interfaces";
 
 import './tools.css'
 import { useUser } from "../../context/UserContext";
-import { useUpdateUserInfo } from "../CustomHooks/updateUserInfo";
-import useModal from "../CustomHooks/modal";
+import { useUpdateUserInfo } from "../../CustomHooks/updateUserInfo";
+import useModal from "../../CustomHooks/modal";
 
 export interface FormAddresses {
     address: Address | null,

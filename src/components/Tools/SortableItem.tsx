@@ -39,7 +39,7 @@ const SortableItem: React.FC<SortableItemProps> = ({ id, img, onRemove }) => {
         <span>Prioridad: {img.priority}</span>
       </li>
       <button onClick={() => { onRemove(img.id) }}>
-        <img className="w100 h100 fix-img" src={trash} alt="eliminar"></img>
+        <LazyLoadImage className="w100 h100 fix-img" src={trash} alt="eliminar"></LazyLoadImage>
         </button>
     </div>
   );

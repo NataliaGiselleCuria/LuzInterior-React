@@ -1,51 +1,63 @@
 import { Link, useParams } from "react-router-dom";
 import { useApi } from "../../context/ApiProvider"
-import { useUser } from "../../context/UserContext";
-import useCurrencyFormat from "../CustomHooks/currencyFormat";
-import { LazyLoadImage } from 'react-lazy-load-image-component';
-import 'react-lazy-load-image-component/src/effects/blur.css';
+import ProductCard from "./ProductCard";
 import './products.css'
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const ProductList = () => {
 
-    const { isLogin } = useUser();
-    const { products, categories, dev } = useApi();
+    const { products, categories } = useApi();
     const { category } = useParams<{ category?: string }>();
-    const formatCurrency = useCurrencyFormat();
+    const navigate = useNavigate();
 
     const productFilter = category
         ? products.filter((product) => product.category === category)
         : products;
 
+    useEffect(() => {
+        const savedScrollPosition = sessionStorage.getItem("scrollPosition");
+        if (savedScrollPosition) {
+            window.scrollTo(0, parseInt(savedScrollPosition, 10));
+            sessionStorage.removeItem("scrollPosition"); 
+        }
+    }, []);
+
+    const handleProductClick = (productId:string) => {
+        sessionStorage.setItem("scrollPosition", String(window.scrollY));
+        navigate(`/productos/id/${productId}`);
+    };
+
     return (
-        <div className="cont container">
-            <h2>{category ? `${category}` : 'Todos los Productos'}</h2>
+        <div className="cont container prod-list">
+            <div className="title-page">
+                <h1>{category ? `${category}` : 'PRODUCTOS'}</h1>
+                <span className="line"></span>
+            </div>
             {!category && (
-                <div>
-                    <h3>Categorías</h3>
-                    <ul>
+                <div className="container">
+                    <ul className="row row-cols-1 row-cols-sm-2 row-cols-md-7 ul-row-nopadding">
                         {categories.map((cat) => (
-                            <li key={cat}>
+                            <li key={cat} className="categories">
                                 <Link to={`/productos/categoria/${cat}`}>{cat}</Link>
                             </li>
                         ))}
                     </ul>
                 </div>
             )}
-            <div>
-                <Link to={'/productos'}>/todos los productos</Link>
-                <ul>
+            <span className="route"><Link to={'/productos'}>/todos los productos</Link></span>
+            <div className="container">
+                <ul className="prod-list-cont">
                     {productFilter.map((product) => (
-                    
-                        <li key={product.id}>
-                            <Link to={`/productos/id/${product.id}`}>
-                                <LazyLoadImage  className='prod-img' src={`${dev}${product.img_url[0]?.url}`} alt={product.name} />
-                                <h3>{product.name}</h3>
-                                <h4>{product.id}</h4>
-                                {isLogin && <p>Precio: {formatCurrency(product.price)}</p>}
+                        <li key={product.id} className="prod-list-li">
+                            <Link to={`/productos/id/${product.id}`} className="h100 w100" onClick={() => handleProductClick(product.id)}>
+                                <ProductCard
+                                    key={product.id}
+                                    product={product}
+                                />
                             </Link>
                         </li>
-                    
+
                     ))}
                 </ul>
             </div>

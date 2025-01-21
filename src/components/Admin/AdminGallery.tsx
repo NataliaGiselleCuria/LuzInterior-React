@@ -5,12 +5,12 @@ import { arrayMove, SortableContext, rectSwappingStrategy } from "@dnd-kit/sorta
 import SortableItem from "../Tools/SortableItem";
 import { FormGalleryImgs } from "../../Interfaces/interfaces";
 import { useApi } from "../../context/ApiProvider";
-import useVerifyToken from "../CustomHooks/verefyToken";
+import useVerifyToken from "../../CustomHooks/verefyToken";
 import ModalMesagge from "../Tools/ModalMesagge";
-import useModal from "../CustomHooks/modal";
+import useModal from "../../CustomHooks/modal";
 
 const AdminGallery: React.FC = () => {
-  const { dev, gallery } = useApi();
+  const { dev, gallery, refreshGallery } = useApi();
   const { validateToken } = useVerifyToken();
   const { modalConfig, openModal, closeModal } = useModal();
   const { register, reset } = useForm<FormGalleryImgs>();
@@ -88,6 +88,7 @@ const AdminGallery: React.FC = () => {
         setImages((prev) => [...prev, newImage]);
         setCurrentFile(null);
         setPreview(null);
+        refreshGallery();
         reset();
 
       } else {
@@ -169,6 +170,7 @@ const AdminGallery: React.FC = () => {
           if (!data.success) {
              openModal("Error", `Error al actualizar la galería: ${data.message}`, closeModal);
           }
+          refreshGallery();
         })
     } catch (error) {
       openModal("Error", `Error en la conxión: ${error}`, closeModal);

@@ -15,6 +15,7 @@ const PasswordRecover = () => {
   const { register, handleSubmit } = useForm<RecoverInput>();
 
   const handleRecover = async (data: RecoverInput) => {
+    setMessage("");
     const result = await recoverPassword(data.email);
     setMessage(result.message);
   };
@@ -22,7 +23,7 @@ const PasswordRecover = () => {
   return (
     <div className="cont container">
       <h2>Recuperar contraseña</h2>
-      <form onSubmit={handleSubmit(handleRecover)}>
+      <form onSubmit={handleSubmit(handleRecover)}> 
         <p>Ingrese su email</p>
         <input 
         id="email"

@@ -1,9 +1,8 @@
 import { useForm } from "react-hook-form";
 import { useApi } from "../../context/ApiProvider";
-import { Shipping } from "../../Interfaces/interfaces";
-import useVerifyToken from "../CustomHooks/verefyToken";
+import useVerifyToken from "../../CustomHooks/verefyToken";
 import ModalMesagge from "../Tools/ModalMesagge";
-import useModal from "../CustomHooks/modal";
+import useModal from "../../CustomHooks/modal";
 
 
 const AdminShipping = () => {
