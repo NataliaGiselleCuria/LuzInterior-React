@@ -156,7 +156,7 @@ const CheckOut = () => {
       {(!isLogin) ?
         <>
           <h3>Inicie sesión para continuar</h3>
-          <button onClick={() => navigate('/mayoristas', { state: { from: '/checkout' } })}>  Iniciar sesión </button>
+          <button onClick={() => navigate('/login', { state: { from: '/checkout' } })}>  Iniciar sesión </button>
           <Link to='/registro'>¿No tienes cuenta aún?</Link>
         </>
         :

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Orders, Products, Users } from '../../Interfaces/interfaces';
 import { Link } from 'react-router-dom';
 import { useSearch } from '../../CustomHooks/useSearch';
@@ -12,23 +12,33 @@ interface SearchBarProps {
 
 const SearchBar: React.FC<SearchBarProps> = ({ data }) => {
   const { searchQuery, filteredResults, handleSearchChange } = useSearch(data);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const handleOptionClick = () => {
+    setIsDropdownOpen(false);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleSearchChange(e);
+    setIsDropdownOpen(true);
+  };
 
   return (
     <div className="search-cont">
-      <span className='search-input'>
-        <LazyLoadImage src={search} alt='buscador'></LazyLoadImage>
+      <span className="search-input">
+        <LazyLoadImage src={search} alt="buscador" />
         <input
           type="text"
           value={searchQuery}
-          onChange={handleSearchChange}
+          onChange={handleInputChange}
           placeholder="Buscar ..."
           className="search-input"
         />
       </span>
-      {filteredResults.length > 0 && (
+      {isDropdownOpen && filteredResults.length > 0 && (
         <ul className="dropdown-search">
           {filteredResults.map((item) => (
-            <li key={item.id}>
+            <li key={item.id} onClick={handleOptionClick}>
               {isProduct(item) ? (
                 <Link to={`/productos/id/${item.id}`}>{item.name}</Link>
               ) : 'name' in item ? (

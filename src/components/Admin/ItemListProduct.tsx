@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useApi } from "../../context/ApiProvider";
 import { useProduct } from "../../context/ProductProvider";
+import { Editor } from '@tinymce/tinymce-react';
 import { FormImgsProduct, FormProduct, Products } from "../../Interfaces/interfaces"
 import { useForm } from "react-hook-form";
 import FormImg from "../Tools/FormImg";
@@ -23,7 +24,7 @@ const ItemListProduct = ({ product }: ItemListProductProps) => {
   const [isEditingImages, setIsEditingImages] = useState(false);
   const [idEditingProduct, setIdEditingProduct] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
-  const { register, handleSubmit } = useForm<Products>({});
+  const { register, handleSubmit, setValue } = useForm<Products>({});
 
   useEffect(() => {
     if (product) {
@@ -34,7 +35,7 @@ const ItemListProduct = ({ product }: ItemListProductProps) => {
           category: product.category,
           price: product.price,
           description: product.description,
-          novelty:product.novelty,
+          novelty: product.novelty,
         },
         images: product.img_url.map((img) => ({
           id: img.id_img,
@@ -45,6 +46,10 @@ const ItemListProduct = ({ product }: ItemListProductProps) => {
       });
     }
   }, [product]);
+
+  const handleEditorChange = (content: string) => {
+    setValue('description', content);
+  } ;
 
   const onSubmitProductInfo = (formData: any) => {
     setIsUpdating(true);
@@ -214,6 +219,19 @@ const ItemListProduct = ({ product }: ItemListProductProps) => {
                 </div>
                 <div className="li-product-cont-description">
                   <span>Descripción:</span>
+                  {/* TinyMCE Editor */}
+                  <Editor
+                    apiKey='l8lb42gic93aurxg94l1ijzbitffo8i746rsk9q9fmazi1th'
+                    initialValue={product.description}
+                    onEditorChange={handleEditorChange}
+                    init={{
+                      height: 300,
+                      menubar: false,
+                      plugins: 'lists link image table code',
+                      toolbar:
+                        'undo redo | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | code',
+                    }}
+                  />
                   <textarea id="description" {...register('description', { required: true })} defaultValue={product.description}></textarea>
                 </div>
                 <div>

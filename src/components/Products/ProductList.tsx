@@ -1,13 +1,15 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useApi } from "../../context/ApiProvider"
 import ProductCard from "./ProductCard";
-import './products.css'
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useUser } from "../../context/UserContext";
+import 'react-lazy-load-image-component/src/effects/blur.css';
+import './products.css'
 
 const ProductList = () => {
 
     const { products, categories } = useApi();
+    const { isLogin} = useUser();
     const { category } = useParams<{ category?: string }>();
     const navigate = useNavigate();
 
@@ -30,6 +32,7 @@ const ProductList = () => {
 
     return (
         <div className="cont container prod-list">
+            {!isLogin && <div className="login-mesagge"><Link to='/login'>Inicie sesión </Link><span> para acceder a los precios de los productos.</span></div>}
             <div className="title-page">
                 <h1>{category ? `${category}` : 'PRODUCTOS'}</h1>
                 <span className="line"></span>
@@ -45,7 +48,12 @@ const ProductList = () => {
                     </ul>
                 </div>
             )}
-            <span className="route"><Link to={'/productos'}>/todos los productos</Link></span>
+            {!category ? (
+             <span className="route"><span><Link className="current-route" to={'/productos'}>/ todos los productos</Link></span></span>
+            ):(
+                <span className="route"><span><Link to={'/productos'}>/ todos los productos</Link><span className="current-route">{`/ ${category}`}</span></span></span>
+            )}
+           
             <div className="container">
                 <ul className="prod-list-cont">
                     {productFilter.map((product) => (

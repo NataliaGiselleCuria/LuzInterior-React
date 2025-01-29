@@ -14,7 +14,7 @@ const OrdersUser = () => {
 
   useEffect(() => {
     if (!isLogin) {
-      navigate("/mayoristas");
+      navigate("/login");
     }
   }, [isLogin, navigate]);
 

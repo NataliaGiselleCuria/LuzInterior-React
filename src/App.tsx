@@ -51,7 +51,7 @@ function App() {
   }, [checkToken]);
 
   if (loading) {
-    return <div>Loading...</div>;  // loading o spinner mientras se verifica el token
+    return <div className='loading'>Loading...</div>;  // loading o spinner mientras se verifica el token
   }
 
   return (  
@@ -59,16 +59,16 @@ function App() {
         <Route
           path="/*"
           element={
-            <AppWithNavBar openCart={openCart} cartOpen={cartOpen} closeCart={closeCart} />
+            <AppWithNavBar openCart={openCart} cartOpen={cartOpen} closeCart={closeCart} setLoading={setLoading} />
           }
         />
       </Routes>  
   );
 }
 
-function AppWithNavBar({ openCart, cartOpen, closeCart }: any) {
+function AppWithNavBar({ openCart, cartOpen, closeCart, setLoading}: any) {
   const location = useLocation();
-  const hideNavBarRoutes = ['/registro', '/mayoristas', '/registro_finalizado', '/recuperar_contraseña', '/restablecer-contraseña' ];
+  const hideNavBarRoutes = ['/registro', '/login', '/registro_finalizado', '/recuperar_contraseña', '/restablecer-contraseña' ];
 
   const showNavBar = !hideNavBarRoutes.includes(location.pathname);
 
@@ -77,11 +77,11 @@ function AppWithNavBar({ openCart, cartOpen, closeCart }: any) {
       {showNavBar && <NavBar openCart={openCart} />}
       <PreviewCart cartOpen={cartOpen} onClose={closeCart} />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home setLoading={setLoading}/>} />
         <Route path="/productos/categoria/:category" element={<ProductList />} />
         <Route path="/productos/id/:id" element={<ProductItem openCart={openCart} />} />
         <Route path="/productos" element={<ProductList />} />
-        <Route path="/mayoristas" element={<Wholesalers />} />
+        <Route path="/login" element={<Wholesalers />} />
         <Route path="/registro" element={<Register />} />
         <Route path="/registro_finalizado" element={<SuccessRegister />} />
         <Route path="/recuperar_contraseña" element={<PasswordRecover />} />

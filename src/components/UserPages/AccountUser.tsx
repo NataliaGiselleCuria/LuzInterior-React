@@ -82,7 +82,7 @@ const AccountUser = () => {
 
   useEffect(() => {
     if (!isLogin) {
-      navigate('/mayoristas');
+      navigate('/login');
     }
   }, [isLogin, navigate]);
 

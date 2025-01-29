@@ -6,6 +6,7 @@ import AdminGallery from "./AdminGallery";
 import './admin.css';
 import AdminAccount from "./AdminAccount";
 import AdminShipping from "./AdminShipping";
+import AdminFrequentlyAskedQuestions from "./AdminFrequentlyAskedQuestions";
 
 export const AdminPanel = () => {
 
@@ -26,6 +27,8 @@ export const AdminPanel = () => {
                 return <AdminAccount/>;
             case 'envios': 
                 return <AdminShipping/>
+            case 'preguntas-frecuentes':
+                return <AdminFrequentlyAskedQuestions/>
         }
     }
 
@@ -37,9 +40,10 @@ export const AdminPanel = () => {
                     <li><button onClick={() => setSelectedOption('pedidos')}>Pedidos</button></li>
                     <li><button onClick={() => setSelectedOption('usuarios')}>Usuarios</button></li>
                     <li><button onClick={() => setSelectedOption('productos')}>Productos</button></li>
-                    <li><button onClick={() => setSelectedOption('galeria')}>Galería</button></li>
-                    <li><button onClick={() => setSelectedOption('cuenta')}>Cuenta</button></li>
+                    <li><button onClick={() => setSelectedOption('galeria')}>Galería</button></li>                   
                     <li><button onClick={() => setSelectedOption('envios')}>Envios</button></li>
+                    <li><button onClick={() => setSelectedOption('preguntas-frecuentes')}>Preguntas Frecuentes</button></li>
+                    <li><button onClick={() => setSelectedOption('cuenta')}>Cuenta</button></li>
                 </ul>
             </div>
             <div className="opc-render">

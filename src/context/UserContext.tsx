@@ -40,7 +40,7 @@ export const UserProvider = ({ children }: Props) => {
         localStorage.removeItem('token');
         setUserActive(null);
         setIsLogin(false);
-        navigate('/mayoristas');
+        navigate('/login');
     };
 
     const checkToken = useCallback(async (token: string, navigate: NavigateFunction): Promise<Response> => {

@@ -1,4 +1,90 @@
-/* formulario direcciones */
+/* Product images */
+.image-gallery {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+.main-image{
+    border: 1px solid var(--light);
+}
+
+.main-image img {
+    height: 95%;
+    margin-bottom: 10px;
+}
+
+.thumbnail-container {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.thumbnail-img-cont {
+    width: 60px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border 0.3s;
+}
+
+.thumbnail img {
+    height: 100%;
+}
+
+.thumbnail.active {
+    border: 2px solid var(--light);
+}
+
+/* Quantity selector */
+.quantity-selector {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    border: 1px solid var(--light);
+    border-radius: 10px;
+    margin-bottom: 5px;
+}
+
+.quantity-selector button {
+    width: 10%;
+    display: flex;
+    justify-content: center;
+    font-size: larger;
+    border: none;
+    background: none;  
+}
+
+.quantity-selector input {
+    width: calc(80% - 30px);
+    display: flex;
+    justify-items: center;
+    border: none;
+    background: none;
+    outline: none;  
+    border-right: 1px solid var(--light);
+    border-left: 1px solid var(--light);  
+}
+
+.quantity-selector input::-webkit-outer-spin-button,
+.quantity-selector input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.quantity-selector input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
+
+/* Form addresses */
 .modal {
     position: absolute!important;
     width: 100dvw!important;
@@ -16,7 +102,51 @@
     flex-direction: column;
 }
 
-/* modal de mensajes */
+/* Form images */
+.img-form{
+    flex-direction: column;
+}
+
+.img-form ul{
+    gap: 10px;
+}
+
+.li-img-prod{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.li-img-prod li {
+    height: 200px;
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.li-img-prod button {
+    height: 30px;
+    width: 30px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    border-radius: 4px;
+    background-color: var(--black);
+    padding: 2px;
+}
+
+.li-img-prod .img-prod {
+    width: 100%;
+    height: 80%;
+    object-fit: contain;
+}
+
+/* Modal mesagges */
 .modal-content {
     background-color: white;
     padding: 20px;
@@ -57,52 +187,5 @@
 .btn-cancel:hover,
 .btn-confirm:hover {
     opacity: 0.9;
-}
-
-/* formulario imagenes */
-
-.img-form{
-    flex-direction: column;
-}
-
-.img-form ul{
-    gap: 10px;
-}
-.li-img-prod{
-    display: flex;
-    flex-direction: column;
-    position: relative;
-}
-
-.li-img-prod li {
-    justify-content: space-between;
-}
-
-.li-img-prod button {
-    height: 30px;
-    width: 30px;
-    position: absolute;
-    right: 0;
-    top: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: none;
-    border-radius: 4px;
-    background-color: var(--black);
-    padding: 2px;
-}
-
-.li-img-prod li {
-    height: 200px;
-    width: 200px;
-    display: flex;
-    flex-direction: column;
-}
-
-.li-img-prod .img-prod {
-    width: 100%;
-    height: 80%;
-    object-fit: contain;
 }
 

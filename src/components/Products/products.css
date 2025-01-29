@@ -1,36 +1,20 @@
-/* Page List products */
-.prod-list-cont {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-    gap: 20px;
-    justify-items: center;
+.login-mesagge {
+    width: 100dvw;
+    display: flex;
+    justify-self: center;
     justify-content: center;
-    margin-top: 55px;
+    gap: 5px;
+    color: white;
+    background-color: var(--grey);
 }
 
-.prod-list .container .ul-row-nopadding li {
-    width: fit-content;
-}
-
-li.prod-list-li {
-    height: 700px;
-    width: 520px;
-    max-width: 90dvw;
-}
-
-li.categories {  
-    width: 155px;
-    text-align: center;
-    border: 1px solid var(--light);
-}
-
-li.categories:hover {
-    background-color: var(--light);
-
+.login-mesagge a {
+    color: white!important;
+    text-decoration: underline;
 }
 
 /* Product Card */
-.prod-card-cont .img-cont {
+.img-cont {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -48,65 +32,153 @@ li.categories:hover {
 
 .novelty-mark {
     position: absolute;
-    top: 0;
-    right: 50px;
+    top: -5px;
+    right: 30px;
     background-color: var(--light);
-    color: black;
+    color: var(--font-light);
     padding: 2px 10px;
 }
 
-.prod-card-description{
-    height: 20%;
+.prod-card-description {
+    height: 15%;
     width: 80%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin: auto;
+    align-self: center;
 }
 
 .prod-card-description h4,
-.prod-card-description h5 {
+.prod-card-description h5,
+.prod-card-characteristics h5 {
     font-family: 'Roboto Flex', sans-serif !important;
-    font-size: 18px;
     color: var(--black);
     padding: 4px;
     padding-bottom: 0;
+    font-size: 18px;
 }
 
-.prod-card-description span{
+.prod-card-description span {
     display: flex;
     align-items: baseline;
     border-bottom: 1px solid var(--black);
 }
 
-.prod-card-description p {
-    font-size:large;
+.prod-card-cont.prod-card-description p {
+    font-size: large;
     padding-top: 4px;
 }
 
-
-
-
-.prod-img-detail {
-    height: 400px;
-    width: 400px;
+/* Page List products */
+.prod-list-cont {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: 20px;
+    justify-items: center;
+    justify-content: center;
+    margin-top: 20px;
 }
+
+.prod-list .container .ul-row-nopadding li {
+    width: fit-content;
+}
+
+li.prod-list-li {
+    height: 700px;
+    width: 520px;
+    max-width: 90dvw;
+    border: 1px solid var(--light);
+}
+
+li.categories {
+    width: 155px;
+    text-align: center;
+    border: 1px solid var(--light);
+}
+
+li.categories:hover {
+    background-color: var(--light);
+
+}
+
+
+/* Page Product Item */
+
+.prod-item .route{
+    margin-top: 20px;
+}
+
+.prod-item-cont{
+    width: 80%;
+    justify-self: center;
+}
+
+.prod-item-img,
+.prod-item-info {
+    height: 80dvh;
+    margin-top: 20px !important;
+}
+
+.prod-item-info {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    padding: 0px 50px !important;
+}
+
+.prod-item-info .prod-card-description {
+    height: auto;
+}
+
+.product-actions {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    gap: 5px
+}
+
+.product-actions button{
+    border-radius: 15px;
+}
+
+.prod-card-characteristics{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--black);
+}
+
+.frequently-asked-questions .accordion-button, .frequently-asked-questions h6{
+    font-family: 'Roboto Flex', sans-serif!important;
+    font-weight: 500;
+}
+
 
 @media (max-width: 500px) {
 
     li.prod-list-li {
         height: 600px;
-        max-height: 90dvh;       
+        max-height: 90dvh;
     }
 
-    .prod-card-description span{
+    .prod-card-description span {
         flex-direction: column;
         align-items: center;
         border: none;
     }
 
-    .prod-card-description h4{
+    .prod-card-description h4 {
         border-bottom: 1px solid var(--black);
+    }
+
+    .prod-item-img {
+        height: 50dvh;
+    }
+
+    .prod-item-cont {
+       width: auto;
     }
 }

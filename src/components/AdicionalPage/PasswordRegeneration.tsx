@@ -46,7 +46,7 @@ const PasswordRegeneration = () => {
       }
 
       setMessage(result.message); // Éxito
-      setTimeout(() => navigate("/mayoristas"), 1000);
+      setTimeout(() => navigate("/login"), 1000);
 
     } catch (error) {
       setMessage("Hubo un error al intentar restablecer la contraseña.");

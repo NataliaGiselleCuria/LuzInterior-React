@@ -66,6 +66,12 @@ export interface ListPrice{
     date: Date;
 }
 
+export interface Fsq{
+    id: number;
+    question: string;
+    answer: string;
+}
+
 export interface ProductInCart {
     product:Products;
     product_id: string;
@@ -167,12 +173,14 @@ export type ApiContextType = {
     companyInfo: CompanyInfo[];
     gallery: GalleryImgs[];
     social: Socials[];
-    listPrice: ListPrice[];
     setSocial:  React.Dispatch<React.SetStateAction<Socials[]>>;
+    listPrice: ListPrice[];
+    fsq: Fsq[];
     categories: string[];
     fetchUserData: (token: string, email: string) => Promise<ApiResponse>;  
     refreshOrders: () => Promise<void>;
     refreshGallery: () => Promise<void>;
+    refreshFsq:  () => Promise<void>;
     fileUrl:string;
     getFile: () => void;
 }

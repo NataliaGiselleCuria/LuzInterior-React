@@ -1,5 +1,5 @@
 import { createContext, useContext, ReactNode, useState, useEffect, useMemo } from 'react';
-import { Products, ApiContextType, Users, ApiResponse, Shipping, CompanyInfo, Orders, Address, GalleryImgs, Socials, ListPrice, } from '../Interfaces/interfaces';
+import { Products, ApiContextType, Users, ApiResponse, Shipping, CompanyInfo, Orders, Address, GalleryImgs, Socials, ListPrice, Fsq, } from '../Interfaces/interfaces';
 
 export const ApiContext = createContext<ApiContextType>({} as ApiContextType);
 
@@ -18,13 +18,14 @@ export const ApiProvider = ({ children }: Props) => {
     const [social, setSocial] = useState<Socials[]>([]);
     const [listPrice, setListPrice] = useState<ListPrice[]>([]);
     const [fileUrl, setFileUrl] = useState('');
+    const [fsq, setFsq ] = useState<Fsq[]>([]);
 
     const dev = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [productsRes, usersRes, ordersRes, shippingRes, companyInfoRes, galleryRes, socialRes, listPriceRes] = await Promise.all([
+                const [productsRes, usersRes, ordersRes, shippingRes, companyInfoRes, galleryRes, socialRes, listPriceRes, fsqRes] = await Promise.all([
                     fetch(`${dev}/index.php?action=products`),
                     fetch(`${dev}/index.php?action=users`),
                     fetch(`${dev}/index.php?action=orders`),
@@ -33,13 +34,14 @@ export const ApiProvider = ({ children }: Props) => {
                     fetch(`${dev}/index.php?action=gallery`),
                     fetch(`${dev}/index.php?action=social`),
                     fetch(`${dev}/index.php?action=list-price`),
+                    fetch(`${dev}/index.php?action=frequently-asked-questions`),
                 ]);
 
-                if (!productsRes.ok || !usersRes.ok || !ordersRes.ok || !shippingRes.ok || !companyInfoRes.ok || !galleryRes.ok || !socialRes.ok || !listPriceRes) {
+                if (!productsRes.ok || !usersRes.ok || !ordersRes.ok || !shippingRes.ok || !companyInfoRes.ok || !galleryRes.ok || !socialRes.ok || !listPriceRes.ok || !fsqRes.ok) {
                     throw new Error('One or more responses were not ok');
                 }
 
-                const [productsData, usersData, ordersData, shippingData, companyInfoData, galleryData, socialData, listPriceData] = await Promise.all([
+                const [productsData, usersData, ordersData, shippingData, companyInfoData, galleryData, socialData, listPriceData, fsqData] = await Promise.all([
                     productsRes.json(),
                     usersRes.json(),
                     ordersRes.json(),
@@ -48,7 +50,7 @@ export const ApiProvider = ({ children }: Props) => {
                     galleryRes.json(),
                     socialRes.json(),
                     listPriceRes.json(),
-                    
+                    fsqRes.json(),
                 ]);
 
                 const mappedOrders = ordersData.map((orderData: any) => ({
@@ -71,6 +73,7 @@ export const ApiProvider = ({ children }: Props) => {
                 setGallery(galleryData);
                 setSocial(socialData);
                 setListPrice(listPriceData);
+                setFsq(fsqData)
 
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -165,6 +168,16 @@ export const ApiProvider = ({ children }: Props) => {
         }
     }
 
+    const refreshFsq = async() =>{
+        try {
+            const updateFsq = await fetch(`${dev}/index.php?action=frequently-asked-questions`);
+            const data = await updateFsq.json();
+            setFsq(data);
+        } catch (error) {
+            throw new Error("Error al obtener las imagenes de la galería");
+        }
+    }
+
     useEffect(() => {
         getFile();        
       }, []);
@@ -208,7 +221,9 @@ export const ApiProvider = ({ children }: Props) => {
         fetchUserData,
         refreshOrders,
         refreshGallery,
-        getFile
+        getFile,
+        fsq,
+        refreshFsq
        
     }),
         [
@@ -219,7 +234,8 @@ export const ApiProvider = ({ children }: Props) => {
             companyInfo,
             gallery,
             social,
-            fileUrl
+            fileUrl,
+            fsq
         ]);
 
     return (

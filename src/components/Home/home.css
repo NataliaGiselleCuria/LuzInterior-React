@@ -1,24 +1,33 @@
 .banner-wholesalers {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: center;
-    gap: 30px;
     padding: 15px;
 }
 
+.banner-wholesalers span:not(.line){
+    padding: 5px 21px;
+    display: flex;
+    flex-direction: column;
+}
+
 .banner-wholesalers h3 {
-    font-size: clamp(2.05rem, 2vw, 2rem);
+    font-size: clamp(1.7rem, 1.7vw, 2.1rem);
     line-height: 70%;
-    filter: drop-shadow(2px 1px 2px #7d7d7dbf);
+    color: var(--black);
+    /* filter: drop-shadow(2px 1px 2px #7d7d7dbf); */
 }
 
 .banner-wholesalers p {
-    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    font-size: clamp(1rem, 0.9vw, 1.3rem);
+    text-wrap-mode: nowrap;
+    line-height: 100%;
+    color: var(--black);
 }
 
 span.line {
-    height: 2px;
-    background: var(--black);
+    height: 1px;
+    background: var(--light);
     width: -webkit-fill-available;
     width: -moz-available;
     display: flex;
@@ -27,11 +36,11 @@ span.line {
 
 /* carousel */
 #carousel-home {
-    margin-top: 25px;
+    margin-top: 15px;
 }
 
-.carousel-item {
-    height: 70dvh;
+.carousel-item {   
+    height: calc(100dvh - 200px);
 }
 
 .carousel-item img {
@@ -51,6 +60,12 @@ span.line {
 /* Latest releases */
 .latest-releases .title-page{
     padding-top: 0;
+   
+}
+
+.latest-releases .title-page h1{
+    font-size: clamp(1.3rem, 1.7vw, 2.1rem);
+    color: var(--black);
 }
 
 .latest-releases-cont{
@@ -58,16 +73,15 @@ span.line {
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 20px;
     justify-items: center;
-    justify-content: center;
-    margin-top: 55px;   
+    justify-content: center;  
 }
 
 .latest-releases-list{
     width: 350px;
     height: 500px;
-    max-width: 90dvh;
+    max-width: 90%;
+    border: 1px solid var(--light);
 }
-
 
 
 
@@ -76,5 +90,19 @@ span.line {
     .banner-wholesalers {
         flex-direction: column;
         align-items: baseline;
+        padding: 10px;
+        gap: 5px;
+    }
+
+    .banner-wholesalers .line:first-of-type{
+        display: none;
+    }
+
+    #carousel-home{
+        margin: 0;
+    }
+
+    .carousel-item {
+        height: calc(100dvh - 90px - 70px);
     }
 }

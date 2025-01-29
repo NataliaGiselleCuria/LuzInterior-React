@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
-import { FormImgsProduct, FormProduct} from "../../Interfaces/interfaces";
+import { Editor } from '@tinymce/tinymce-react';
+import { FormImgsProduct, FormProduct } from "../../Interfaces/interfaces";
 import { useState } from "react";
 import FormImg from "../Tools/FormImg";
 import { useApi } from "../../context/ApiProvider";
@@ -14,12 +15,12 @@ const AddProductForm = () => {
 
     const { categories, products } = useApi();
     const { saveProductAndImages, registerProduct } = useProduct();
-    const { register, handleSubmit, setValue, getValues, setError, clearErrors , reset } = useForm<FormProduct>({});
-    const [ productId, setProductId ] = useState<string | null>(null);
+    const { register, handleSubmit, setValue, getValues, setError, clearErrors, reset } = useForm<FormProduct>({});
+    const [productId, setProductId] = useState<string | null>(null);
     const { modalConfig, openModal, closeModal } = useModal();
     const { validateToken } = useVerifyToken();
-    const [ isIdValid, setIsIdValid]  = useState(true);
-    const [ data, setData ] = useState<{ productDetails: FormProduct | null; images: FormImgsProduct[]; }>({ productDetails: null, images: [] });
+    const [isIdValid, setIsIdValid] = useState(true);
+    const [data, setData] = useState<{ productDetails: FormProduct | null; images: FormImgsProduct[]; }>({ productDetails: null, images: [] });
 
     const handleIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const enteredId = event.target.value;
@@ -34,6 +35,10 @@ const AddProductForm = () => {
         }
 
         setValue("id", enteredId); // Actualiza el valor del campo en React Hook Form
+    };
+
+    const handleEditorChange = (content: string) => {
+        setValue('description', content);
     };
 
     const addImg = () => {
@@ -73,7 +78,7 @@ const AddProductForm = () => {
                 openModal("Éxito", "Producto e imágenes guardados exitosamente.", closeModal);
                 setData({ productDetails: null, images: [] });
                 setProductId(null);
-                reset();               
+                reset();
             } else {
                 openModal(
                     "Error", `Error al guardar el producto e imágenes: ${response.message}`, closeModal
@@ -102,7 +107,7 @@ const AddProductForm = () => {
                 );
                 setData({ productDetails: null, images: [] });
                 setProductId(null);
-                reset();           
+                reset();
             } else {
                 openModal(
                     "Error", `Error al guardar el producto: ${response.message}`, () => closeModal()
@@ -131,30 +136,45 @@ const AddProductForm = () => {
                     ))}
                 </ul>
                 <div className="ul-row-nopadding">
-                <span>
-                    <label htmlFor="id">ID: </label>
-                    <input id="id" type="text" {...register('id', { required: true })} onChange={handleIdChange}></input>
-                    {!isIdValid && <p style={{ color: "red" }}>El ID ya está registrado</p>}
-                </span>
-                <span>
-                    <label htmlFor="name">Nombre: </label>
-                    <input id="name" type="text" {...register('name', { required: true })} disabled={!isIdValid}></input>
-                </span>
-                <span>
-                    <label htmlFor="category">Categoría: </label>
-                    <input id="category" type="text" {...register('category', { required: true })} disabled={!isIdValid}></input>
-                </span>
-                <span>
-                    <label htmlFor="price">Precio: </label>
-                    <input id="price" type="number" {...register('price', { required: true })} disabled={!isIdValid}></input>
-                </span>
+                    <span>
+                        <label htmlFor="id">ID: </label>
+                        <input id="id" type="text" {...register('id', { required: true })} onChange={handleIdChange}></input>
+                        {!isIdValid && <p style={{ color: "red" }}>El ID ya está registrado</p>}
+                    </span>
+                    <span>
+                        <label htmlFor="name">Nombre: </label>
+                        <input id="name" type="text" {...register('name', { required: true })} disabled={!isIdValid}></input>
+                    </span>
+                    <span>
+                        <label htmlFor="category">Categoría: </label>
+                        <input id="category" type="text" {...register('category', { required: true })} disabled={!isIdValid}></input>
+                    </span>
+                    <span>
+                        <label htmlFor="price">Precio: </label>
+                        <input id="price" type="number" {...register('price', { required: true })} disabled={!isIdValid}></input>
+                    </span>
                 </div>
                 <div className="li-product-cont-description">
                     <label htmlFor="description">Descripción: </label>
-                    <textarea id="description" {...register('description', { required: true })} disabled={!isIdValid}></textarea>
+                    {/* TinyMCE Editor */}
+                    <Editor
+                        apiKey='l8lb42gic93aurxg94l1ijzbitffo8i746rsk9q9fmazi1th'
+                        onEditorChange={handleEditorChange} 
+                        init={{
+                            height: 300,
+                            menubar: false,
+                            plugins: 'lists link image table code',
+                            toolbar:
+                                'undo redo | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | code',
+                        }}
+                    />
+                    <textarea
+                        {...register('description', { required: true })}
+                        style={{ display: 'none' }} // Ocultar el textarea, se actualiza con TinyMCE
+                    />
                 </div>
                 <span>
-                    <label htmlFor="description">Marcar como novedad: </label>
+                    <label htmlFor="novelty">Marcar como novedad: </label>
                     <input type="checkbox" id="novelty" {...register('novelty')} disabled={!isIdValid}></input>
                 </span>
             </form>
@@ -182,5 +202,6 @@ const AddProductForm = () => {
         </>
     )
 }
+
 
 export default AddProductForm

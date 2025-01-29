@@ -15,7 +15,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     const { isLogin } = useUser();
     const { dev } = useApi();
     const formatCurrency = useCurrencyFormat();
-
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     const handleMouseEnter = () => {
@@ -29,7 +28,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     };
 
     return (
-        <div className='prod-card-cont position-relative d-flex flex-column h100 w100'
+        <div className='prod-card-cont position-relative d-flex flex-column justify-content-end h100 w100'
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}>
             <div className='img-cont'>

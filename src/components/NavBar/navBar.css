@@ -6,24 +6,18 @@
     padding: 0;
 }
 
-#nav li a,
-#nav li {
-    color: white;
-    font-weight: 200;
-}
-
 .nav-cont {
     display: flex;
     flex-direction: column;
     height: 100%;
 }
 
-.nav-logo{
+.nav-logo {
     height: 80%;
     margin: auto;
 }
 
-.nav-cont a{
+.nav-cont a {
     height: 60%;
     margin: auto;
     display: flex;
@@ -50,6 +44,24 @@ ul.dropdown-menu.show {
     background-color: var(--black);
     border-radius: 0 0 6px 6px;
     height: auto;
+    margin: 0;
+}
+
+#nav li a,
+#nav li {
+    color: white !important;
+    font-weight: 200;
+    border: 1px solid var(--black);
+}
+
+#nav li a:hover,
+#nav li:hover {
+    background-color: var(--black);
+}
+
+#nav .dropdown-menu li:hover,
+#nav .dropdown-search li:hover{
+    border-bottom: 1px solid var(--grey);
 }
 
 input.search-input {
@@ -62,7 +74,6 @@ input.search-input {
 
 input.search-input:focus-visible {
     outline: none;
-
 }
 
 .search-cont {
@@ -79,6 +90,7 @@ input.search-input:focus-visible {
 
 ul.dropdown-search {
     position: absolute;
+    z-index: 1;
     top: 27px;
     height: fit-content;
     background-color: var(--black);
@@ -95,11 +107,11 @@ ul.dropdown-search li:last-child {
     margin-bottom: 10px;
 }
 
-.dropdown-item:active, .dropdown-item:hover{
-    color: black!important;
-    background: white!important;
+.dropdown-item:active,
+.dropdown-item:hover {
+    background-color: var(--black);
 }
-  
+
 
 .navbar-toggler,
 .navbar-toggler:focus {
@@ -188,9 +200,9 @@ ul.dropdown-search li:last-child {
         align-items: center;
     }
 
-    .nav-cont a{
+    .nav-cont a {
         margin: 0;
-        
+
     }
 
     .navbar-collapse {
@@ -201,7 +213,8 @@ ul.dropdown-search li:last-child {
         height: fit-content;
     }
 
-    .dropdown-menu.drop-user.show, .navbar-collapse{
+    .dropdown-menu.drop-user.show,
+    .navbar-collapse {
         height: 100dvh;
         background-image: url(/src/assets/tortuga-agua.png);
         background-repeat: no-repeat;
@@ -210,8 +223,8 @@ ul.dropdown-search li:last-child {
         background-attachment: fixed;
         background-size: 50%;
     }
-    
-    .nav-logo{
+
+    .nav-logo {
         height: 100%;
         margin: 0;
     }
