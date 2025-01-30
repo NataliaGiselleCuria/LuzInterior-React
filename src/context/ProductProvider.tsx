@@ -12,14 +12,8 @@ interface Props {
 
 export const ProductProvider = ({ children }: Props) => {
 
-  const { dev, setProducts } = useApi();
-  const { validateToken } = useVerifyToken();
-
-  const refreshProducts = async () => {
-    const updateProducts = await fetch(`${dev}/index.php?action=products`);
-    const data = await updateProducts.json();
-    setProducts(data);
-  }
+  const { dev, refreshProducts, refreshListPrice } = useApi();
+  const { validateToken } = useVerifyToken();  
 
   const registerProduct = async (data: FormProduct): Promise<Response & { id?: string }> => {
     const isTokenValid = await validateToken();
@@ -312,6 +306,8 @@ export const ProductProvider = ({ children }: Props) => {
     }
   }
 
+  
+
   const updateListPrice = async (data: ListPrice): Promise<Response> => {
     const isTokenValid = await validateToken();
 
@@ -343,6 +339,8 @@ export const ProductProvider = ({ children }: Props) => {
         return { success: false, message: result.message || `Error al actualizar la lista ded precios: ${result.mesagge}` };
       }
 
+      refreshListPrice();
+
       return {
         success: result.success,
         message: result.message || "Lista de precios actualizada exitosamente.",
@@ -358,6 +356,46 @@ export const ProductProvider = ({ children }: Props) => {
     }
   };
 
+  const deleteListPrice = async(): Promise<Response> => {
+    const isTokenValid = await validateToken();
+
+    if (!isTokenValid) {
+      return { success: false, message: "Token inválido." };
+    }
+
+    const token = localStorage.getItem('token')
+
+    try {
+      const response = await fetch(`${dev}/index.php?action=delete-list-price`, {
+        method: "POST",
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        return { success: false, message: result.message || `Error al eliminar la lista ded precios: ${result.mesagge}` };
+      }
+
+      refreshListPrice();
+      
+      return {
+        success: result.success,
+        message: result.message || "Lista de precios eliminada exitosamente.",
+      };
+
+    } catch (error) {
+      const errorMessage =
+        error instanceof TypeError
+          ? `Error de conexión: ${error.message}`
+          : `Ocurrió un problema inesperado: ${error}`;
+
+      return { success: false, message: errorMessage };
+    }
+  }
+
   const value = useMemo(() => ({
     registerProduct,
     deleteProduct,
@@ -366,6 +404,7 @@ export const ProductProvider = ({ children }: Props) => {
     saveProductAndImages,
     updateProductPrices,
     updateListPrice,
+    deleteListPrice,
   }), []);
 
   return <ProductContext.Provider value={value}>{children}</ProductContext.Provider>;

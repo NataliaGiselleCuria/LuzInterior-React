@@ -13,7 +13,7 @@ import { useForm } from "react-hook-form";
 export const AdminProducts = () => {
 
     const { products, listPrice, fileUrl, getFile } = useApi();
-    const { updateProductPrices, updateListPrice } = useProduct();
+    const { updateProductPrices, updateListPrice, deleteListPrice } = useProduct();
     const [selectedProducts, setSelectedProducts] = useState<number[]>([]);
     const [percentage, setPercentage] = useState<number>(0)
     const { validateToken } = useVerifyToken();
@@ -83,6 +83,24 @@ export const AdminProducts = () => {
 
     }
 
+    const handleDeleteListPrice = async () => {
+        const isTokenValid = await validateToken();
+        if (!isTokenValid) {
+            return false;
+        }
+
+        try {
+                const response = await deleteListPrice();
+                if (response.success) {
+                    openModal("Éxito", "La lista de precios se eliminó correctamente.", closeModal);
+                    getFile();
+                } else {
+                    openModal("Error", `Error al eliminar la lista de precios: ${response.message}`, closeModal);
+                }
+        } catch (error) {
+            openModal("Error", `Error inesperado al actualizar la lista de precios: , ${error}`, closeModal);
+        }
+    }
 
     return (
         <>
@@ -129,7 +147,7 @@ export const AdminProducts = () => {
                 <div id="prods-price" className="accordion-item">
                     <h2 className="accordion-header">
                         <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-                            Editar precios
+                            Editar precios de productos en lista
                         </button>
                     </h2>
                     <div id="panelsStayOpen-collapseThree" className="accordion-collapse collapse">
@@ -179,7 +197,7 @@ export const AdminProducts = () => {
                 <div id="prods-list-price" className="accordion-item">
                     <h2 className="accordion-header">
                         <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour">
-                            Lista de precios
+                            Actualizar lista de precios descargable
                         </button>
                     </h2>
                     <div id="panelsStayOpen-collapseFour" className="accordion-collapse collapse">
@@ -194,6 +212,7 @@ export const AdminProducts = () => {
                                         ) : (
                                             <p>No hay archivos disponibles.</p>
                                         )}
+                                        <button onClick={handleDeleteListPrice}>Eliminar lista actual</button>
                                     </>
                                 ) : (
                                     <p>No hay ningun archivo cargado.</p>

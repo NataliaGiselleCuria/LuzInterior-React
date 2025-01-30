@@ -98,7 +98,7 @@ const NavBar: React.FC<NavBarProps> = ({ openCart }) => {
                                 : <li className='nav-item'><Link to='/lista_de_precios' className="nav-link" onClick={handleLinkClick}>Lista de precios</Link></li>
                             }
                             <li className='nav-item'>
-                                <Link to='/contacto' className="nav-link" onClick={handleLinkClick}>Contato</Link>
+                                <Link to='/contacto' className="nav-link" onClick={handleLinkClick}>Contacto</Link>
                             </li>
                             <li>
                                 <SearchBar data={products} />

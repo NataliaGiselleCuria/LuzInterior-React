@@ -12,7 +12,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 
 
 const AdminAccount = () => {
-    const { dev, companyInfo, social, setSocial } = useApi();
+    const { dev, companyInfo, social, refreshSocial } = useApi();
     const { userActive } = useUser();
     const { modalConfig, openModal, closeModal } = useModal();
     const { validateToken } = useVerifyToken();
@@ -38,7 +38,7 @@ const AdminAccount = () => {
         const labels: Record<string, string> = {
             email: "Correo Electrónico",
             store_address: "Dirección de la Tienda",
-            map: "Mapa ionteractivo",
+            map: "Mapa interactivo",
             tel: "Teléfono",
         };
         return labels[name] ?? name; // Devuelve la clave original si no hay coincidencia
@@ -90,13 +90,6 @@ const AdminAccount = () => {
     };
 
     // Social
-
-    const refreshSocial = async () => {
-        const updateProducts = await fetch(`${dev}/index.php?action=social`);
-        const data = await updateProducts.json();
-        setSocial(data);
-    }
-
     const socialSubmit = async (data: FormSocial) => {
         const isTokenValid = await validateToken();
 
@@ -167,9 +160,7 @@ const AdminAccount = () => {
             closeModal);
     } 
    
-
     return (
-
         <>
             <h3>Cuenta</h3>
             <h5>{userActive?.email}</h5>

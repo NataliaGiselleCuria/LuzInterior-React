@@ -49,10 +49,11 @@ export interface Shipping {
     price: number;
 }
 
-export interface GalleryImgs {
+export interface Imgs {
     id: string;
     img_url: string;
     priority: number;
+    link: string | null;
 }
 
 export interface Socials{
@@ -134,11 +135,12 @@ export interface FormImgsProduct {
     priority: number
 }
 
-export interface FormGalleryImgs {
+export interface FormImgs {
     id: string;
     url: File | string;
     priority: number;
     preview: string;
+    link: string | null;
 }
 
 export interface FormSocial{
@@ -164,25 +166,29 @@ export interface ApiResponse {
 export type ApiContextType = {
     dev: string;
     products: Products[];
-    setProducts:  React.Dispatch<React.SetStateAction<Products[]>>;
+    refreshProducts: () => Promise<void>;
     users: Users[];
-    setUsers: React.Dispatch<React.SetStateAction<Users[]>>;
+    refreshUser:  () => Promise<void>;
+    fetchUserData: (token: string, email: string) => Promise<ApiResponse>; 
     orders: Orders[];
     setOrders: React.Dispatch<React.SetStateAction<Orders[]>>;
+    refreshOrders: () => Promise<void>;
     shipping: Shipping[];
     companyInfo: CompanyInfo[];
-    gallery: GalleryImgs[];
-    social: Socials[];
-    setSocial:  React.Dispatch<React.SetStateAction<Socials[]>>;
-    listPrice: ListPrice[];
-    fsq: Fsq[];
-    categories: string[];
-    fetchUserData: (token: string, email: string) => Promise<ApiResponse>;  
-    refreshOrders: () => Promise<void>;
+    gallery: Imgs[];
     refreshGallery: () => Promise<void>;
-    refreshFsq:  () => Promise<void>;
+    bannerDesktop: Imgs[];
+    bannerMobile: Imgs[];
+    refreshBanner: () => Promise<void>;
+    social: Socials[];
+    refreshSocial: () => Promise<void>;
+    listPrice: ListPrice[];
+    refreshListPrice: () => Promise<void>;
     fileUrl:string;
     getFile: () => void;
+    fsq: Fsq[];
+    refreshFsq: () => Promise<void>;
+    categories: string[];
 }
 
 export type UserContextType = {
@@ -208,6 +214,7 @@ export type ProductContextType = {
     saveProductAndImages: (productData: FormProduct, images: FormImgsProduct[]) => Promise<Response>;
     updateProductPrices: (percentage:number, productIds: number[]) => Promise<Response>;
     updateListPrice:(data: ListPrice) => Promise<Response>;
+    deleteListPrice:() => Promise<Response>;
     
 };
 

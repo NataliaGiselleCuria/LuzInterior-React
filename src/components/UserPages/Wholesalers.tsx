@@ -32,6 +32,7 @@ const Wholesalers = () => {
       <div>
         {!isLogin ?
           <>
+            <Link to="/">inicio</Link>
             <h2>Iniciar sesión</h2>
             <p>¿Eres un nuevo usuario?<span><Link to='/registro'>Crear cuenta</Link></span></p>
             <form onSubmit={handleSubmit(handleLogin)}>

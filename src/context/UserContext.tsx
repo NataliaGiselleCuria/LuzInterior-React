@@ -11,12 +11,11 @@ interface Props {
 
 export const UserProvider = ({ children }: Props) => {
 
-    const { users, setUsers, fetchUserData, dev } = useApi();
+    const { users, refreshUser, fetchUserData, dev } = useApi();
     const [isLogin, setIsLogin] = useState(false);
     const [userActive, setUserActive] = useState<Users | null>(null);
 
     const getUserActive = useCallback(async (token: string, email: string): Promise<ApiResponse> => {
-        // setIsLogin(true); // Inicia el estado de carga
         try {
             const userActiveResponse = await fetchUserData(token, email);
 
@@ -224,12 +223,6 @@ export const UserProvider = ({ children }: Props) => {
             };
         }
     };
-
-    const refreshUser = async() => {
-        const updateUsers = await fetch(`${dev}/index.php?action=users`);
-        const data = await updateUsers.json();
-        setUsers(data);
-    }
 
     const updateUserApproved = async (id: number): Promise<Response> => {
         try {

@@ -3,20 +3,20 @@ import { useForm } from "react-hook-form";
 import { DndContext, closestCenter } from "@dnd-kit/core";
 import { arrayMove, SortableContext, rectSwappingStrategy } from "@dnd-kit/sortable";
 import SortableItem from "../Tools/SortableItem";
-import { FormGalleryImgs } from "../../Interfaces/interfaces";
+import { FormImgs } from "../../Interfaces/interfaces";
 import { useApi } from "../../context/ApiProvider";
 import useVerifyToken from "../../CustomHooks/verefyToken";
 import ModalMesagge from "../Tools/ModalMesagge";
 import useModal from "../../CustomHooks/modal";
 
-const AdminGallery: React.FC = () => {
+const ItemGallery: React.FC = () => {
   const { dev, gallery, refreshGallery } = useApi();
   const { validateToken } = useVerifyToken();
   const { modalConfig, openModal, closeModal } = useModal();
-  const { register, reset } = useForm<FormGalleryImgs>();
-  const [images, setImages] = useState<FormGalleryImgs[]>([]);
-  const [currentFile, setCurrentFile] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
+  const { register, reset } = useForm<FormImgs>();
+  const [images, setImages] = useState<FormImgs[]>([]);
+  const [currentFile, setCurrentFile] = useState<File[] | null>(null);
+  const [preview, setPreview] = useState<string[] | null>(null);
 
   useEffect(() => {
     const loadImages = async () => {
@@ -26,6 +26,7 @@ const AdminGallery: React.FC = () => {
         url: `${dev}${img.img_url}`,
         priority: img.priority,
         preview: `${dev}${img.img_url}`,
+        link: null,
       }));
 
       const sortedImages = formattedImages.sort((a, b) => a.priority - b.priority);
@@ -37,66 +38,68 @@ const AdminGallery: React.FC = () => {
   }, [gallery]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-
-    if (file) {
-      const previewUrl = URL.createObjectURL(file);
-      setCurrentFile(file);
-      setPreview(previewUrl);
+    const files = event.target.files;
+    if (files) {
+        const previews = Array.from(files).map(file => URL.createObjectURL(file));
+        setPreview(previews);
+        setCurrentFile(Array.from(files));
     }
   };
 
   const addImage = async (event: React.FormEvent) => {
     event.preventDefault();
-
-    if (!currentFile) {
+  
+    if (!currentFile || currentFile.length === 0) {
       openModal("Error", "No se ha seleccionado una imagen válida.", closeModal);
       return;
     }
-
-    const formData = new FormData();
-    formData.append(`image`, currentFile);
-    formData.append(`priority`, (images.length + 1).toString());
-
+  
     try {
       const isTokenValid = await validateToken();
-
+  
       if (!isTokenValid) {
         openModal("Error", "Token inválido. Por favor, inicie sesión nuevamente.", closeModal);
         return;
       }
-
-      const token = localStorage.getItem('token')
-
-      const response = await fetch(`${dev}/index.php?action=add-gallery`, {
-        method: "POST",
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-        body: formData,
-      });
-
-      const result = await response.json();
-      if (result.success) {
-        const newImage: FormGalleryImgs = {
-          id: `${Date.now()}`,
-          url: currentFile,
-          priority: images.length + 1,
-          preview: preview || "",
-        };
-
-        setImages((prev) => [...prev, newImage]);
-        setCurrentFile(null);
-        setPreview(null);
-        refreshGallery();
-        reset();
-
-      } else {
-
-        openModal("Error", `Error al actualizar la galería: ${result.message}`, closeModal);
+  
+      const token = localStorage.getItem('token');
+  
+      for (let i = 0; i < currentFile.length; i++) {
+        const formData = new FormData();
+        formData.append("image", currentFile[i]);
+        formData.append("priority", (images.length + 1 + i).toString()); 
+  
+        const response = await fetch(`${dev}/index.php?action=add-gallery`, {
+          method: "POST",
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+          body: formData,
+        });
+  
+        const result = await response.json();
+        if (result.success) {
+          const newImage: FormImgs = {
+            id: `${Date.now() + i}`,
+            url: currentFile[i],
+            priority: images.length + 1 + i,
+            preview: preview && preview[i] ? preview[i] : "",
+            link: null
+          };
+  
+          setImages((prev) => [...prev, newImage]); // Añadir la nueva imagen al estado
+        } else {
+          openModal("Error", `Error al actualizar la galería: ${result.message}`, closeModal);
+        }
       }
+  
+      setCurrentFile(null);
+      setPreview(null);
+      refreshGallery();
+      reset();
+  
     } catch (error) {
-      openModal("Error", `Error en la conxión: ${error}`, closeModal);
+      openModal("Error", `Error en la conexión: ${error}`, closeModal);
     }
   };
 
@@ -179,8 +182,7 @@ const AdminGallery: React.FC = () => {
   };
 
   return (
-    <div className="ul-row-nopadding img-form">
-      <h3>Galería de Imágenes</h3>
+    <div className="ul-row-nopadding img-form">    
       <form onSubmit={addImage}>
         <div>
           <input
@@ -189,6 +191,7 @@ const AdminGallery: React.FC = () => {
             accept="image/*"
             {...register("url")}
             onChange={handleFileChange}
+            multiple
           />
         </div>
         <button type="submit">Agregar imagen</button>
@@ -218,8 +221,7 @@ const AdminGallery: React.FC = () => {
         cancelText={modalConfig.cancelText}
       />
     </div>
-
   );
 };
 
-export default AdminGallery;
+export default ItemGallery;

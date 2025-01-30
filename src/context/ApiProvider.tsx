@@ -1,5 +1,5 @@
 import { createContext, useContext, ReactNode, useState, useEffect, useMemo } from 'react';
-import { Products, ApiContextType, Users, ApiResponse, Shipping, CompanyInfo, Orders, Address, GalleryImgs, Socials, ListPrice, Fsq, } from '../Interfaces/interfaces';
+import { Products, ApiContextType, Users, ApiResponse, Shipping, CompanyInfo, Orders, Address, Socials, ListPrice, Fsq, Imgs, } from '../Interfaces/interfaces';
 
 export const ApiContext = createContext<ApiContextType>({} as ApiContextType);
 
@@ -14,40 +14,46 @@ export const ApiProvider = ({ children }: Props) => {
     const [orders, setOrders] = useState<Orders[]>([]);
     const [shipping, setShipping] = useState<Shipping[]>([]);
     const [companyInfo, setCompanyInfo] = useState<CompanyInfo[]>([]);
-    const [gallery, setGallery] = useState<GalleryImgs[]>([]);
+    const [gallery, setGallery] = useState<Imgs[]>([]);
+    const [bannerDesktop, setBannerDesktop] = useState<Imgs[]>([]);
+    const [bannerMobile, setBannerMobile] = useState<Imgs[]>([]);
     const [social, setSocial] = useState<Socials[]>([]);
     const [listPrice, setListPrice] = useState<ListPrice[]>([]);
     const [fileUrl, setFileUrl] = useState('');
-    const [fsq, setFsq ] = useState<Fsq[]>([]);
+    const [fsq, setFsq] = useState<Fsq[]>([]);
 
     const dev = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [productsRes, usersRes, ordersRes, shippingRes, companyInfoRes, galleryRes, socialRes, listPriceRes, fsqRes] = await Promise.all([
+                const [productsRes, usersRes, ordersRes, shippingRes, companyInfoRes, galleryRes, bannerDesktopRes, bannerMobileRes, socialRes, listPriceRes, fsqRes] = await Promise.all([
                     fetch(`${dev}/index.php?action=products`),
                     fetch(`${dev}/index.php?action=users`),
                     fetch(`${dev}/index.php?action=orders`),
                     fetch(`${dev}/index.php?action=shipping`),
                     fetch(`${dev}/index.php?action=company-info`),
                     fetch(`${dev}/index.php?action=gallery`),
+                    fetch(`${dev}/index.php?action=banner-desktop`),
+                    fetch(`${dev}/index.php?action=banner-mobile`),
                     fetch(`${dev}/index.php?action=social`),
                     fetch(`${dev}/index.php?action=list-price`),
                     fetch(`${dev}/index.php?action=frequently-asked-questions`),
                 ]);
 
-                if (!productsRes.ok || !usersRes.ok || !ordersRes.ok || !shippingRes.ok || !companyInfoRes.ok || !galleryRes.ok || !socialRes.ok || !listPriceRes.ok || !fsqRes.ok) {
+                if (!productsRes.ok || !usersRes.ok || !ordersRes.ok || !shippingRes.ok || !companyInfoRes.ok || !galleryRes.ok || !bannerDesktopRes.ok || !bannerMobileRes.ok || !socialRes.ok || !listPriceRes.ok || !fsqRes.ok) {
                     throw new Error('One or more responses were not ok');
                 }
 
-                const [productsData, usersData, ordersData, shippingData, companyInfoData, galleryData, socialData, listPriceData, fsqData] = await Promise.all([
+                const [productsData, usersData, ordersData, shippingData, companyInfoData, galleryData, bannerDesktopData, bannerMobileData, socialData, listPriceData, fsqData] = await Promise.all([
                     productsRes.json(),
                     usersRes.json(),
                     ordersRes.json(),
                     shippingRes.json(),
                     companyInfoRes.json(),
                     galleryRes.json(),
+                    bannerDesktopRes.json(), 
+                    bannerMobileRes.json(),
                     socialRes.json(),
                     listPriceRes.json(),
                     fsqRes.json(),
@@ -71,6 +77,8 @@ export const ApiProvider = ({ children }: Props) => {
                 setShipping(shippingData);
                 setCompanyInfo(companyInfoData);
                 setGallery(galleryData);
+                setBannerDesktop(bannerDesktopData);
+                setBannerMobile(bannerMobileData);
                 setSocial(socialData);
                 setListPrice(listPriceData);
                 setFsq(fsqData)
@@ -81,10 +89,9 @@ export const ApiProvider = ({ children }: Props) => {
         };
 
         fetchData();
-       
+
     }, []);
 
-    
     //Data del usuario logueado.
     const fetchUserData = async (token: string, email: string): Promise<ApiResponse> => {
         try {
@@ -128,37 +135,55 @@ export const ApiProvider = ({ children }: Props) => {
         return address || null;
     };
 
+    const refreshUser = async () => {
+        const updateUsers = await fetch(`${dev}/index.php?action=users`);
+        const data = await updateUsers.json();
+        setUsers(data);
+    }
+
     const refreshOrders = async () => {
         try {
             const [updateOrders, updatedUsers] = await Promise.all([
                 fetch(`${dev}/index.php?action=orders`),
                 fetch(`${dev}/index.php?action=users`),
             ]);
-    
+
             const [ordersData, usersData] = await Promise.all([
                 updateOrders.json(),
                 updatedUsers.json(),
             ]);
-    
+
             const mappedOrders = ordersData.map((orderData: any) => ({
                 id: orderData.id_order,
-                user: getUserById(usersData, orderData.id_user), 
+                user: getUserById(usersData, orderData.id_user),
                 date: new Date(orderData.date + "T00:00:00"),
                 products: orderData.products,
                 total_price: parseFloat(orderData.total_price),
-                address: getAddressById(usersData, orderData.id_user, orderData.shipping_address), 
+                address: getAddressById(usersData, orderData.id_user, orderData.shipping_address),
                 shipping: orderData.shipping_type,
                 state: orderData.state,
                 new: orderData.new,
             }));
-    
+
             setOrders(mappedOrders);
         } catch (error) {
             console.error('Error refreshing orders:', error);
         }
     };
 
-    const refreshGallery = async() => {
+    const refreshProducts = async () => {
+        const updateProducts = await fetch(`${dev}/index.php?action=products`);
+        const data = await updateProducts.json();
+        setProducts(data);
+    }
+
+    const refreshListPrice = async () => {
+        const updateListPrice = await fetch(`${dev}/index.php?action=list-price`);
+        const data = await updateListPrice.json();
+        setListPrice(data);
+    }
+
+    const refreshGallery = async () => {
         try {
             const updateGallery = await fetch(`${dev}/index.php?action=gallery`);
             const data = await updateGallery.json();
@@ -168,7 +193,21 @@ export const ApiProvider = ({ children }: Props) => {
         }
     }
 
-    const refreshFsq = async() =>{
+    const refreshBanner = async () => {
+        try {
+            const updateBannerD = await fetch(`${dev}/index.php?action=banner-desktop`);
+            const dataD = await updateBannerD.json();
+            setBannerDesktop(dataD);
+
+            const updateBannerM = await  fetch(`${dev}/index.php?action=banner-mobile`);
+            const dataM = await updateBannerM.json();
+            setBannerMobile(dataM);
+        } catch (error) {
+            throw new Error("Error al obtener las imagenes de la galería");
+        }
+    }
+
+    const refreshFsq = async () => {
         try {
             const updateFsq = await fetch(`${dev}/index.php?action=frequently-asked-questions`);
             const data = await updateFsq.json();
@@ -178,43 +217,53 @@ export const ApiProvider = ({ children }: Props) => {
         }
     }
 
-    useEffect(() => {
-        getFile();        
-      }, []);
-    
-    const getFile = async () => {
-    try {
-        const response = await fetch(`${dev}/index.php?action=get-list-price`); // Ajusta la ruta del endpoint PHP
-        const data = await response.json();
-
-        const list = `${dev}/${data.fileUrl}`;
-        if (data.success) {
-        setFileUrl(list); // Guarda la URL del archivo
-        } else {
-        console.error(data.message);
-        }
-    } catch (error) {
-        console.error('Error fetching the file URL:', error);
+    const refreshSocial = async () => {
+        const updateSocial = await fetch(`${dev}/index.php?action=social`);
+        const data = await updateSocial.json();
+        setSocial(data);
     }
+
+    useEffect(() => {
+        getFile();
+    }, []);
+
+    const getFile = async () => {
+        try {
+            const response = await fetch(`${dev}/index.php?action=get-list-price`); // Ajusta la ruta del endpoint PHP
+            const data = await response.json();
+
+            const list = `${dev}/${data.fileUrl}`;
+            if (data.success) {
+                setFileUrl(list); // Guarda la URL del archivo
+            } else {
+                console.error(data.message);
+            }
+        } catch (error) {
+            console.error('Error fetching the file URL:', error);
+        }
     };
 
     useEffect(() => {
-       console.log(products)        
-      }, [products]);
+        console.log(bannerDesktop)
+    }, [bannerDesktop]);
 
     const apiValue = useMemo(() => ({
         products,
-        setProducts,
+        refreshProducts,
         users,
-        setUsers,
+        refreshUser,
         orders,
         setOrders,
         shipping,
         companyInfo,
         gallery,
+        bannerDesktop,
+        bannerMobile,
+        refreshBanner,
         social,
-        setSocial,
+        refreshSocial,
         listPrice,
+        refreshListPrice,
         fileUrl,
         categories,
         dev,
@@ -224,7 +273,7 @@ export const ApiProvider = ({ children }: Props) => {
         getFile,
         fsq,
         refreshFsq
-       
+
     }),
         [
             products,
@@ -233,6 +282,8 @@ export const ApiProvider = ({ children }: Props) => {
             shipping,
             companyInfo,
             gallery,
+            bannerDesktop,
+            bannerMobile,
             social,
             fileUrl,
             fsq

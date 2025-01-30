@@ -34,7 +34,7 @@ const AddProductForm = () => {
             clearErrors("id");
         }
 
-        setValue("id", enteredId); // Actualiza el valor del campo en React Hook Form
+        setValue("id", enteredId); 
     };
 
     const handleEditorChange = (content: string) => {
@@ -155,23 +155,20 @@ const AddProductForm = () => {
                     </span>
                 </div>
                 <div className="li-product-cont-description">
-                    <label htmlFor="description">Descripción: </label>
-                    {/* TinyMCE Editor */}
-                    <Editor
-                        apiKey='l8lb42gic93aurxg94l1ijzbitffo8i746rsk9q9fmazi1th'
-                        onEditorChange={handleEditorChange} 
-                        init={{
-                            height: 300,
-                            menubar: false,
-                            plugins: 'lists link image table code',
-                            toolbar:
-                                'undo redo | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | code',
-                        }}
-                    />
-                    <textarea
-                        {...register('description', { required: true })}
-                        style={{ display: 'none' }} // Ocultar el textarea, se actualiza con TinyMCE
-                    />
+                <span>Descripción:</span>
+                  {/* TinyMCE Editor */}
+                  <Editor
+                    apiKey='l8lb42gic93aurxg94l1ijzbitffo8i746rsk9q9fmazi1th'
+                    onEditorChange={handleEditorChange}
+                    init={{
+                      height: 300,
+                      menubar: false,
+                      plugins: 'lists link image table code',
+                      toolbar:
+                        'undo redo | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | code',
+                    }}
+                  />
+                  <textarea id="description" {...register('description', { required: true })}></textarea>
                 </div>
                 <span>
                     <label htmlFor="novelty">Marcar como novedad: </label>

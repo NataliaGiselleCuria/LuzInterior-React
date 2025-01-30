@@ -2,11 +2,12 @@ import { useState } from "react";
 import { AdminProducts } from "./AdminProducts";
 import AdminUsers from "./AdminUsers";
 import AdminOrders from "./AdminOrders";
-import AdminGallery from "./AdminGallery";
-import './admin.css';
+import AdminImages from "./adminimages";
 import AdminAccount from "./AdminAccount";
 import AdminShipping from "./AdminShipping";
 import AdminFrequentlyAskedQuestions from "./AdminFrequentlyAskedQuestions";
+import './admin.css';
+
 
 export const AdminPanel = () => {
 
@@ -21,8 +22,8 @@ export const AdminPanel = () => {
                 return <AdminUsers />;
             case 'productos':
                 return <AdminProducts />;
-            case 'galeria':
-                return <AdminGallery />;
+            case 'imagenes':
+                return <AdminImages />;
             case 'cuenta':
                 return <AdminAccount/>;
             case 'envios': 
@@ -40,9 +41,9 @@ export const AdminPanel = () => {
                     <li><button onClick={() => setSelectedOption('pedidos')}>Pedidos</button></li>
                     <li><button onClick={() => setSelectedOption('usuarios')}>Usuarios</button></li>
                     <li><button onClick={() => setSelectedOption('productos')}>Productos</button></li>
-                    <li><button onClick={() => setSelectedOption('galeria')}>Galería</button></li>                   
                     <li><button onClick={() => setSelectedOption('envios')}>Envios</button></li>
                     <li><button onClick={() => setSelectedOption('preguntas-frecuentes')}>Preguntas Frecuentes</button></li>
+                    <li><button onClick={() => setSelectedOption('imagenes')}>Imágenes</button></li>                                      
                     <li><button onClick={() => setSelectedOption('cuenta')}>Cuenta</button></li>
                 </ul>
             </div>
