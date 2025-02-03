@@ -16,7 +16,7 @@ export const useSearch = (data: (Products | Users | Orders)[], showAll: boolean 
 
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const query = event.target.value;
+        const query = event.target.value.toLowerCase();
         setSearchQuery(query);
    
         if (query === '') {
@@ -31,7 +31,7 @@ export const useSearch = (data: (Products | Users | Orders)[], showAll: boolean 
                     ) {
                         return true;
                     }
-                }
+                }          
 
                 return Object.keys(item).some((key) => {
                     const itemKey = key as keyof typeof item;
@@ -54,3 +54,4 @@ export const useSearch = (data: (Products | Users | Orders)[], showAll: boolean 
    
     return { searchQuery, filteredResults, handleSearchChange };
 };
+

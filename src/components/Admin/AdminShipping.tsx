@@ -27,15 +27,14 @@ const AdminShipping = () => {
 
     try {
 
-        const token = localStorage.getItem('token')
+        const token = localStorage.getItem('user_token')
 
         const response = await fetch(`${dev}/index.php?action=update-shipping`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                'Authorization': `Bearer ${token}`,
             },
-            body: JSON.stringify({ updatedShipping }),
+            body: JSON.stringify({ updatedShipping, token }),
         });
 
         const result = await response.json();

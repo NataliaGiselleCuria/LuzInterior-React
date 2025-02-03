@@ -12,17 +12,18 @@
 }
 
 .banner-wholesalers h3 {
-    font-size: clamp(1.7rem, 1.7vw, 2.1rem);
-    line-height: 70%;
+    font-size: clamp(1.56rem, 1.7vw, 2.1rem);
+    line-height: 100%;
     color: var(--black);
-    /* filter: drop-shadow(2px 1px 2px #7d7d7dbf); */
+    margin: 0;
 }
 
 .banner-wholesalers p {
-    font-size: clamp(1rem, 0.9vw, 1.3rem);
+    font-size: clamp(0.8rem, 0.9vw, 1.3rem);
     text-wrap-mode: nowrap;
     line-height: 100%;
     color: var(--black);
+    margin: 0;
 }
 
 span.line {
@@ -41,6 +42,7 @@ span.line {
 
 .carousel-item {   
     height: calc(100dvh - 200px);
+    max-height: 700px;
 }
 
 .carousel-item img {
@@ -49,8 +51,20 @@ span.line {
     object-fit: contain;
 }
 
+.carousel-control-prev, .carousel-control-next{
+    display: block;
+}
+
+.carousel-control-next{
+    text-align: end;
+}
+
 .carousel-control-next-icon {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%250000ff'%3e%3cpath d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e")!important;
+}
+
+.carousel-control-prev{
+    text-align: start;
 }
 
 .carousel-control-prev-icon {
@@ -70,27 +84,29 @@ span.line {
 
 .latest-releases-cont{
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     justify-items: center;
     justify-content: center;  
 }
 
 .latest-releases-list{
-    width: 350px;
-    height: 500px;
+    width: 300px;
+    height: 450px;
     max-width: 90%;
-    border: 1px solid var(--light);
+    outline: 1px solid var(--light);
+    margin: 10px 0;
 }
 
 
-
+@media (max-width: 768px) {
+    
+}
 
 @media (max-width: 576px) {
     .banner-wholesalers {
         flex-direction: column;
         align-items: baseline;
-        padding: 10px;
+        padding: 0px;
         gap: 5px;
     }
 
@@ -98,11 +114,31 @@ span.line {
         display: none;
     }
 
+    .banner-wholesalers span:not(.line) {
+        padding: 5px 0px;
+    }
+
     #carousel-home{
         margin: 0;
     }
 
     .carousel-item {
-        height: calc(100dvh - 90px - 70px);
+        height: 650px;
+        max-height: 80dvh;
+    }
+
+    .latest-releases-cont {
+        grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+        padding: 0; 
+    }
+
+    .latest-releases-list{
+        width: 200px;
+        height: 300px;
+    }
+
+    .latest-releases-list .prod-name{
+        flex-direction: column;
+        border: none;
     }
 }

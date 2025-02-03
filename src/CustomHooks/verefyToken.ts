@@ -10,7 +10,7 @@ const useVerifyToken = () => {
     const [isSessionValid, setIsSessionValid] = useState(true);
 
     const validateToken = async () => {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('user_token');
 
         if (!token) {
             await checkToken('', navigate);

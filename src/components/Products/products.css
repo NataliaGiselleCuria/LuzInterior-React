@@ -6,11 +6,18 @@
     gap: 5px;
     color: white;
     background-color: var(--grey);
+    position: absolute;
+    left: 0;
+}
+
+.login-mesagge span { 
+   width: 80%;
+   text-align: center;
 }
 
 .login-mesagge a {
     color: white!important;
-    text-decoration: underline;
+    text-decoration: underline!important;
 }
 
 /* Product Card */
@@ -33,10 +40,11 @@
 .novelty-mark {
     position: absolute;
     top: -5px;
-    right: 30px;
+    right: 5px;
     background-color: var(--light);
     color: var(--font-light);
     padding: 2px 10px;
+    font-size: 14px;
 }
 
 .prod-card-description {
@@ -47,22 +55,41 @@
     align-items: center;
     justify-content: center;
     align-self: center;
+    min-height: fit-content;
 }
 
-.prod-card-description h4,
-.prod-card-description h5,
+.prod-card-description p{
+    font-size: 20px;
+}
+
+.prod-name h4,
+.prod-name h5,
 .prod-card-characteristics h5 {
     font-family: 'Roboto Flex', sans-serif !important;
     color: var(--black);
     padding: 4px;
     padding-bottom: 0;
     font-size: 18px;
+    margin: 0;
+    text-wrap-mode: nowrap;
+    text-transform: uppercase;
 }
 
-.prod-card-description span {
+.prod-name {
     display: flex;
     align-items: baseline;
     border-bottom: 1px solid var(--black);
+}
+
+.prod-card-cont{
+    position:relative;
+    display:flex;
+    flex-direction: column;
+    justify-content:center;
+    width: 100%;
+    height: 100%;
+    gap: 10px;
+    padding: 5px;
 }
 
 .prod-card-cont.prod-card-description p {
@@ -73,20 +100,16 @@
 /* Page List products */
 .prod-list-cont {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
     gap: 20px;
     justify-items: center;
     justify-content: center;
     margin-top: 20px;
 }
 
-.prod-list .container .ul-row-nopadding li {
-    width: fit-content;
-}
-
 li.prod-list-li {
     height: 700px;
-    width: 520px;
+    width: 450px;
     max-width: 90dvw;
     border: 1px solid var(--light);
 }
@@ -106,7 +129,7 @@ li.categories:hover {
 /* Page Product Item */
 
 .prod-item .route{
-    margin-top: 20px;
+    padding-top: 18px;
 }
 
 .prod-item-cont{
@@ -125,7 +148,6 @@ li.categories:hover {
     display: flex;
     flex-direction: column;
     gap: 25px;
-    padding: 0px 50px !important;
 }
 
 .prod-item-info .prod-card-description {
@@ -147,8 +169,13 @@ li.categories:hover {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    padding: 0 50px;
     padding-bottom: 10px;
     border-bottom: 1px solid var(--black);
+}
+
+.frequently-asked-questions{
+    margin-bottom: 35px;
 }
 
 .frequently-asked-questions .accordion-button, .frequently-asked-questions h6{
@@ -157,28 +184,80 @@ li.categories:hover {
 }
 
 
-@media (max-width: 500px) {
+@media (max-width: 1200px) {
+    
+    .prod-item-cont{
+        width: 100%;
+    }
+
+    .prod-list-cont {
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    }
 
     li.prod-list-li {
         height: 600px;
-        max-height: 90dvh;
+        width: 400px;
     }
 
-    .prod-card-description span {
-        flex-direction: column;
-        align-items: center;
-        border: none;
+    .prod-card-characteristics{
+        padding: 0;
+    }
+}
+
+@media (max-width: 576px) {
+
+    .login-mesagge{
+        font-size: 14px;
+        position: relative;
     }
 
-    .prod-card-description h4 {
-        border-bottom: 1px solid var(--black);
+    li.categories {
+        width: 137px;
+        min-width: fit-content;
+        padding: 2px 5px;
+    }
+
+    .prod-list-cont{
+        padding: 0;
+    }
+
+    li.prod-list-li {
+        height: 400px;
+        max-width: 80dvw;
+    }
+
+    /* .prod-card-description span {
+        align-items: center;     
+    } */
+
+    .prod-card-description .prod-name {
+        align-items: center;     
+    }
+
+    .prod-card-description h4, .prod-card-description h5, .prod-card-characteristics h5{
+        font-size: 14px;
+        border: none!important;
+    }
+
+    .prod-item-info .prod-card-description h4, .prod-item-info .prod-card-description h5, .prod-item-info .prod-card-characteristics h5 {
+        font-size: 16px;
     }
 
     .prod-item-img {
-        height: 50dvh;
+        height: 500px;
     }
 
     .prod-item-cont {
-       width: auto;
+       width: 100%;
     }
+
+    .prod-item-info{
+        margin: 0!important;
+        padding: 0;
+    }
+
+    .prod-item-info .prod-card-description {
+        height: 50px;
+    }
+    
 }

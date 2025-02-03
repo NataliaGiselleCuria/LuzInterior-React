@@ -1,3 +1,4 @@
+/* preview-cart */
 #preview-cart {
     position: absolute;
     position: fixed;
@@ -22,16 +23,20 @@
 }
 
 .prev-cart-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     position: relative;
     overflow-y: scroll;
     z-index: 99;
-    width: 300px;
+    width: 400px;
     height: 100%;
     padding: 20px;
     background-color: white;
     right: -100%;
     animation-duration: 0.5s;
     animation-fill-mode: forwards;
+    box-shadow: 1px 1px 10px var(--grey);
 }
 
 #preview-cart.show .prev-cart-content {
@@ -59,6 +64,115 @@
         right: -100%;
     }
 }
+
+.cart-title{
+    align-self: flex-start;
+}
+
+.ul-cart{
+     width: 100%;
+}
+
+.ul-cart li{
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    gap: 10px;
+    border-bottom: 1px solid var(--light);
+}
+
+.ul-cart .prod-name{
+    border: none;
+}
+
+.ul-cart .prod-name h5{
+    font-size: 14px;
+   font-weight: 400;
+}
+
+.ul-cart-img {
+    width: 40%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.ul-cart-img img{
+    height: 70%;
+    object-fit: contain;
+}
+
+.cart-prod-info{
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cart-prod-info .quantity-selector{
+    height: 28px;
+    margin: 8px 0;
+}
+
+.cart-prod-info .quantity-selector input{
+    font-size: 14px;
+}
+
+.cart-prod-info .quantity-selector button{
+    padding: 0;
+}
+
+.sub-total{
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.ul-cart .delete{ 
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    background-color: transparent;
+    display: flex;
+    position: relative;
+    top: 12px;
+}
+
+.delete img{
+    height: 100%;
+    background: #3a3a3a00;
+    filter: invert(1);
+}
+
+.cart-total{
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+}
+
+.cart-total h4, .cart-total h5, .cart-total h6{
+    font-family: 'Roboto Flex';
+    text-transform: uppercase;
+    color: var(--black);
+}
+
+.prev-cart-content a, .prev-cart-content .light-button{
+    width: 100%;
+    border-radius: 20px;
+    margin-top: 15px;
+}
+
+
+/* cart */
+
+.cart-container{
+ display: flex;
+}
+
+
 
 @media (max-width: 768px) {
     .prev-cart-content {

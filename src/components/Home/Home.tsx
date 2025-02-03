@@ -4,8 +4,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import ProductCard from '../Products/ProductCard';
 import { useEffect, useState } from 'react';
-import Carousel from '../Tools/carousel';
+import Carousel from '../Tools/Carousel';
 import './home.css';
+
 
 interface HomeProps {
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;

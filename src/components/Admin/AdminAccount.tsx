@@ -62,29 +62,25 @@ const AdminAccount = () => {
 
         try {
 
-            const token = localStorage.getItem('token')
+            const token = localStorage.getItem('user_token')
 
             const response = await fetch(`${dev}/index.php?action=update_companyInfo`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    'Authorization': `Bearer ${token}`,
                 },
-                body: JSON.stringify(data),
+                body: JSON.stringify({data, token}),
             });
 
             const result = await response.json();
 
             if (!response.ok || !result.success) {
-                openModal("Error", `Error al actualizar la información", ${result.message}`, closeModal);
+                openModal("Error", `Error al actualizar la información, ${result.message}`, closeModal);
                 return
             }
 
             openModal("Éxito", "Información actualizada correctamente", closeModal);
-
-
         } catch (error) {
-            console.error("Error al actualizar:", error);
             openModal("Error", `No se pudo actualizar la información" ${error}`, closeModal);
         }
     };
@@ -97,17 +93,18 @@ const AdminAccount = () => {
             return { success: false, message: "Token inválido." };
         }
         try {
-            const token = localStorage.getItem('token')
+            const token = localStorage.getItem('user_token')
 
             const formData = new FormData();
             formData.append("id", data.id);
             formData.append("img_social", data.img_social[0]);
             formData.append("social_url", data.social_url);
+            formData.append("token", token || '');
 
             const response = await fetch(`${dev}/index.php?action=update_social`, {
                 method: "POST",
                 headers: {
-                    'Authorization': `Bearer ${token}`,
+                    
                 },
                 body: formData,
             });
@@ -115,7 +112,7 @@ const AdminAccount = () => {
             const result = await response.json();
 
             if (!response.ok || !result.success) {
-                openModal("Error", `Error al actualizar la información" ${result.message}`, closeModal);
+                openModal("Error", `Error al actualizar la información ${result.message}`, closeModal);
                 return
             } else {
                 openModal("Éxito", "Información actualizada correctamente", closeModal);
@@ -131,14 +128,14 @@ const AdminAccount = () => {
     };
 
     const deleteSocial = async (id: string) => {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('user_token');
         try {
             const response = await fetch(`${dev}/index.php?action=delete-social`, {
                 method: "POST",
                 headers: {
-                    'Authorization': `Bearer ${token}`,
+                
                 },
-                body: JSON.stringify({ id }),
+                body: JSON.stringify({ id, token }),
             });
     
             const result = await response.json();

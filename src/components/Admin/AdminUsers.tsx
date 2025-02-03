@@ -46,7 +46,7 @@ const AdminUsers = () => {
             if (response.success) {
                 openModal("Éxito", "El usuario se eliminó correctamente.", closeModal);
             } else {
-                openModal("Error", `Error al aliminar el usuario: ${response.message}`, closeModal);
+                openModal("Error", `Error al eliminar el usuario: ${response.message}`, closeModal);
             }
         } catch (error) {
             openModal("Error", `Error inesperado al eliminar el usuario: ${error}` , closeModal);

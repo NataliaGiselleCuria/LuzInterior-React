@@ -1,5 +1,5 @@
 import { createContext, useContext, ReactNode, useState, useEffect, useMemo } from 'react';
-import { Products, ApiContextType, Users, ApiResponse, Shipping, CompanyInfo, Orders, Address, Socials, ListPrice, Fsq, Imgs, } from '../Interfaces/interfaces';
+import { Products, ApiContextType, Users, ApiResponse, Shipping, CompanyInfo, Orders, Address, Socials, ListPrice, Faq, Imgs, } from '../Interfaces/interfaces';
 
 export const ApiContext = createContext<ApiContextType>({} as ApiContextType);
 
@@ -20,14 +20,14 @@ export const ApiProvider = ({ children }: Props) => {
     const [social, setSocial] = useState<Socials[]>([]);
     const [listPrice, setListPrice] = useState<ListPrice[]>([]);
     const [fileUrl, setFileUrl] = useState('');
-    const [fsq, setFsq] = useState<Fsq[]>([]);
+    const [faq, setFaq] = useState<Faq[]>([]);
 
     const dev = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [productsRes, usersRes, ordersRes, shippingRes, companyInfoRes, galleryRes, bannerDesktopRes, bannerMobileRes, socialRes, listPriceRes, fsqRes] = await Promise.all([
+                const [productsRes, usersRes, ordersRes, shippingRes, companyInfoRes, galleryRes, bannerDesktopRes, bannerMobileRes, socialRes, listPriceRes, faqRes] = await Promise.all([
                     fetch(`${dev}/index.php?action=products`),
                     fetch(`${dev}/index.php?action=users`),
                     fetch(`${dev}/index.php?action=orders`),
@@ -41,11 +41,11 @@ export const ApiProvider = ({ children }: Props) => {
                     fetch(`${dev}/index.php?action=frequently-asked-questions`),
                 ]);
 
-                if (!productsRes.ok || !usersRes.ok || !ordersRes.ok || !shippingRes.ok || !companyInfoRes.ok || !galleryRes.ok || !bannerDesktopRes.ok || !bannerMobileRes.ok || !socialRes.ok || !listPriceRes.ok || !fsqRes.ok) {
+                if (!productsRes.ok || !usersRes.ok || !ordersRes.ok || !shippingRes.ok || !companyInfoRes.ok || !galleryRes.ok || !bannerDesktopRes.ok || !bannerMobileRes.ok || !socialRes.ok || !listPriceRes.ok || !faqRes.ok) {
                     throw new Error('One or more responses were not ok');
                 }
 
-                const [productsData, usersData, ordersData, shippingData, companyInfoData, galleryData, bannerDesktopData, bannerMobileData, socialData, listPriceData, fsqData] = await Promise.all([
+                const [productsData, usersData, ordersData, shippingData, companyInfoData, galleryData, bannerDesktopData, bannerMobileData, socialData, listPriceData, faqData] = await Promise.all([
                     productsRes.json(),
                     usersRes.json(),
                     ordersRes.json(),
@@ -56,7 +56,7 @@ export const ApiProvider = ({ children }: Props) => {
                     bannerMobileRes.json(),
                     socialRes.json(),
                     listPriceRes.json(),
-                    fsqRes.json(),
+                    faqRes.json(),
                 ]);
 
                 const mappedOrders = ordersData.map((orderData: any) => ({
@@ -81,7 +81,7 @@ export const ApiProvider = ({ children }: Props) => {
                 setBannerMobile(bannerMobileData);
                 setSocial(socialData);
                 setListPrice(listPriceData);
-                setFsq(fsqData)
+                setFaq(faqData)
 
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -99,11 +99,11 @@ export const ApiProvider = ({ children }: Props) => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
                 },
-                body: JSON.stringify({ email }),
+                body: JSON.stringify({ email, token }),
             });
             const data = await response.json();
+            console.log(data)
             return data;
         } catch (error) {
             throw new Error("Error al obtener los datos del usuario");
@@ -207,11 +207,11 @@ export const ApiProvider = ({ children }: Props) => {
         }
     }
 
-    const refreshFsq = async () => {
+    const refreshFaq = async () => {
         try {
-            const updateFsq = await fetch(`${dev}/index.php?action=frequently-asked-questions`);
-            const data = await updateFsq.json();
-            setFsq(data);
+            const updateFaq = await fetch(`${dev}/index.php?action=frequently-asked-questions`);
+            const data = await updateFaq.json();
+            setFaq(data);
         } catch (error) {
             throw new Error("Error al obtener las imagenes de la galería");
         }
@@ -271,8 +271,8 @@ export const ApiProvider = ({ children }: Props) => {
         refreshOrders,
         refreshGallery,
         getFile,
-        fsq,
-        refreshFsq
+        faq,
+        refreshFaq
 
     }),
         [
@@ -286,7 +286,7 @@ export const ApiProvider = ({ children }: Props) => {
             bannerMobile,
             social,
             fileUrl,
-            fsq
+            faq
         ]);
 
     return (

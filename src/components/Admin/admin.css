@@ -11,7 +11,7 @@
     margin: auto; 
 }
 
-.list-acordeon{
+.list-acordeon:not(.faq){
     width: 95%;
     margin: auto;
     padding: 0;

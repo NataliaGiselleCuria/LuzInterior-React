@@ -15,7 +15,7 @@ interface ProductItemProps {
 
 const ProductItem: React.FC<ProductItemProps> = ({ openCart }) => {
 
-    const { products, fsq } = useApi();
+    const { products, faq } = useApi();
     const { isLogin } = useUser();
     const { addToCart } = useCart();
     const formatCurrency = useCurrencyFormat();
@@ -58,16 +58,16 @@ const ProductItem: React.FC<ProductItemProps> = ({ openCart }) => {
 
     return (
         <div className="cont container prod-item">
-            {!isLogin && <div className="login-mesagge"><Link to='/login'>Inicie sesión </Link><span> para acceder a los precios de los productos.</span></div>}
+            {!isLogin && <div className="login-mesagge"><span><Link to='/login'>Inicie sesión </Link><span> para acceder a los precios de los productos.</span></span></div>}
             <span className="route"><span><Link to='/'>Inicio</Link><Link to='/productos'>/ Todos los productos</Link><Link to={`/productos/categoria/${productItem.category}`}>/ {productItem.category}</Link><span className="current-route">/ {productItem.name}.{productItem.id}</span></span></span>
-            <div className="prod-item-cont row row-cols-1 row-cols-lg-2">
+            <div className="prod-item-cont row row-cols-1 row-cols-md-2">
                 <div className="prod-item-img col-lg-7">
                     <ProductsImages images={productItem.img_url} />
                 </div>
-                <div className="prod-item-info col-lg-5">
+                <div className="prod-item-info col-md-5">
                     <div className='prod-card-description'>
-                        <span>
-                            <h4 className='text-uppercase'>{productItem.name}.</h4>
+                        <span className="prod-name">
+                            <h4>{productItem.name}</h4>
                             <h5>{productItem.id}</h5>
                         </span>
                         {isLogin ? <p className="fs-4">{formatCurrency(productItem.price)}</p> : <></>}
@@ -94,7 +94,7 @@ const ProductItem: React.FC<ProductItemProps> = ({ openCart }) => {
                                     <div className="accordion-body">
 
                                         <ul className="list-acordeon">
-                                            {fsq.map((item) => (
+                                            {faq.map((item) => (
                                                 <li key={item.id}>
                                                     <h6 dangerouslySetInnerHTML={{ __html: item.question }}></h6>
                                                     <p dangerouslySetInnerHTML={{ __html: item.answer }}></p>

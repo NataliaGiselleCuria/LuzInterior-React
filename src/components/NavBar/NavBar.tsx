@@ -30,19 +30,22 @@ const NavBar: React.FC<NavBarProps> = ({ openCart }) => {
         if (!isLogin) {
             return (
                 <Link to="/login" onClick={handleLinkClick}>
+                    <LazyLoadImage className='h100' src={userImg} alt="usuario" />
                     <span className="button-text">Iniciar sesión</span>
                 </Link>
             );
         }
 
+
         if (role === "user") {
             return (
                 <li>
+                     <LazyLoadImage className='h100' src={userImg} alt="usuario" />
                     <span className="nav-link dropdown-toggle" data-bs-toggle="dropdown"></span>
                     <ul className="dropdown-menu drop-user">
                         <li onClick={handleLinkClick}><Link to="/mi_cuenta" className="dropdown-item" >Mi cuenta</Link></li>
                         <li onClick={handleLinkClick}><Link to="/mis_pedidos" className="dropdown-item" >Mis pedidos</Link></li>
-                        <li onClick={() => { userLogout(navigate); handleLinkClick();}} className="dropdown-item" >Cerrar sesión</li>
+                        <li onClick={() => { userLogout(navigate); handleLinkClick(); }} className="dropdown-item" >Cerrar sesión</li>
                     </ul>
                 </li>
             );
@@ -50,10 +53,11 @@ const NavBar: React.FC<NavBarProps> = ({ openCart }) => {
 
         return (
             <li>
+                 <LazyLoadImage className='h100' src={userImg} alt="usuario" />
                 <span className="nav-link dropdown-toggle" data-bs-toggle="dropdown"></span>
                 <ul className="dropdown-menu drop-user">
                     <li onClick={handleLinkClick}><Link to="/admin" className="dropdown-item">Panel de Administración</Link></li>
-                    <li onClick={() => { userLogout(navigate); handleLinkClick();}} className="dropdown-item" >Cerrar sesión</li>
+                    <li onClick={() => { userLogout(navigate); handleLinkClick(); }} className="dropdown-item" >Cerrar sesión</li>
                 </ul>
             </li>
         );
@@ -70,7 +74,7 @@ const NavBar: React.FC<NavBarProps> = ({ openCart }) => {
     return (
         <nav id='nav' className='navbar navbar-expand-md bg-body-tertiary' >
             <div className='container nav-cont'>
-                <Link to='/'>
+                <Link to='/' onClick={handleLinkClick}>
                     <LazyLoadImage className='nav-logo' src={logo} alt="Logo Luz Interior" />
                 </Link>
                 <span className='nav-links'>
@@ -101,7 +105,7 @@ const NavBar: React.FC<NavBarProps> = ({ openCart }) => {
                                 <Link to='/contacto' className="nav-link" onClick={handleLinkClick}>Contacto</Link>
                             </li>
                             <li>
-                                <SearchBar data={products} />
+                                <SearchBar data={products} handleLinkClick={handleLinkClick} />
                             </li>
                         </ul>
                     </div>
@@ -115,8 +119,17 @@ const NavBar: React.FC<NavBarProps> = ({ openCart }) => {
                     </span>
                     <span className='user-cont'>
                         <button className="button-login">
-                            <LazyLoadImage className='h100' src={userImg} alt="usuario" />
-                            {getDropdownContent()}
+                            {!isLogin ?(
+                                <Link to="/login" onClick={handleLinkClick} >
+                                    {getDropdownContent()}
+                                 </Link> 
+                            ) : (
+                                <a>
+                                {getDropdownContent()}   
+                                </a> 
+                            )
+                            }
+                             
                         </button>
                     </span>
                 </span>

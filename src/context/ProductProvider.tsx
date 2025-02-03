@@ -13,7 +13,7 @@ interface Props {
 export const ProductProvider = ({ children }: Props) => {
 
   const { dev, refreshProducts, refreshListPrice } = useApi();
-  const { validateToken } = useVerifyToken();  
+  const { validateToken } = useVerifyToken();
 
   const registerProduct = async (data: FormProduct): Promise<Response & { id?: string }> => {
     const isTokenValid = await validateToken();
@@ -22,7 +22,7 @@ export const ProductProvider = ({ children }: Props) => {
       return { success: false, message: "Token inválido." };
     }
 
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('user_token')
     console.log(data)
 
     try {
@@ -30,9 +30,8 @@ export const ProductProvider = ({ children }: Props) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({data, token}),
       });
 
       const result = await response.json();
@@ -68,18 +67,18 @@ export const ProductProvider = ({ children }: Props) => {
       return { success: false, message: "Token inválido." };
     }
 
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('user_token')
 
     try {
       const response = await fetch(`${dev}/index.php?action=update-product`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({
           productId,
           data: productData,
+          token: token
         }),
       });
 
@@ -111,16 +110,15 @@ export const ProductProvider = ({ children }: Props) => {
       return { success: false, message: "Token inválido." };
     }
 
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('user_token')
 
     try {
       const response = await fetch(`${dev}/index.php?action=delete-product`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({ productId }),
+        body: JSON.stringify({ productId, token }),
       });
 
       const result = await response.json();
@@ -158,7 +156,7 @@ export const ProductProvider = ({ children }: Props) => {
     const formData = new FormData();
     formData.append("productId", productId);
 
-    
+
     images.forEach((image, index) => {
       if (image.url instanceof File) {
         formData.append(`image${index}`, image.url);
@@ -173,17 +171,16 @@ export const ProductProvider = ({ children }: Props) => {
     });
 
     try {
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('user_token')
+      formData.append("token", token || '')
 
-      console.log(formData)
-      
       const response = await fetch(`${dev}/index.php?action=upload-images-products`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          
         },
         body: formData,
-        
+
       });
 
       const result = await response.json();
@@ -228,12 +225,14 @@ export const ProductProvider = ({ children }: Props) => {
     });
 
     try {
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('user_token')
+
+      formData.append("token", token || "")
 
       const response = await fetch(`${dev}/index.php?action=register-prod-and-img`, {
         method: "POST",
         headers: {
-          'Authorization': `Bearer ${token}`,
+          
         },
         body: formData,
       });
@@ -273,15 +272,14 @@ export const ProductProvider = ({ children }: Props) => {
     }
 
     try {
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('user_token')
 
       const response = await fetch(`${dev}/index.php?action=update-price`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({ percentage, productIds }),
+        body: JSON.stringify({ percentage, productIds, token }),
       });
 
       const result = await response.json();
@@ -306,7 +304,7 @@ export const ProductProvider = ({ children }: Props) => {
     }
   }
 
-  
+
 
   const updateListPrice = async (data: ListPrice): Promise<Response> => {
     const isTokenValid = await validateToken();
@@ -315,7 +313,7 @@ export const ProductProvider = ({ children }: Props) => {
       return { success: false, message: "Token inválido." };
     }
 
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('user_token')
     const date = new Date();
 
     try {
@@ -324,11 +322,11 @@ export const ProductProvider = ({ children }: Props) => {
       if (data.list_price[0]) {
         formData.append("list_price", data.list_price[0]);
       }
+      formData.append("token", token || "");
 
       const response = await fetch(`${dev}/index.php?action=update-list-price`, {
         method: "POST",
         headers: {
-          'Authorization': `Bearer ${token}`,
         },
         body: formData,
       });
@@ -356,21 +354,22 @@ export const ProductProvider = ({ children }: Props) => {
     }
   };
 
-  const deleteListPrice = async(): Promise<Response> => {
+  const deleteListPrice = async (): Promise<Response> => {
     const isTokenValid = await validateToken();
 
     if (!isTokenValid) {
       return { success: false, message: "Token inválido." };
     }
 
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('user_token')
 
     try {
       const response = await fetch(`${dev}/index.php?action=delete-list-price`, {
         method: "POST",
         headers: {
-          'Authorization': `Bearer ${token}`,
+
         },
+        body: JSON.stringify({ token }),
       });
 
       const result = await response.json();
@@ -380,7 +379,7 @@ export const ProductProvider = ({ children }: Props) => {
       }
 
       refreshListPrice();
-      
+
       return {
         success: result.success,
         message: result.message || "Lista de precios eliminada exitosamente.",

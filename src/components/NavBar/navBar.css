@@ -18,7 +18,7 @@
 }
 
 .nav-cont a {
-    height: 60%;
+    height: 50%;
     margin: auto;
     display: flex;
     align-items: center;
@@ -172,27 +172,31 @@ ul.dropdown-search li:last-child {
     background-color: var(--black);
 }
 
-.button-login {
-    display: flex;
+.button-login a {
+    height: 100%; 
+    align-items: flex-end;
+    color: white!important;
     gap: 5px;
-    background: none;
-    border: none;
-    color: white;
 }
 
-.button-login a {
+.button-login a li{
     height: 100%;
     display: flex;
-    align-items: flex-end;
-    color: white;
-
+    gap: 5px;
 }
 
+ul.dropdown-menu.drop-user.show a, ul.dropdown-menu.drop-user.show li {
+    height: min-content !important;
+}
 
 @media (max-width: 768px) {
 
     #nav {
         height: 70px;
+    }
+
+    #nav li a, #nav li{
+        border: none;
     }
 
     .nav-cont {
@@ -211,11 +215,16 @@ ul.dropdown-search li:last-child {
         left: 0;
         width: 100dvw;
         height: fit-content;
+        z-index: 3;
+    }
+
+    .dropdown-menu.show{
+        background-color: transparent;
     }
 
     .dropdown-menu.drop-user.show,
     .navbar-collapse {
-        height: 100dvh;
+        height: 100dvh!important;
         background-image: url(/src/assets/tortuga-agua.png);
         background-repeat: no-repeat;
         background-blend-mode: overlay;

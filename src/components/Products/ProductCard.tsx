@@ -28,7 +28,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     };
 
     return (
-        <div className='prod-card-cont position-relative d-flex flex-column justify-content-end h100 w100'
+        <div className='prod-card-cont'
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}>
             <div className='img-cont'>
@@ -39,11 +39,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 />
             </div>
             <div className='prod-card-description'>
-                <span>
-                    <h4 className='text-uppercase'>{product.name}.</h4>
+                <span className='prod-name'>
+                    <h4>{product.name}</h4>
                     <h5>{product.id}</h5>
                 </span>
-                {isLogin ? <p>{formatCurrency(product.price)}</p> : <></>}
+                {isLogin ? <p className='fs-5'>{formatCurrency(product.price)}</p> : <></>}
             </div>
             {product.novelty ? <span className='novelty-mark'>Novedad</span> : <></>}
         </div>

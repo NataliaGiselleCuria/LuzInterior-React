@@ -36,50 +36,57 @@ export const UserProvider = ({ children }: Props) => {
     }, []);
 
     const userLogout = (navigate: NavigateFunction) => {
-        localStorage.removeItem('token');
+        localStorage.removeItem('user_token');
         setUserActive(null);
         setIsLogin(false);
         navigate('/login');
     };
 
     const checkToken = useCallback(async (token: string, navigate: NavigateFunction): Promise<Response> => {
-
+        console.log("Verificando token:", token);
+    
         try {
             if (!token) {
+                console.log("Token no encontrado.");
                 userLogout(navigate);
                 return { success: false, message: "Token no encontrado. La sesión ha expirado." };
             }
-
+    
             const response = await fetch(`${dev}/index.php?action=verify-token`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
+                    
+                },
+                body: JSON.stringify({
+                    token: token
+                })
             });
-
+    
             const result = await response.json();
-
+            console.log("Resultado de verificación:", result);
+    
             if (result.success) {
                 const email = localStorage.getItem('email');
-
                 if (!email) {
+                    console.log("Email no encontrado.");
                     userLogout(navigate);
                     return { success: false, message: "No se encontró el email del usuario en el almacenamiento." };
                 }
-
+    
                 setIsLogin(true);
                 return { success: true, message: "Inicio de sesión exitoso" };
-
             } else {
+                console.log("Token inválido o expirado.");
                 userLogout(navigate);
                 return {
                     success: false,
                     message: result.message || "Su sesión expiró. Inicie sesión nuevamente"
                 };
             }
-
+    
         } catch (error) {
+            console.error("Error en la verificación:", error);
             userLogout(navigate);
             const errorMessage = error instanceof TypeError
                 ? "Error de conexión. Verifique su conexión a internet."
@@ -106,7 +113,7 @@ export const UserProvider = ({ children }: Props) => {
 
                 if (!token) return { success: false, message: "Token no recibido" };
 
-                localStorage.setItem('token', token);
+                localStorage.setItem('user_token', token);
                 localStorage.setItem('email', email);
                 localStorage.setItem('role', role);
 
@@ -118,6 +125,8 @@ export const UserProvider = ({ children }: Props) => {
             } else {
                 return { success: false, message: result.message || "Credenciales incorrectas" };
             }
+
+          
         } catch (error) {
             const errorMessage = error instanceof TypeError
                 ? "Error de conexión. Verifique su conexión a internet."
@@ -198,15 +207,14 @@ export const UserProvider = ({ children }: Props) => {
         endpoint: string
     ): Promise<Response> => {
         try {
-            const token = localStorage.getItem('token')
+            const token = localStorage.getItem('user_token')
 
             const response = await fetch(`${dev}/index.php?action=${endpoint}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
                 },
-                body: JSON.stringify({ data, id }),
+                body: JSON.stringify({ data, id, token }),
             });
 
             const result = await response.json();
@@ -226,15 +234,14 @@ export const UserProvider = ({ children }: Props) => {
 
     const updateUserApproved = async (id: number): Promise<Response> => {
         try {
-            const token = localStorage.getItem('token')
+            const token = localStorage.getItem('user_token')
 
             const response = await fetch(`${dev}/index.php?action=change-approved`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
                 },
-                body: JSON.stringify({ id }),
+                body: JSON.stringify({ id, token }),
             });
 
             const result = await response.json();
@@ -258,15 +265,14 @@ export const UserProvider = ({ children }: Props) => {
 
     const updateUserRole = async (id:number) : Promise<Response> => {
         try {
-            const token = localStorage.getItem('token')
+            const token = localStorage.getItem('user_token')
 
             const response = await fetch(`${dev}/index.php?action=change-role`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
                 },
-                body: JSON.stringify({ id }),
+                body: JSON.stringify({ id, token}),
             });
 
             const result = await response.json();
@@ -290,15 +296,15 @@ export const UserProvider = ({ children }: Props) => {
 
     const deletUser = async(id:number): Promise<Response> => {
         try {
-            const token = localStorage.getItem('token')
+            const token = localStorage.getItem('user_token')
 
             const response = await fetch(`${dev}/index.php?action=delete-user`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
+                   
                 },
-                body: JSON.stringify({ id }),
+                body: JSON.stringify({ id, token }),
             });
 
             const result = await response.json();

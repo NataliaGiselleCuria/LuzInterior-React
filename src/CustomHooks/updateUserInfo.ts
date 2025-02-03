@@ -49,7 +49,7 @@ export const useUpdateUserInfo = (openModal: (title: string, content: string) =>
       return false;
     }
 
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('user_token');
     const updateResult = await updateUserInfo(data, id, endpoint);
 
     if (updateResult.success && token) {

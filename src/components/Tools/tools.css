@@ -54,6 +54,7 @@
 
 .quantity-selector button {
     width: 10%;
+    height: 35px;
     display: flex;
     justify-content: center;
     font-size: larger;
@@ -68,8 +69,6 @@
     border: none;
     background: none;
     outline: none;  
-    border-right: 1px solid var(--light);
-    border-left: 1px solid var(--light);  
 }
 
 .quantity-selector input::-webkit-outer-spin-button,
@@ -189,3 +188,12 @@
     opacity: 0.9;
 }
 
+@media (max-width: 576px) {
+
+    .image-gallery{
+        gap: 10px!important
+    }
+    
+
+    
+}

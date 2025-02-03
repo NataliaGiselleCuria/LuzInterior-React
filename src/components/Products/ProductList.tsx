@@ -32,7 +32,7 @@ const ProductList = () => {
 
     return (
         <div className="cont container prod-list">
-            {!isLogin && <div className="login-mesagge"><Link to='/login'>Inicie sesión </Link><span> para acceder a los precios de los productos.</span></div>}
+            {!isLogin && <div className="login-mesagge"><span><Link to='/login'>Inicie sesión </Link><span> para acceder a los precios de los productos.</span></span></div>}
             <div className="title-page">
                 <h1>{category ? `${category}` : 'PRODUCTOS'}</h1>
                 <span className="line"></span>

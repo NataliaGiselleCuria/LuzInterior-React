@@ -62,17 +62,17 @@ const ItemGallery: React.FC = () => {
         return;
       }
   
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('user_token');
   
       for (let i = 0; i < currentFile.length; i++) {
         const formData = new FormData();
         formData.append("image", currentFile[i]);
         formData.append("priority", (images.length + 1 + i).toString()); 
   
+        formData.append("token", token || '')
         const response = await fetch(`${dev}/index.php?action=add-gallery`, {
           method: "POST",
           headers: {
-            'Authorization': `Bearer ${token}`,
           },
           body: formData,
         });
@@ -158,15 +158,14 @@ const ItemGallery: React.FC = () => {
         return;
       }
 
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('user_token')
 
       fetch(`${dev}/index.php?action=update-gallery`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({payload, token}),
       })
         .then((response) => response.json())
         .then((data) => {

@@ -100,7 +100,7 @@ const ItemBanner = () => {
                 return;
             }
 
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('user_token');
 
             for (let i = 0; i < currentFile.length; i++) {
                 const formData = new FormData();
@@ -115,11 +115,10 @@ const ItemBanner = () => {
 
                 formData.append("link", imageLink || "");
                 formData.append("type", uploadType);
-
+                formData.append("token", token || "");   
               
                 const response = await fetch(`${dev}/index.php?action=add-banner`, {
                     method: "POST",
-                    headers: { 'Authorization': `Bearer ${token}` },
                     body: formData,
                 });
 
@@ -266,9 +265,7 @@ const ItemBanner = () => {
                 return;
             }
 
-            const token = localStorage.getItem('token')
-
-            console.log('uploadType', uploadType)
+            const token = localStorage.getItem('user_token')
             
             const url = uploadType === 'desktop'
             ? `${dev}/index.php?action=update-banner-desktop`
@@ -278,9 +275,8 @@ const ItemBanner = () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
                 },
-                body: JSON.stringify({ payload, uploadType }),
+                body: JSON.stringify({ payload, uploadType, token }),
             })
                 .then((response) => response.json())
                 .then((data) => {
@@ -289,7 +285,6 @@ const ItemBanner = () => {
                     }
                     refreshBanner();
                 })
-            console.log('uploadType end ', uploadType)
         } catch (error) {
             openModal("Error", `Error en la conxión: ${error}`, closeModal);
         }

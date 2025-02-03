@@ -20,14 +20,14 @@ const Carousel : React.FC<CarouselProps> = ({type })  => {
                             <Link to={img.link}>
                                 <LazyLoadImage
                                 className="d-block w-100"
-                                src={dev + img.img_url}
-                                alt={`Banner Mobile ${img.priority}`}
+                                src={`${dev}${img.img_url}`}
+                                alt={`Banner desktop ${img.priority}`}
                                 />
                             </Link>
                         ):(
                             <LazyLoadImage
                             className="d-block w-100"
-                            src={dev + img.img_url}
+                            src={`${dev}${img.img_url}`}
                             alt={`Banner Mobile ${img.priority}`}
                             />
                         )}

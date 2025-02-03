@@ -9,7 +9,11 @@ interface Props {
 const AdminRoute = ({ children }:Props) => {
     const { userActive } = useUser();
 
+    console.log(userActive)
+
     if (userActive?.role === 'admin') {
+
+        console.log(userActive.role)
         return children;
     }
     return <Navigate to="/" />;

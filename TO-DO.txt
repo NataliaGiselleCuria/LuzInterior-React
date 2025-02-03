@@ -1,0 +1,8 @@
+- Admin order: las ordenes no pueden filtrarse por email o cuit del usuario. (useSearch).
+- Modal para el mensaje que anunca que no hay ninguna imagen seleccionada cuando se intenta subir una foto con el input vacio.
+- arreglar la ruta para mostrar las imagenes del banner en admin.   $targetDir = './uploads/img-banner/mobile/';
+
+
+
+
+errores ortograficos:

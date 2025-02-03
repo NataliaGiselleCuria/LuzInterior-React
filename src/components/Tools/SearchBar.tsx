@@ -8,14 +8,16 @@ import search from '../../assets/search.png'
 
 interface SearchBarProps {
   data: (Products | Users | Orders)[];
+  handleLinkClick: () => void
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ data }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ data, handleLinkClick }) => {
   const { searchQuery, filteredResults, handleSearchChange } = useSearch(data);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const handleOptionClick = () => {
     setIsDropdownOpen(false);
+    handleLinkClick();
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,7 +40,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ data }) => {
       {isDropdownOpen && filteredResults.length > 0 && (
         <ul className="dropdown-search">
           {filteredResults.map((item) => (
-            <li key={item.id} onClick={handleOptionClick}>
+            <li key={item.id} onClick={handleOptionClick }>
               {isProduct(item) ? (
                 <Link to={`/productos/id/${item.id}`}>{item.name}</Link>
               ) : 'name' in item ? (

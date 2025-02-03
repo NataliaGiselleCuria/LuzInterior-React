@@ -2,11 +2,12 @@ import { useState } from "react";
 import { AdminProducts } from "./AdminProducts";
 import AdminUsers from "./AdminUsers";
 import AdminOrders from "./AdminOrders";
-import AdminImages from "./adminimages";
+import AdminImages from "./AdminImages";
 import AdminAccount from "./AdminAccount";
 import AdminShipping from "./AdminShipping";
 import AdminFrequentlyAskedQuestions from "./AdminFrequentlyAskedQuestions";
 import './admin.css';
+
 
 
 export const AdminPanel = () => {

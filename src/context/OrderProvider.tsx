@@ -40,7 +40,7 @@ export const OrderProvider = ({ children }: Props) => {
 
     const sendOrder = async (data: Orders, navigate: NavigateFunction): Promise<Response> => {
         try {
-            const token = localStorage.getItem('token')
+            const token = localStorage.getItem('user_token')
 
             if (!token) {
                 checkToken("", navigate);
@@ -56,9 +56,8 @@ export const OrderProvider = ({ children }: Props) => {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`,
                         },
-                        body: JSON.stringify({ data }),
+                        body: JSON.stringify({ data, token }),
                     });
 
                     const result = await response.json();
@@ -90,16 +89,15 @@ export const OrderProvider = ({ children }: Props) => {
             return { success: false, message: "Token inválido." };
         }
 
-        const token = localStorage.getItem('token')
+        const token = localStorage.getItem('user_token')
 
         try {
             const response = await fetch(`${dev}/index.php?action=update-state-order`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    'Authorization': `Bearer ${token}`,
                 },
-                body: JSON.stringify({orderId, newState}),
+                body: JSON.stringify({orderId, newState, token}),
             });
 
             const result = await response.json();
@@ -131,16 +129,15 @@ export const OrderProvider = ({ children }: Props) => {
             return { success: false, message: "Token inválido." };
         }
 
-        const token = localStorage.getItem('token')
+        const token = localStorage.getItem('user_token')
 
         try {
             const response = await fetch(`${dev}/index.php?action=update-new`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    'Authorization': `Bearer ${token}`,
                 },
-                body: JSON.stringify({orderId,}),
+                body: JSON.stringify({orderId,token}),
             });
 
             const result = await response.json();
@@ -173,16 +170,15 @@ export const OrderProvider = ({ children }: Props) => {
             return { success: false, message: "Token inválido." };
         }
 
-        const token = localStorage.getItem('token')
+        const token = localStorage.getItem('user_token')
 
         try {
             const response = await fetch(`${dev}/index.php?action=delete-order`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    'Authorization': `Bearer ${token}`,
                 },
-                body: JSON.stringify({orderId,}),
+                body: JSON.stringify({orderId,token}),
             });
 
             const result = await response.json();

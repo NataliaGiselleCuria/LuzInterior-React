@@ -67,7 +67,7 @@ export interface ListPrice{
     date: Date;
 }
 
-export interface Fsq{
+export interface Faq{
     id: number;
     question: string;
     answer: string;
@@ -186,8 +186,8 @@ export type ApiContextType = {
     refreshListPrice: () => Promise<void>;
     fileUrl:string;
     getFile: () => void;
-    fsq: Fsq[];
-    refreshFsq: () => Promise<void>;
+    faq: Faq[];
+    refreshFaq: () => Promise<void>;
     categories: string[];
 }
 
