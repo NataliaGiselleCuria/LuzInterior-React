@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form";
 import { useUser } from "../../context/UserContext"
 import { useState } from "react";
@@ -10,8 +10,6 @@ const Wholesalers = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from || '/';
 
   const { register, handleSubmit } = useForm<FormLogin>();
 
@@ -21,7 +19,7 @@ const Wholesalers = () => {
 
     if (loginResult.success) {
       setErrorMessage("");
-      navigate(from, { replace: true });
+      navigate(-1);
     } else {
       setErrorMessage(loginResult.message);
     }
@@ -32,7 +30,12 @@ const Wholesalers = () => {
       <div>
         {!isLogin ?
           <>
-            <Link to="/">inicio</Link>
+            <Link to="#" onClick={(e) => {
+              e.preventDefault();
+              window.history.back();
+            }}>
+              Volver
+            </Link>
             <h2>Iniciar sesión</h2>
             <p>¿Eres un nuevo usuario?<span><Link to='/registro'>Crear cuenta</Link></span></p>
             <form onSubmit={handleSubmit(handleLogin)}>

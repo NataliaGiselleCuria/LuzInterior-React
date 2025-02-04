@@ -77,6 +77,7 @@
 
 .prod-name {
     display: flex;
+    justify-content: center;
     align-items: baseline;
     border-bottom: 1px solid var(--black);
 }
@@ -109,7 +110,7 @@
 
 li.prod-list-li {
     height: 700px;
-    width: 450px;
+    width: 480px;
     max-width: 90dvw;
     border: 1px solid var(--light);
 }
@@ -232,6 +233,10 @@ li.categories:hover {
 
     .prod-card-description .prod-name {
         align-items: center;     
+    }
+
+    .prod-card-description p{
+        font-size: 16px!important;
     }
 
     .prod-card-description h4, .prod-card-description h5, .prod-card-characteristics h5{

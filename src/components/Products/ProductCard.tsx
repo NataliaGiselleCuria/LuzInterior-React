@@ -28,7 +28,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     };
 
     return (
-        <div className='prod-card-cont'
+        <div className='prod-card-cont shadow-sm'
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}>
             <div className='img-cont'>

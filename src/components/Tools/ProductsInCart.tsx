@@ -25,17 +25,18 @@ const ProductsInCart = ({ editable }: Props) => {
   }
 
   return (
-    <>
       <ul className="ul-cart">
         {cart.map((item) => {
           const totalForProduct = item.quantity * item.product.price;
 
           return (
             <li key={item.product.id}>
-              <span className="ul-cart-img"><LazyLoadImage src={`${dev}${item.product.img_url[0].url}`} alt={item.product.name} /></span>
-              <span className="cart-prod-info">
-                <span className="prod-name"><h5>{item.product.name}. {item.product.id}</h5></span>
-                {isLogin && <p className="sub-total">{formatCurrency(item.product.price)}</p>}
+              <div className="ul-cart-img"><LazyLoadImage src={`${dev}${item.product.img_url[0].url}`} alt={item.product.name} /></div>
+              <div className="cart-prod-info">
+                <span className="d-flex flex-column">
+                  <span className="prod-name"><h5>{item.product.name}. {item.product.id}</h5></span>
+                  {isLogin && <p className="sub-total">{formatCurrency(item.product.price)}</p>}
+                </span>
                 {editable &&
                   <QuantitySelector
                     productId={item.product.id}
@@ -47,7 +48,7 @@ const ProductsInCart = ({ editable }: Props) => {
                 }
                 {isLogin && <p>Total: {formatCurrency(totalForProduct)}</p>}
 
-              </span>
+              </div>
               {editable &&
                 <button className="delete" onClick={() => handleRemoveFromCart(item.product.id)}>
                   <img src={trash} alt="eliminar producto"></img>
@@ -57,7 +58,6 @@ const ProductsInCart = ({ editable }: Props) => {
           );
         })}
       </ul>
-    </>
   );
 }
 

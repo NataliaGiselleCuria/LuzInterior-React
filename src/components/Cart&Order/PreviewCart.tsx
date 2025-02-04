@@ -43,6 +43,7 @@ const PreviewCart: React.FC<PreviewCartProps> = ({ cartOpen, onClose }) => {
           <>
             <h6>Subtotal:</h6>
             <h5>{formatCurrency(totalPrice)}</h5>
+            <p className="small">IVA incluido</p>
           </>
         ) : null}
       </div>

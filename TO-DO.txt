@@ -1,8 +1,9 @@
 - Admin order: las ordenes no pueden filtrarse por email o cuit del usuario. (useSearch).
 - Modal para el mensaje que anunca que no hay ninguna imagen seleccionada cuando se intenta subir una foto con el input vacio.
 - arreglar la ruta para mostrar las imagenes del banner en admin.   $targetDir = './uploads/img-banner/mobile/';
-
-
+- Las imagenes de los productos deben verse en grande al hacerles click
+- Arreglar el height del banner en mobile para que no dependa del dvh.
+- cambiar el tamaño de la cart de 'novedades' en mobile.
 
 
 errores ortograficos:

@@ -39,9 +39,9 @@ const ProductList = () => {
             </div>
             {!category && (
                 <div className="container">
-                    <ul className="row row-cols-1 row-cols-sm-2 row-cols-md-7 ul-row-nopadding">
+                    <ul className="row ul-row-nopadding">
                         {categories.map((cat) => (
-                            <li key={cat} className="categories">
+                            <li key={cat} className="categories col-sm-6">
                                 <Link to={`/productos/categoria/${cat}`}>{cat}</Link>
                             </li>
                         ))}
