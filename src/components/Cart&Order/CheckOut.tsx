@@ -14,11 +14,11 @@ import FormAddresses from "../Tools/FormAddresses";
 import useModal from "../../CustomHooks/modal";
 import ModalMesagge from "../Tools/ModalMesagge";
 import useVerifyToken from "../../CustomHooks/verefyToken";
+import logo from "../../assets/alt_logo.png"
 import './cart.css'
 
 
 const CheckOut = () => {
-
   const { userActive, isLogin, userLogout } = useUser();
   const { shipping, companyInfo } = useApi();
   const { cart, totalPrice } = useCart();
@@ -31,10 +31,17 @@ const CheckOut = () => {
   const [isEditingAddress, setIsEditingAddress] = useState(false);
   const [isEditingshipping, setIsEditingshipping] = useState(true);
   const [selAddress, setSelAddress] = useState<Address | null>(null);
+  const [defaultAddress, setDefaultAddress] = useState<Address | null>(null);
   const [selshipping, setSelshipping] = useState<Shipping | null>(null);
 
   //direcciones
-  const defaultAddress = userActive?.addresses?.find(address => address.default_address);
+
+
+  useEffect(() => {
+    console.log(userActive)
+    const defaultAddress = userActive?.addresses?.find(address => address.default_address) || userActive?.addresses[0] || null;
+    setDefaultAddress(defaultAddress)
+  }, []);
 
   useEffect(() => {
     if (selAddress) {
@@ -52,6 +59,8 @@ const CheckOut = () => {
     if (userActive?.addresses?.length === 1) {
       setSelAddress(userActive?.addresses[0]);
     }
+
+    console.log(selAddress)
   }, [userActive?.addresses]);
 
   const handleSelectAddress = (addressId: number) => {
@@ -64,28 +73,33 @@ const CheckOut = () => {
 
   const handleConfirmAddress = () => {
     setIsEditingAddress(false);
+    console.log(selAddress)
   };
 
   //envío
+  const valueFree = () => {
+    const value = shipping.find(shipping => shipping.id_shipping === 'min_free_shipping')
+    return value?.price || 0;
+  };
+
   const shippingsMessages = (shippingType: string) => {
     let message = '';
 
     switch (shippingType) {
       case 'free': {
-        const valueFree = shipping.find(shipping => shipping.id_shipping === 'min_free_shipping');
-        if (valueFree) {
-          message = `Pedido superior a ${valueFree.price} EL ENVÍO ES GRATIS`;
+        const freePrice = valueFree();
+
+        if (freePrice) {
+          message = `Pedido superior a ${formatCurrency(freePrice)} el envío es gratis`;
         } else {
           message = 'Información no disponible';
         }
         break;
       }
-
       case 'delivery': {
         message = 'Despacho en el transporte indicado';
         break;
       }
-
       case 'pickup': {
         const valuePickup = companyInfo.find(setting => setting.key === 'store_address');
         if (valuePickup) {
@@ -116,7 +130,7 @@ const CheckOut = () => {
 
     if (!isTokenValid) {
       return;
-    } 
+    }
 
     const addressOrder = selAddress || defaultAddress;
     const shippingOrder = selshipping;
@@ -151,168 +165,207 @@ const CheckOut = () => {
   };
 
   return (
-    <div className="cont container">
-      <h2>Generar orden de pedido</h2>
-      {(!isLogin) ?
-        <>
-          <h3>Inicie sesión para continuar</h3>
-          <button onClick={() => navigate('/login', { state: { from: '/checkout' } })}>  Iniciar sesión </button>
-          <Link to='/registro'>¿No tienes cuenta aún?</Link>
-        </>
-        :
-        <>
-          <div className="prod-chekout-container">
-            <ProductsInCart price='subtotal' editable={false} ></ProductsInCart>
-            <span><p>Envío</p> {selshipping && <><p>{selshipping.id_shipping}</p><p>{formatCurrency(selshipping.price)}</p></>}</span>
-            <p>Total: {!selshipping ? (<p>{totalPrice}</p>):(<p>{formatCurrency(totalPrice + selshipping.price)}</p>)}</p>
-          </div>
-          <div>
-            <span><p>Sesión inciada con {userActive?.email}</p><button onClick={() => userLogout(navigate)}>Cerrar sesión</button></span>
-            <div className="shipping-cont">
-              <span>
-                <h3>Opciones de envío.</h3>
-                {!isEditingshipping &&
-                  <button onClick={() => setIsEditingshipping(!isEditingshipping)}>Cambiar</button>
-                }
-              </span>
-              {isEditingshipping ? (
-                <div>
-                  <p>Envío y entrega</p>
-                  {shipping.map(option => option.id_shipping !== 'min_free_shipping' && (
-                    <div key={option.id_shipping}>
-                      <div>
-                        <span className="flex">
-                          <input
-                            type="radio"
-                            name="shipping"
-                            id={option.id_shipping}
-                            onChange={() => handleConfirmShipping(option)} />
-                          <p>{option.description}</p>
-                          <p>{formatCurrency(option.price)}</p>
-                        </span>
-                      </div>
-                      <div>
-                        <p>{shippingsMessages(option.id_shipping)}</p>
-                      </div>
+    <div className="checkout-body container-md">
+      <nav className="container-lg nav-checkout">
+        <div className="title-page">
+          <img src={logo} alt="logo luz interior"></img>
+          <h2>Generar orden de pedido</h2>
+          <span className="line"></span>
+          <Link to="/" className="small"> ← Seguir navegando  </Link>
+        </div>
+      </nav>
+      <div className="cont container">
+
+        {(!isLogin) ?
+          <>
+            <h3>Inicie sesión para continuar</h3>
+            <button onClick={() => navigate('/login', { state: { from: '/checkout' } })}>  Iniciar sesión </button>
+            <Link to='/registro'>¿No tienes cuenta aún?</Link>
+          </>
+          :
+          <div className="container">
+            <div className="row checkOut">
+              <div className="checkOut-info col-lg-7">
+                <span className="email"><p>Sesión inciada con {userActive?.email}</p><button className="no-button" onClick={() => userLogout(navigate)}>Cerrar sesión</button></span>
+                <div className="item-cont">
+                  <span>
+                    <div className="title-page">
+                      <h4>Método de envío</h4>
+                      {!isEditingshipping &&
+                        <button className="general-button" onClick={() => setIsEditingshipping(!isEditingshipping)}>Cambiar</button>
+                      }
                     </div>
-                  ))}
-                  <button onClick={() => setIsEditingshipping(false)}>Confirmar</button>
-                </div>
-              ) : (
-                <>
-                  {selshipping &&
+                  </span>
+                  {isEditingshipping ? (
+                    <div className="opc-cont">
+                      <h5>Envío y entrega</h5>
+                      {shipping
+                        .filter(option => option.id_shipping !== 'min_free_shipping')
+                        .map(option => (
+                          <div key={option.id_shipping} className={`option-cont ${selshipping === option ? 'selected' : ''}`}>
+                            <div className="option-radio">
+                              <input
+                                type="radio"
+                                name="shipping"
+                                id={option.id_shipping}
+                                onChange={() => handleConfirmShipping(option)}
+                                disabled={option.id_shipping === 'free' && totalPrice < valueFree()} />
+                            </div>
+                            <div className="option-info">
+                              <span>
+                                <p>{option.description}</p>
+                                <p>{formatCurrency(option.price)}</p>
+                              </span>
+                              <p className="small">{shippingsMessages(option.id_shipping)}</p>
+                            </div>
+
+                          </div>
+                        ))}
+                      <button className="light-button" onClick={() => setIsEditingshipping(false)}>Confirmar</button>
+                    </div>
+                  ) : (
                     <>
-                      <p>{selshipping.id_shipping}</p>
-                      <p>{selshipping.description}</p>
-                      <p>{shippingsMessages(selshipping.id_shipping)}</p>
-                      <p>{formatCurrency(selshipping.price)}</p>
+                      {selshipping &&
+                        <div className="info-save">
+                          <p>{selshipping.description}</p>
+                          <p>{shippingsMessages(selshipping.id_shipping)}</p>
+                          <p>{formatCurrency(selshipping.price)}</p>
+                        </div>
+                      }
                     </>
-                  }
-                </>
-              )}
-            </div>
-            {!isEditingshipping && selshipping?.id_shipping!=='pickup' && (
-              <div className="address-order-cont">
-              <span>
-                <h3>Detalle de envío</h3>
-                {!isEditingAddress &&
-                  <button onClick={() => setIsEditingAddress(!isEditingAddress)}>Cambiar</button>
-                }
-              </span>
-              {!isEditingAddress ? (
-                <div>
-                  <span className="adress-order-selected">
-                    {selAddress ? (
-                      <div>
-                        <p>{selAddress.name_address}, {selAddress.last_name}</p>
-                        <p>{selAddress.street}, {selAddress.street2}</p>
-                        <p>{selAddress.city}, {selAddress.province}</p>
-                        <p>{selAddress.cp}</p>
-                        <p>{selAddress.tel_address}</p>
+                  )}
+                </div>
+                {!isEditingshipping && selshipping?.id_shipping !== 'pickup' && (
+                  <div className="item-cont">
+                    <div className="title-page">
+                      <h4>Detalle de envío</h4>
+                      {!isEditingAddress &&
+                        <button className="general-button" onClick={() => setIsEditingAddress(!isEditingAddress)}>Cambiar</button>
+                      }
+                    </div>
+                    {!isEditingAddress ? (
+                      <div className="">
+                        <span className="opc-cont">
+                          {selAddress ? (
+                            <div className="info-save">
+                              <p>{selAddress.name_address}, {selAddress.last_name}</p>
+                              <p>{selAddress.street}, {selAddress.street2}</p>
+                              <p>{selAddress.city}, {selAddress.province}</p>
+                              <p>{selAddress.cp}</p>
+                              <p>{selAddress.tel_address}</p>
+                            </div>
+                          ) : (
+                            defaultAddress && (
+                              <div className="info-save">
+                                <p>{defaultAddress.name_address}, {defaultAddress.last_name}</p>
+                                <p>{defaultAddress.street}, {defaultAddress.street2}</p>
+                                <p>{defaultAddress.city}, {defaultAddress.province}</p>
+                                <p>{defaultAddress.cp}</p>
+                                <p>{defaultAddress.tel_address}</p>
+                              </div>
+                            )
+                          )}
+                        </span>
                       </div>
                     ) : (
-                      defaultAddress && (
+                      <div className="opc-cont">
                         <div>
-                          <p>{defaultAddress.name_address}, {defaultAddress.last_name}</p>
-                          <p>{defaultAddress.street}, {defaultAddress.street2}</p>
-                          <p>{defaultAddress.city}, {defaultAddress.province}</p>
-                          <p>{defaultAddress.cp}</p>
-                          <p>{defaultAddress.tel_address}</p>
+                          <p>Elige una dirección:</p>
+                          <span className="d-flex flex-column gap-1 align-items-start">
+                            <select
+                              onChange={(e) => handleSelectAddress(Number(e.target.value))}
+                              defaultValue={selAddress ? selAddress.id : defaultAddress?.id}>
+                              <option key="default-option" value="" disabled>Seleccione una dirección</option>
+                              {userActive?.addresses?.map((address, index) => (
+                                <option key={address.id || index} value={address.id}>
+                                  {address.street}, {address.city} ({address.province})
+                                </option>
+                              ))}
+                            </select>
+                            <button className="no-button" onClick={() => openModalAddress()}>Agregar nueva dirección</button>
+                          </span>
                         </div>
-                      )
-                    )}
-                  </span>
-                </div>
-              ) : (
-                <span className="address-options">
-                  <p>Elige una dirección:</p>
-                  <span>
-                    <select
-                      onChange={(e) => handleSelectAddress(Number(e.target.value))}
-                      defaultValue={selAddress ? selAddress.id : defaultAddress?.id}>
-                      <option value="" disabled>Seleccione una dirección</option>
-                      {userActive?.addresses?.map((address) => (
-                        <option key={address.id} value={address.id}>
-                          {address.street}, {address.city} ({address.province})
-                        </option>
-                      ))}
-                    </select>
-                    <button onClick={() => openModalAddress()}>Agregar nueva dirección</button>
-                  </span>
-                  <span>
-                    {selAddress && (
-                      <>
                         <span>
-                          <p>{selAddress.name_address}, {selAddress.last_name}</p>
-                          <p>{selAddress.street}, {selAddress.street2}</p>
-                          <p>{selAddress.city}, {selAddress.province}</p>
-                          <p>{selAddress.cp}</p>
-                          <p>{selAddress.tel_address}</p>
+                          {selAddress && (
+                            <div className="info-save">
+                              <span>
+                                <p>{selAddress.name_address}, {selAddress.last_name}</p>
+                                <p>{selAddress.street}, {selAddress.street2}</p>
+                                <p>{selAddress.city}, {selAddress.province}</p>
+                                <p>{selAddress.cp}</p>
+                                <p>{selAddress.tel_address}</p>
+                              </span>
+                              <span>
+                                <button className="no-button" onClick={() => openModalAddress(selAddress)}>Editar</button>
+                              </span>
+                              {userActive?.id && isModalOpen && (
+                                <div className="modal">
+                                  <FormAddresses
+                                    address={selectedAddress}
+                                    id_user={userActive?.id}
+                                    onClose={closeModalAddress}
+                                  />
+                                </div>
+                              )}
+                            </div>
+                          )}
                         </span>
-                        <span>
-                          <button onClick={() => openModalAddress(selAddress)}>Editar</button>
-                        </span>
-                        {userActive?.id && isModalOpen && (
-                          <div className="modal">
-                            <FormAddresses
-                              address={selectedAddress}
-                              id_user={userActive?.id}
-                              onClose={closeModalAddress}
-                            />
-                          </div>
-                        )}
-                      </>
+                        <button className="light-button" onClick={handleConfirmAddress}>Confirmar Dirección</button>
+                      </div>
                     )}
-                  </span>
-                  <button onClick={handleConfirmAddress}>Confirmar Dirección</button>
-                </span>
-              )}
-            </div>
-            )}
-            <div className="pay-cont">
-              <h3>Pago</h3>
-              {!isEditingshipping && !isEditingAddress &&
-                <>
-                  <div>
-                    <p>Nos pondremos en contacto para coordinar el pago y la facturación correspondiente.</p>
                   </div>
-                  <p>Revisa la información anterior y continúa cuando esté todo listo.</p>
-                  <button onClick={handleAddtoOrder}>Finalizar Pedido</button>
-                </>
-              }
+                )}
+                <div className="pay-cont">
+
+                  {!isEditingshipping && !isEditingAddress &&
+                    <div className="item-cont">
+                      <div className="title-page">
+                        <h4>Pago</h4>
+                      </div>
+                      <div>
+                        <p>Nos pondremos en contacto para coordinar el pago y la facturación correspondiente.</p>
+                      </div>
+                      <p>Revisa la información anterior y continúa cuando esté todo listo.</p>
+                      <button onClick={handleAddtoOrder}>Finalizar Pedido</button>
+                    </div>
+                  }
+                </div>
+                <span>
+                  <h5>Envío</h5>
+                  {selshipping &&
+                    <div className="total-shipping">
+                      <p>{selshipping.id_shipping}</p>
+                      <p>{formatCurrency(selshipping.price)}</p>
+                    </div>}
+                </span>
+                <p>Total: {!selshipping ? (<p>{totalPrice}</p>) : (<p>{formatCurrency(totalPrice + selshipping.price)}</p>)}</p>
+              </div>
+              <div className="prod-chekout-container col-lg-4">
+                <div className="title-page">
+                  <h4>Resumen de pedido</h4>
+                </div>
+                <Link to="#" onClick={(e) => {
+                  e.preventDefault();
+                  window.history.back();
+                }}>
+                  ← Editar pedido
+                </Link>
+                <ProductsInCart price='subtotal' editable={false} ></ProductsInCart>
+
+              </div>
             </div>
+            <ModalMesagge
+              isOpen={modalConfig.isOpen}
+              title={modalConfig.title}
+              content={<p>{modalConfig.content}</p>}
+              onClose={closeModal}
+              onConfirm={modalConfig.onConfirm}
+              confirmText={modalConfig.confirmText}
+              cancelText={modalConfig.cancelText}
+            />
           </div>
-          <ModalMesagge
-            isOpen={modalConfig.isOpen}
-            title={modalConfig.title}
-            content={<p>{modalConfig.content}</p>}
-            onClose={closeModal}
-            onConfirm={modalConfig.onConfirm}
-            confirmText={modalConfig.confirmText}
-            cancelText={modalConfig.cancelText}
-          />
-        </>
-      }
+        }
+      </div>
     </div>
   );
 };

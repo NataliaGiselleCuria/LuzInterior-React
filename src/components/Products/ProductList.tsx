@@ -38,10 +38,10 @@ const ProductList = () => {
                 <span className="line"></span>
             </div>
             {!category && (
-                <div className="container">
-                    <ul className="row ul-row-nopadding">
+                <div>
+                    <ul className=" categories ul-row-nopadding">
                         {categories.map((cat) => (
-                            <li key={cat} className="categories col-sm-6">
+                            <li key={cat} className="categories ">
                                 <Link to={`/productos/categoria/${cat}`}>{cat}</Link>
                             </li>
                         ))}
@@ -54,7 +54,7 @@ const ProductList = () => {
                 <span className="route"><span><Link to={'/productos'}>/ todos los productos</Link><span className="current-route">{`/ ${category}`}</span></span></span>
             )}
            
-            <div className="container">
+            <div className="">
                 <ul className="prod-list-cont">
                     {productFilter.map((product) => (
                         <li key={product.id} className="prod-list-li">

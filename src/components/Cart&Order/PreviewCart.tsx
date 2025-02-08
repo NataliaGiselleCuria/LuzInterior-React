@@ -38,16 +38,20 @@ const PreviewCart: React.FC<PreviewCartProps> = ({ cartOpen, onClose }) => {
       <div className="prev-cart-content" onClick={(e) => e.stopPropagation()}>
         <span className="prod-name cart-title"><h4>carrito.</h4><p>{calculateTotalQuantity()} productos</p></span>
         <ProductsInCart price='total' editable={true}></ProductsInCart>
-        <div className="cart-total">
-        {isLogin ? (
-          <>
-            <h6>Subtotal:</h6>
-            <h5>{formatCurrency(totalPrice)}</h5>
-            <p className="small">IVA incluido</p>
-          </>
-        ) : null}
-      </div>
-        <Link to='/carrito' onClick={onClose}><button className='light-button'>Ver carrito</button></Link>
+        <span className='footer'>
+          <div className="cart-total">
+            {isLogin ? (
+              <>
+                <span className="d-flex align-items-center gap-2">
+                <h6>Subtotal:</h6>
+                <h5>{formatCurrency(totalPrice)}</h5>
+                </span>
+                <p className="small">IVA incluido</p>
+              </>
+            ) : null}
+          </div>
+          <Link to='/carrito' onClick={onClose}><button className='light-button'>Ver carrito</button></Link>
+        </span>
       </div>
     </div>
 

@@ -68,7 +68,7 @@ function App() {
 
 function AppWithNavBar({ openCart, cartOpen, closeCart, setLoading}: any) {
   const location = useLocation();
-  const hideNavBarRoutes = ['/registro', '/login', '/registro_finalizado', '/recuperar_contraseña', '/restablecer-contraseña' ];
+  const hideNavBarRoutes = ['/registro', '/login', '/registro_finalizado', '/recuperar_contraseña', '/restablecer-contraseña', '/checkout' ];
 
   const showNavBar = !hideNavBarRoutes.includes(location.pathname);
 

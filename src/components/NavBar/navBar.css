@@ -1,7 +1,7 @@
 #nav {
     background-color: var(--black) !important;
     color: white;
-    height: 110px;
+    height: 100px;
     position: relative;
     padding: 0;
 }
@@ -13,7 +13,9 @@
 }
 
 .nav-logo {
-    height: 80%;
+    height: 90%;
+    width: auto;
+    object-fit: contain;
     margin: auto;
 }
 
@@ -36,7 +38,8 @@
 }
 
 .nav-links {
-    height: 50%;
+    height: 40%;
+    line-height: normal;
 }
 
 ul.dropdown-menu.show {
@@ -86,6 +89,8 @@ input.search-input:focus-visible {
 
 .search-cont img {
     height: 16px;
+    width: auto;
+    object-fit: contain;
 }
 
 ul.dropdown-search {

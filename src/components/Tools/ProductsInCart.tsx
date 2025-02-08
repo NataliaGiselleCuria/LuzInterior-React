@@ -33,8 +33,9 @@ const ProductsInCart = ({ editable }: Props) => {
             <li key={item.product.id}>
               <div className="ul-cart-img"><LazyLoadImage src={`${dev}${item.product.img_url[0].url}`} alt={item.product.name} /></div>
               <div className="cart-prod-info">
-                <span className="d-flex flex-column">
+                <span className="prod-info">
                   <span className="prod-name"><h5>{item.product.name}. {item.product.id}</h5></span>
+                  <span className="prod-cant small">Cant: {item.quantity}</span>
                   {isLogin && <p className="sub-total">{formatCurrency(item.product.price)}</p>}
                 </span>
                 {editable &&
@@ -46,7 +47,7 @@ const ProductsInCart = ({ editable }: Props) => {
                     }
                   />
                 }
-                {isLogin && <p>Total: {formatCurrency(totalForProduct)}</p>}
+                {isLogin && <span className="total d-flex"><p>Total:</p><p>{formatCurrency(totalForProduct)}</p></span>}
 
               </div>
               {editable &&

@@ -4,6 +4,9 @@
 - Las imagenes de los productos deben verse en grande al hacerles click
 - Arreglar el height del banner en mobile para que no dependa del dvh.
 - cambiar el tamaño de la cart de 'novedades' en mobile.
+-optimizar imagenes
+-el banner a veces no carga??
+-arreglar el footer del preview-cart
 
 
 errores ortograficos:

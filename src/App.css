@@ -23,7 +23,9 @@ html, .prev-cart-content{
 }
 
 body{
-  font-family: "Roboto Flex", serif;
+  font-family: "Roboto Flex", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
   font-weight: 300;
   overflow: hidden;
 }
@@ -69,10 +71,14 @@ li{
 
 .h100{
   height: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
 }
 
 .w100{
   width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
 }
 
 .fix-img{
@@ -88,6 +94,7 @@ button{
   padding: 5px 30px;
   font-weight: 300;
   transition: all 0.2s ease-in-out;
+  border-radius: 20px;
 }
 
 .general-button {
@@ -108,16 +115,48 @@ button{
   background-color: rgb(237 236 230);
 }
 
+select {
+  word-wrap: normal;
+  border: 1px solid var(--light);
+  padding: 2px;
+  color: var(--black);
+}
+
+select option #select-options:focus {
+  background-color: blue !important; /* Fuerza el color azul */
+  color: white; /* Asegura que el texto sea legible */
+}
+
+.select-selected {
+  color: #ffffff;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+  cursor: pointer;
+}
+
 .loading{
-  position: absolute;
+  position: fixed;
   top: 0;
-  width: 100dvw ;
-  height: 100dvh;
+  left: 0;
+  width: 100%;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: var(--black);
-  background-color: white;
+  background-color: #fff; /* Fondo blanco para mantener la coherencia visual */
+  transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+  z-index: 9999;
+}
+
+.loading-active .loading {
+  opacity: 1;
+  visibility: visible;
+}
+
+.app:not(.loading-active) .loading {
+  opacity: 0;
+  visibility: hidden;
 }
 
 .title-page{
@@ -137,7 +176,7 @@ button{
 .route {
   display: flex;
   align-items: center;
-  height: 50px;
+  height: 20px;
   width: 100dvw;
   overflow: auto;
 }
@@ -205,7 +244,7 @@ h2.accordion-header:focus-visible {
   }
 
   .cont{
-    padding: 0;
+    padding: 0!important;
   }
 
 
@@ -225,3 +264,4 @@ h2.accordion-header:focus-visible {
     padding: 0;
   }
 }
+

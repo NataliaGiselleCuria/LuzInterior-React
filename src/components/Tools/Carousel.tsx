@@ -12,21 +12,21 @@ const Carousel : React.FC<CarouselProps> = ({type })  => {
     const images = type ==='desktop'? bannerDesktop : bannerMobile;
 
     return (
-        <div id={`carousel-home-${type}`} className={`carousel slide ${type}`} data-bs-ride="carousel">
+        <div id={`carousel-home-${type}`} className={`carousel slide ${type}`} >
             <div className="carousel-inner">
                 {images.map((img, i) => (
                     <div className={`carousel-item ${i === 0 ? "active" : ""}`} key={img.id}>
                         {img.link? (
                             <Link to={img.link}>
                                 <LazyLoadImage
-                                className="d-block w-100"
+                                className="d-block"
                                 src={`${dev}${img.img_url}`}
                                 alt={`Banner desktop ${img.priority}`}
                                 />
                             </Link>
                         ):(
                             <LazyLoadImage
-                            className="d-block w-100"
+                            className="d-block"
                             src={`${dev}${img.img_url}`}
                             alt={`Banner Mobile ${img.priority}`}
                             />
