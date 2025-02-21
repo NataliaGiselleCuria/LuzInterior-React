@@ -58,8 +58,9 @@ export const ApiProvider = ({ children }: Props) => {
                     listPriceRes.json(),
                     faqRes.json(),
                 ]);
-
+                
                 const mappedOrders = ordersData.map((orderData: any) => ({
+                    
                     id: orderData.id_order,
                     user: getUserById(usersData, orderData.id_user),
                     date: new Date(orderData.date + "T00:00:00"),
@@ -103,7 +104,6 @@ export const ApiProvider = ({ children }: Props) => {
                 body: JSON.stringify({ email, token }),
             });
             const data = await response.json();
-            console.log(data)
             return data;
         } catch (error) {
             throw new Error("Error al obtener los datos del usuario");
@@ -125,13 +125,11 @@ export const ApiProvider = ({ children }: Props) => {
     }
 
     const getAddressById = (usersData: Users[], userId: number, addressId: number): Address | null => {
-
         const user = usersData.find(user => user.id === userId) || null;
         if (!user) {
             return null;
         }
-
-        const address = user.addresses.find(address => Number(address.id) === Number(addressId));
+        const address = user.addresses.find(address => Number(address.id_address) === Number(addressId));
         return address || null;
     };
 
@@ -242,10 +240,6 @@ export const ApiProvider = ({ children }: Props) => {
             console.error('Error fetching the file URL:', error);
         }
     };
-
-    useEffect(() => {
-        console.log(bannerDesktop)
-    }, [bannerDesktop]);
 
     const apiValue = useMemo(() => ({
         products,

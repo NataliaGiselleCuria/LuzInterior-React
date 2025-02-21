@@ -5,6 +5,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import ProductCard from '../Products/ProductCard';
 import { useEffect, useState } from 'react';
 import Carousel from '../Tools/Carousel';
+import arrow from '../../assets/arrow.png';
 import './home.css';
 
 
@@ -90,6 +91,7 @@ const Home: React.FC<HomeProps> = () => {
                         product={product}>
                       </ProductCard>
                     </Link>
+                    <img src={arrow} alt='ir al producto' className='arrow-prod'></img>
                   </li>
                 ))}
               </ul>

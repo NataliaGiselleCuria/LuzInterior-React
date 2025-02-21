@@ -29,11 +29,11 @@ const ModalMesagge: React.FC<ModalProps> = ({
                 <div className="modal-body">{content}</div>
                 <div className="modal-footer">
                     {onConfirm && (
-                        <button className="btn-confirm" onClick={onConfirm}>
+                        <button className="light-button" onClick={onConfirm}>
                             {confirmText}
                         </button>
                     )}
-                    <button className="btn-cancel" onClick={onClose}>
+                    <button className="no-button" onClick={onClose}>
                         {cancelText}
                     </button>
                 </div>

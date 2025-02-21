@@ -8,25 +8,20 @@ import ProductItem from './components/Products/ProductItem';
 import ProductList from './components/Products/ProductList';
 import Cart from './components/Cart&Order/Cart';
 import Wholesalers from './components/UserPages/Wholesalers';
-import PasswordRecover from './components/AdicionalPage/PasswordRecover';
 import ErrorPage from './components/AdicionalPage/ErrorPage';
-import Register from './components/UserPages/Register';
 import PriceList from './components/PriceList/PriceList';
-import SuccessRegister from './components/AdicionalPage/SuccessRegister';
-import PasswordRegeneration from './components/AdicionalPage/PasswordRegeneration';
+import PasswordRegeneration from './components/UserPages/PasswordRegeneration';
 import AccountUser from './components/UserPages/AccountUser';
 import OrdersUser from './components/UserPages/OrdersUser';
 import CheckOut from './components/Cart&Order/CheckOut';
 import AdminRoute from './components/Admin/AdminRoute';
-import Footer from './components/Footer/Footer';
-
-import { useUser } from './context/UserContext';
-import { AdminPanel } from './components/Admin/AdminPanel';
-
-import 'bootstrap/dist/css/bootstrap.css';
-import './App.css';
 import Gallery from './components/Galery/Gallery';
 import Contact from './components/Contact/Contact';
+import Footer from './components/Footer/Footer';
+import { useUser } from './context/UserContext';
+import { AdminPanel } from './components/Admin/AdminPanel';
+import 'bootstrap/dist/css/bootstrap.css';
+import './App.css';
 
 function App() {
   const { checkToken, getUserActive } = useUser();
@@ -68,7 +63,14 @@ function App() {
 
 function AppWithNavBar({ openCart, cartOpen, closeCart, setLoading}: any) {
   const location = useLocation();
-  const hideNavBarRoutes = ['/registro', '/login', '/registro_finalizado', '/recuperar_contraseña', '/restablecer-contraseña', '/checkout' ];
+  const hideNavBarRoutes = [
+    '/registro', 
+    '/login', 
+    '/registro_finalizado', 
+    '/recuperar_contrasea', 
+    '/restablecer_contrasenia', 
+    '/checkout' 
+  ];
 
   const showNavBar = !hideNavBarRoutes.includes(location.pathname);
 
@@ -78,14 +80,11 @@ function AppWithNavBar({ openCart, cartOpen, closeCart, setLoading}: any) {
       <PreviewCart cartOpen={cartOpen} onClose={closeCart} />
       <Routes>
         <Route path="/" element={<Home setLoading={setLoading}/>} />
-        <Route path="/productos/categoria/:category" element={<ProductList />} />
+        <Route path="/productos/categoria/:category" element={<ProductList openCart={openCart}/>} />
         <Route path="/productos/id/:id" element={<ProductItem openCart={openCart} />} />
-        <Route path="/productos" element={<ProductList />} />
+        <Route path="/productos" element={<ProductList openCart={openCart}/>} />
         <Route path="/login" element={<Wholesalers />} />
-        <Route path="/registro" element={<Register />} />
-        <Route path="/registro_finalizado" element={<SuccessRegister />} />
-        <Route path="/recuperar_contraseña" element={<PasswordRecover />} />
-        <Route path="/restablecer-contraseña" element={<PasswordRegeneration />} />
+        <Route path="/restablecer_contrasenia" element={<PasswordRegeneration />} />
         <Route path="/lista_de_precios" element={<PriceList />} />
         <Route path="/mi_cuenta" element={<AccountUser />} />
         <Route path="/mis_pedidos" element={<OrdersUser />} />

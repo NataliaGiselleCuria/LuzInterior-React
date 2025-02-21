@@ -36,11 +36,10 @@ const NavBar: React.FC<NavBarProps> = ({ openCart }) => {
             );
         }
 
-
         if (role === "user") {
             return (
                 <li>
-                     <LazyLoadImage className='h100' src={userImg} alt="usuario" />
+                    <LazyLoadImage className='h100' src={userImg} alt="usuario" />
                     <span className="nav-link dropdown-toggle" data-bs-toggle="dropdown"></span>
                     <ul className="dropdown-menu drop-user">
                         <li onClick={handleLinkClick}><Link to="/mi_cuenta" className="dropdown-item" >Mi cuenta</Link></li>
@@ -53,7 +52,7 @@ const NavBar: React.FC<NavBarProps> = ({ openCart }) => {
 
         return (
             <li>
-                 <LazyLoadImage className='h100' src={userImg} alt="usuario" />
+                <LazyLoadImage className='h100' src={userImg} alt="usuario" />
                 <span className="nav-link dropdown-toggle" data-bs-toggle="dropdown"></span>
                 <ul className="dropdown-menu drop-user">
                     <li onClick={handleLinkClick}><Link to="/admin" className="dropdown-item">Panel de Administración</Link></li>
@@ -85,7 +84,7 @@ const NavBar: React.FC<NavBarProps> = ({ openCart }) => {
                         <ul className='navbar-nav me-auto mb-lg-0 container'>
                             <li className='nav-item dropdown'>
                                 <Link to='/productos' className="nav-link dropdown-toggle" data-bs-toggle="dropdown">Productos</Link>
-                                <ul className="dropdown-menu">
+                                <ul className="dropdown-menu menu-prod">
                                     <li onClick={handleLinkClick}>
                                         <Link to='/productos' className="dropdown-item">Todos los productos</Link>
                                     </li>
@@ -119,17 +118,17 @@ const NavBar: React.FC<NavBarProps> = ({ openCart }) => {
                     </span>
                     <span className='user-cont'>
                         <button className="button-login">
-                            {!isLogin ?(
+                            {!isLogin ? (
                                 <Link to="/login" onClick={handleLinkClick} >
                                     {getDropdownContent()}
-                                 </Link> 
+                                </Link>
                             ) : (
                                 <a>
-                                {getDropdownContent()}   
-                                </a> 
+                                    {getDropdownContent()}
+                                </a>
                             )
                             }
-                             
+
                         </button>
                     </span>
                 </span>

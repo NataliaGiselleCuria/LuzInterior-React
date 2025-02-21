@@ -63,7 +63,7 @@ ul.dropdown-menu.show {
 }
 
 #nav .dropdown-menu li:hover,
-#nav .dropdown-search li:hover{
+#nav .dropdown-search li:hover {
     border-bottom: 1px solid var(--grey);
 }
 
@@ -150,6 +150,10 @@ ul.dropdown-search li:last-child {
     padding: 0;
 }
 
+.button-login .icon-user{
+    font-size: 22px;
+}
+
 .cart-cont,
 .user-cont {
     height: 100%;
@@ -178,19 +182,20 @@ ul.dropdown-search li:last-child {
 }
 
 .button-login a {
-    height: 100%; 
+    height: 100%;
     align-items: flex-end;
-    color: white!important;
+    color: white !important;
     gap: 5px;
 }
 
-.button-login a li{
+.button-login a li {
     height: 100%;
     display: flex;
     gap: 5px;
 }
 
-ul.dropdown-menu.drop-user.show a, ul.dropdown-menu.drop-user.show li {
+ul.dropdown-menu.drop-user.show a,
+ul.dropdown-menu.drop-user.show li {
     height: min-content !important;
 }
 
@@ -200,7 +205,8 @@ ul.dropdown-menu.drop-user.show a, ul.dropdown-menu.drop-user.show li {
         height: 70px;
     }
 
-    #nav li a, #nav li{
+    #nav li a,
+    #nav li {
         border: none;
     }
 
@@ -223,19 +229,33 @@ ul.dropdown-menu.drop-user.show a, ul.dropdown-menu.drop-user.show li {
         z-index: 3;
     }
 
-    .dropdown-menu.show{
+    .dropdown-menu.show {
         background-color: transparent;
     }
 
     .dropdown-menu.drop-user.show,
     .navbar-collapse {
-        height: 100dvh!important;
+        height: 100dvh !important;
         background-image: url(/src/assets/tortuga-agua.png);
         background-repeat: no-repeat;
         background-blend-mode: overlay;
         background-position: bottom right;
         background-attachment: fixed;
         background-size: 50%;
+    }
+
+    ul.menu-prod.show {
+        background: transparent;
+    }
+
+    #nav li a,
+    #nav li {
+        font-size: 18px;
+    }
+
+    #nav li a:hover,
+    #nav li:hover {
+        background-color: transparent;
     }
 
     .nav-logo {

@@ -1,22 +1,22 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../../context/UserContext"
 import { FormAccountInformation, FormPersonalInformation } from "../../Interfaces/interfaces";
 import FormAddresses from "../Tools/FormAddresses";
 import { useUpdateUserInfo } from "../../CustomHooks/updateUserInfo";
 import useModal from "../../CustomHooks/modal";
 import ModalMesagge from "../Tools/ModalMesagge";
-
+import check from '../../assets/check.png'
+import './user.css'
 
 const AccountUser = () => {
 
   const { isLogin, userActive } = useUser();
+  const navigate = useNavigate();
   const { modalConfig, openModal, closeModal } = useModal();
   const { handleUpdateInformation, openModalAddress, closeModalAddress, isModalOpen, selectedAddress } = useUpdateUserInfo((title, content) => openModal(title, content, closeModal));
-  const navigate = useNavigate();
-
-
+  const { register: accountRegister, handleSubmit: accountHandleSubmit, reset: accountReset } = useForm<FormAccountInformation>();
   const { register: personalRegister, handleSubmit: personalHandleSubmit, formState: { errors: personalErrors }, reset: resetPersonal } = useForm<FormPersonalInformation>({
     defaultValues: {
       name: userActive?.name,
@@ -24,8 +24,6 @@ const AccountUser = () => {
       tel: userActive?.tel,
     },
   });
-
-  const { register: accountRegister, handleSubmit: accountHandleSubmit } = useForm<FormAccountInformation>();
 
   useEffect(() => {
     if (userActive) {
@@ -36,7 +34,6 @@ const AccountUser = () => {
       });
     }
   }, [userActive]);
-
 
   const handlePersonalInformation = async (data: FormPersonalInformation) => {
     if (userActive) {
@@ -56,11 +53,12 @@ const AccountUser = () => {
         "update-account-user",
       );
     }
-
   };
 
   const deleteAddress = async (id_address: number) => {
+
     const data = id_address
+
     if (userActive) {
       await handleUpdateInformation(
         data,
@@ -70,15 +68,21 @@ const AccountUser = () => {
     }
   }
 
-  const descartar = () => {
+  const descartar = (form: string) => {
     if (userActive) {
-      resetPersonal({
-        name: userActive.name,
-        cuit: userActive.cuit,
-        tel: userActive.tel,
-      });
+      if (form === 'personal') {
+        resetPersonal({
+          name: userActive.name,
+          cuit: userActive.cuit,
+          tel: userActive.tel,
+        });
+      } else if (form === 'account') {
+        accountReset()
+      }
+
     }
   }
+
 
   useEffect(() => {
     if (!isLogin) {
@@ -88,103 +92,145 @@ const AccountUser = () => {
 
   return (
     <div className="cont container">
-      <h3>{userActive?.name}</h3>
-      <h2>Mi cuenta</h2>
-      <div>
-        <h2>Informacion personal</h2>
-        <p>Actualiza tu informacion personal</p>
-        <form onSubmit={personalHandleSubmit(handlePersonalInformation)}>
-          <span>
-            <label htmlFor="name">Nombre</label>
-            <input
-              id="name"
-              type="text"
-              defaultValue={userActive?.name}
-              {...personalRegister('name')}></input>
+      <div className="row account-user">
+        <div className="col-md-2 col-name-user">
+          <span className="back"></span>
+          <div className="icon-user">
+            {userActive?.name
+              ?.split(" ")
+              .map(word => word[0].toUpperCase())
+              .join("")}
+          </div>
+          <span className="title-page">
+            <h4>{userActive?.name}</h4>
           </span>
-          <span>
-            <label htmlFor="cuit">Cuit</label>
-            <input
-              id="cuit"
-              type="number"
-              defaultValue={userActive?.cuit}
-              {...personalRegister('cuit', {
-                required: true,
-                pattern: {
-                  value: /^\d{11}$/,
-                  message: "El CUIT debe tener 11 dígitos numéricos",
-                },
-              })}>
-            </input>
-            {personalErrors.cuit && <p className="error">{personalErrors.cuit.message}</p>}
-          </span>
-          <span>
-          <label htmlFor="telefono">Teléfono</label>
-            <input
-              id="tel"
-              type="text"
-              {...personalRegister('tel', {
-                required: true,
-                pattern: {
-                  value: /^(\+54)\d{1,4}\d{6,8}$/,
-                  message: "El teléfono debe tener el formato +54 seguido de un código de área y número válido.",
-                },
-                validate: {
-                  length: value =>
-                    value.replace(/[^\d]/g, '').length >= 11 ||
-                    "El teléfono debe incluir el código de área y el número completo (mínimo 11 dígitos).",
-                },
-              })}
-            />
-            {personalErrors.tel && <p className="error">{personalErrors.tel.message}</p>}
-          </span>
-          <span><button type="button" onClick={descartar}>Descartar</button><button>Actualizar</button></span>
-        </form>
-      </div>
-      <div>
-        <h2>Informacion de cuenta</h2>
-        <p>Actualiza tu clave de ingreso</p>
-        <form onSubmit={accountHandleSubmit(handleAccountInformation)}>
-          <span>
-            <label htmlFor="password">Contraseña</label>
-            <input id="password" type="password" {...accountRegister('password')}></input>
-          </span>
-          <span><button>Descartar</button><button>Actualizar</button></span>
-        </form>
-      </div>
-      <div>
-        <h2>Direcciones</h2>
-        <p>Agrega y administra las direcciones que utilizas con frecuencia.</p>
-        {userActive?.addresses
-          .sort((a, b) => (b.default_address ? 1 : 0) - (a.default_address ? 1 : 0))
-          .map((address) => (
-            <div key={address.id}>
-              <span>
-                <p>{address.name_address}</p>
-                <p>{address.street}</p>
-                <p>{address.city}</p>
-                <p>{address.province}</p>
-                <p>{address.tel_address}</p>
-                {address.default_address == true && <p>Dirección predeterminada</p>}
-              </span>
-              <span>
-                <button onClick={() => openModalAddress(address)}>Editar</button>
-                <button onClick={() => deleteAddress(address.id)}>Eliminar</button>
-              </span>
-            </div>
-          ))}
-      </div>
-      <button onClick={() => openModalAddress()}>Agregar nueva dirección</button>
-      {userActive?.id && isModalOpen && (
-        <div className="modal">
-          <FormAddresses
-            address={selectedAddress}
-            id_user={userActive?.id}
-            onClose={closeModalAddress}
-          />
+          <Link to="/mis_pedidos">
+            <button className="general-button">
+              Ver mis pedidos
+            </button>
+          </Link>
         </div>
-      )}
+        <div className="col-md-7 col-user-info">
+          <span className="title-page">
+            <h3>Mi cuenta</h3>
+          </span>
+          <div className="item-cont">
+            <span className="title-page">
+              <h5>Informacion personal</h5>
+              <p>Actualiza tu informacion personal</p>
+            </span>
+            <form onSubmit={personalHandleSubmit(handlePersonalInformation)}>
+              <div className="form-inputs">
+                <span>
+                  <label htmlFor="name">Nombre</label>
+                  <input
+                    id="name"
+                    type="text"
+                    defaultValue={userActive?.name}
+                    {...personalRegister('name')}></input>
+                </span>
+                <span>
+                  <label htmlFor="cuit">Cuit</label>
+                  <input
+                    id="cuit"
+                    type="number"
+                    defaultValue={userActive?.cuit}
+                    {...personalRegister('cuit', {
+                      required: true,
+                      pattern: {
+                        value: /^\d{11}$/,
+                        message: "El CUIT debe tener 11 dígitos numéricos",
+                      },
+                    })}>
+                  </input>
+                  {personalErrors.cuit && <p className="error">{personalErrors.cuit.message}</p>}
+                </span>
+                <span>
+                  <label htmlFor="telefono">Teléfono</label>
+                  <input
+                    id="tel"
+                    type="text"
+                    {...personalRegister('tel', {
+                      required: true,
+                      pattern: {
+                        value: /^(\+54)\d{1,4}\d{6,8}$/,
+                        message: "El teléfono debe tener el formato +54 seguido de un código de área y número válido.",
+                      },
+                      validate: {
+                        length: value =>
+                          value.replace(/[^\d]/g, '').length >= 11 ||
+                          "El teléfono debe incluir el código de área y el número completo (mínimo 11 dígitos).",
+                      },
+                    })}
+                  />
+                  {personalErrors.tel && <p className="error">{personalErrors.tel.message}</p>}
+                </span>
+              </div>
+              <span className="form-buttons">
+                <button className="general-button">Actualizar</button>
+                <button className="no-button" type="button" onClick={() => descartar('personal')}>Descartar</button>
+              </span>
+            </form>
+          </div>
+          <div className="item-cont">
+            <span className="title-page">
+              <h5>Informacion de cuenta</h5>
+              <p>Actualiza tu clave de ingreso</p>
+            </span>
+            <form onSubmit={accountHandleSubmit(handleAccountInformation)}>
+              <div className="form-inputs">
+                <span>
+                  <label htmlFor="password">Contraseña</label>
+                  <input id="password" type="password" {...accountRegister('password')}></input>
+                </span>
+              </div>
+              <span className="form-buttons">
+                <button className="general-button">Actualizar</button>
+                <button className="no-button" onClick={() => descartar('account')} type="button">Descartar</button>
+              </span>
+            </form>
+          </div>
+          <div className="item-cont">
+            <span className="title-page">
+              <h5>Direcciones</h5>
+              <p>Agrega y administra las direcciones que utilizas con frecuencia.</p>
+            </span>
+            <ul className="addresses-ul">
+              {userActive?.addresses
+                .sort((a, b) => (b.default_address ? 1 : 0) - (a.default_address ? 1 : 0))
+                .map((address) => (
+                  <li className={`address-cont ${address.default_address ? "default" : ""}`}
+                    key={`address-${address.id_address}`}>
+                    <div className="info-save">
+                      <p>{address.name_address}</p>
+                      <p>{address.street}</p>
+                      <p>{address.city}</p>
+                      <p>{address.province}</p>
+                      <p>{address.tel_address}</p>
+                      {address.default_address == true && <div className="default-address"><p>Dirección predeterminada</p><img src={check} alt='icon check'></img></div>}
+                    </div>
+                    <span className="form-buttons">
+                      <button className="general-button" onClick={() => openModalAddress(address)}>Editar</button>
+                      <button className="no-button" onClick={() => deleteAddress(address.id_address)}>Eliminar</button>
+                    </span>
+                  </li>
+                ))}
 
+            </ul>
+            <button className="light-button address-button" onClick={() => openModalAddress()}>Agregar nueva dirección</button>
+          </div>
+
+          {userActive?.id && isModalOpen && (
+            <div className="modal">
+              <FormAddresses
+                address={selectedAddress}
+                id_user={userActive?.id}
+                onClose={closeModalAddress}
+              />
+            </div>
+          )}
+        </div>
+      </div>
       <ModalMesagge
         isOpen={modalConfig.isOpen}
         title={modalConfig.title}

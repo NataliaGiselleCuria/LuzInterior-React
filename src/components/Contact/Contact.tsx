@@ -16,30 +16,43 @@ const Contact = () => {
 
     return (
         <div className="cont container">
-            <h2>Contacto</h2>
-            <div className="contact-info">
-                <div className="info-item">
-                    <h4>Email:</h4>
-                    <p>{getCompanyInfoValue('email')}</p>
+
+            <div className='row contact-cont'>
+                <div className="contact-info col-md-5">
+                    <span className='back'></span>
+                    <div className="title-page">
+                        <h1>Contactanos</h1>
+                        <span className="line"></span>
+                    </div>
+                    <div className="info-item">
+                        <h4>Email:</h4>
+                        <a href={`mailto:${getCompanyInfoValue('email')}`}>
+                            {getCompanyInfoValue('email')}
+                        </a>
+                    </div>
+                    <div className="info-item">
+                        <h4>Teléfono:</h4>
+                        <a href={`https://wa.me/${getCompanyInfoValue('tel')?.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer">
+                            {getCompanyInfoValue('tel')}
+                        </a>
+                    </div>
+                    <div className="info-item">
+                        <h4>Dirección:</h4>
+                        <p>{getCompanyInfoValue('store_address')}</p>
+                    </div>
+                    <div className="info-item">
+                        <h4>Nuestras Redes:</h4>
+
+                        {social.map((item) => (
+                            <a href={item.url} key={item.id}><LazyLoadImage src={`${dev}/${item.img_social}`} alt={item.id}></LazyLoadImage></a>
+                        ))}
+                    </div>
                 </div>
-                <div className="info-item">
-                    <h4>Teléfono:</h4>
-                    <p>{getCompanyInfoValue('tel')}</p>
-                </div>
-                <div className="info-item">
-                    <h4>Dirección:</h4>
-                    <p>{getCompanyInfoValue('store_address')}</p>
-                </div>
-                <div className="info-item">
-                   <h4>Nuestras Redes:</h4>
-                   {social.map((item) => (
-                    <a href={item.url} key={item.id}><LazyLoadImage src={`${dev}/${item.img_social}`} alt={item.id}></LazyLoadImage></a>
-                   ))}
+                <div className="map-container col-md-6">
+                    <div dangerouslySetInnerHTML={{ __html: mapIframe }} />
                 </div>
             </div>
-            <div className="map-container">
-                <div dangerouslySetInnerHTML={{ __html: mapIframe }} />
-            </div>
+
         </div>
     );
 };

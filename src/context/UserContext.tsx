@@ -43,11 +43,8 @@ export const UserProvider = ({ children }: Props) => {
     };
 
     const checkToken = useCallback(async (token: string, navigate: NavigateFunction): Promise<Response> => {
-        console.log("Verificando token:", token);
-    
         try {
             if (!token) {
-                console.log("Token no encontrado.");
                 userLogout(navigate);
                 return { success: false, message: "Token no encontrado. La sesión ha expirado." };
             }
@@ -64,12 +61,10 @@ export const UserProvider = ({ children }: Props) => {
             });
     
             const result = await response.json();
-            console.log("Resultado de verificación:", result);
     
             if (result.success) {
                 const email = localStorage.getItem('email');
                 if (!email) {
-                    console.log("Email no encontrado.");
                     userLogout(navigate);
                     return { success: false, message: "No se encontró el email del usuario en el almacenamiento." };
                 }
@@ -77,7 +72,6 @@ export const UserProvider = ({ children }: Props) => {
                 setIsLogin(true);
                 return { success: true, message: "Inicio de sesión exitoso" };
             } else {
-                console.log("Token inválido o expirado.");
                 userLogout(navigate);
                 return {
                     success: false,

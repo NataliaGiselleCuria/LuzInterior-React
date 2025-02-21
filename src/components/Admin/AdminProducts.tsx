@@ -20,6 +20,7 @@ export const AdminProducts = () => {
     const { modalConfig, openModal, closeModal } = useModal();
     const { searchQuery, filteredResults, handleSearchChange } = useSearch(products, true);
     const { register, handleSubmit } = useForm<ListPrice>({});
+    const [focusedProductId, setFocusedProductId] = useState<string | null>(null);
 
     const toggleProductSelection = (id: number) => {
         setSelectedProducts((prev) =>
@@ -90,28 +91,30 @@ export const AdminProducts = () => {
         }
 
         try {
-                const response = await deleteListPrice();
-                if (response.success) {
-                    openModal("Éxito", "La lista de precios se eliminó correctamente.", closeModal);
-                    getFile();
-                } else {
-                    openModal("Error", `Error al eliminar la lista de precios: ${response.message}`, closeModal);
-                }
+            const response = await deleteListPrice();
+            if (response.success) {
+                openModal("Éxito", "La lista de precios se eliminó correctamente.", closeModal);
+                getFile();
+            } else {
+                openModal("Error", `Error al eliminar la lista de precios: ${response.message}`, closeModal);
+            }
         } catch (error) {
             openModal("Error", `Error inesperado al actualizar la lista de precios: , ${error}`, closeModal);
         }
     }
 
     return (
-        <>
-            <h3>Productos</h3>
+        <div className="w-100 prods">
+            <div className="title-page">
+                <h4>Productos</h4>
+            </div>
             <div className="accordion" id="accordionPanelsStayOpenExample">
                 <div id="prods-list" className="accordion-item">
-                    <h2 className="accordion-header">
+                    <div className="accordion-header">
                         <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
-                            Productos en lista
+                            <h6>Productos en lista</h6>
                         </button>
-                    </h2>
+                    </div>
                     <div id="panelsStayOpen-collapseOne" className="accordion-collapse collapse">
                         <div className="accordion-body">
                             <div className="search-container">
@@ -123,21 +126,30 @@ export const AdminProducts = () => {
                                     placeholder="Buscar productos..."
                                 />
                             </div>
-                            <ul className="list-acordeon">
+                            <ul className="">
                                 {filteredResults.filter((item): item is Products => 'category' in item && 'price' in item)
                                     .map((prod) => (
-                                        <ItemListProduct key={prod.id} product={prod} />
+                                        <li
+                                            key={prod.id}
+                                            className={focusedProductId === prod.id ? 'focused' : ''}
+                                            onFocus={() => setFocusedProductId(prod.id)}
+                                            onBlur={() => setFocusedProductId(null)}
+                                            tabIndex={0} // Permite que el li pueda recibir foco
+                                        >
+                                            <ItemListProduct key={prod.id} product={prod} />
+                                        </li>
+
                                     ))}
                             </ul>
                         </div>
                     </div>
                 </div>
                 <div id="add-prods" className="accordion-item">
-                    <h2 className="accordion-header">
+                    <div className="accordion-header">
                         <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                            Agregar producto
+                            <h6>Agregar producto</h6>
                         </button>
-                    </h2>
+                    </div>
                     <div id="panelsStayOpen-collapseTwo" className="accordion-collapse collapse">
                         <div className="accordion-body">
                             <AddProductForm></AddProductForm>
@@ -145,61 +157,70 @@ export const AdminProducts = () => {
                     </div>
                 </div>
                 <div id="prods-price" className="accordion-item">
-                    <h2 className="accordion-header">
+                    <div className="accordion-header">
                         <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-                            Editar precios de productos en lista
+                            <h6>Editar precios de productos en lista</h6>
                         </button>
-                    </h2>
+                    </div>
                     <div id="panelsStayOpen-collapseThree" className="accordion-collapse collapse">
                         <div className="accordion-body">
-                            <div className="form-group">
-                                <label htmlFor="percentageInput">Ingrese el porcentaje de aumento</label>
-                                <input
-                                    type="number"
-                                    step="0.1"
-                                    id="percentageInput"
-                                    placeholder="Ej. 10 para aumentar un 10%"
-                                    value={percentage}
-                                    onChange={(e) => setPercentage(parseFloat(e.target.value) || 0)}
-                                />
-                                <button onClick={() => handleIncreasePrices(false)}>Aumentar a Todos</button>
-                                <button onClick={() => handleIncreasePrices(true)}>Aumentar a Seleccionados</button>
-                            </div>
-                            <div>
-                                <h5>Seleccionar productos:</h5>
-                                <div className="search-container">
-                                    <input
-                                        className="admin-search"
-                                        type="text"
-                                        value={searchQuery}
-                                        onChange={handleSearchChange}
-                                        placeholder="Buscar productos..."
-                                    />
+                            <div className="row li-acordeon">
+                                <div className="col-md-3">
+                                    <div className="item">
+                                        <h6>Ingrese el porcentaje de aumento</h6>
+                                        <input
+                                            type="number"
+                                            step="0.1"
+                                            id="percentageInput"
+                                            placeholder="Ej. 10 para aumentar un 10%"
+                                            value={percentage}
+                                            onChange={(e) => setPercentage(parseFloat(e.target.value) || 0)}
+                                        />
+                                    </div>
+                                    <div className="item">
+                                        <button className="general-button" onClick={() => handleIncreasePrices(false)}>Aumentar a Todos</button>
+                                        <button className="light-button" onClick={() => handleIncreasePrices(true)}>Aumentar a Seleccionados</button>
+                                    </div>
                                 </div>
-                                <ul>
-                                    {filteredResults.filter((item): item is Products => 'category' in item && 'price' in item).map((product) => (
-                                        <li key={product.id}>
-                                            <label>
-                                                <input
-                                                    type="checkbox"
-                                                    checked={selectedProducts.includes(Number(product.id))}
-                                                    onChange={() => toggleProductSelection(Number(product.id))}
-                                                />
-                                                {product.id} - {product.name} - {product.category} - ${product.price}
-                                            </label>
-                                        </li>
-                                    ))}
-                                </ul>
+                                <div className="prods-price-cont col-md-9">
+                                    <div className="item">
+                                        <h6>Seleccionar productos:</h6>
+                                        <div className="search-container">
+                                            <input
+                                                className="admin-search"
+                                                type="text"
+                                                value={searchQuery}
+                                                onChange={handleSearchChange}
+                                                placeholder="Buscar productos..."
+                                            />
+                                        </div>
+                                        <ul className="ul-prod-price">
+                                            {filteredResults.filter((item): item is Products => 'category' in item && 'price' in item).map((product) => (
+                                                <li key={product.id}>
+                                                    
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={selectedProducts.includes(Number(product.id))}
+                                                            onChange={() => toggleProductSelection(Number(product.id))}
+                                                        />
+                                                        <div><p>{product.id} -</p> <p>{product.name} - </p><p>{product.category} -</p><p> ${product.price}</p></div>
+                                                        
+                                                    
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div id="prods-list-price" className="accordion-item">
-                    <h2 className="accordion-header">
+                    <div className="accordion-header">
                         <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour">
-                            Actualizar lista de precios descargable
+                            <h6>Actualizar lista de precios descargable</h6>
                         </button>
-                    </h2>
+                    </div>
                     <div id="panelsStayOpen-collapseFour" className="accordion-collapse collapse">
                         <div className="accordion-body">
                             <span>
@@ -237,6 +258,6 @@ export const AdminProducts = () => {
                 confirmText={modalConfig.confirmText}
                 cancelText={modalConfig.cancelText}
             />
-        </>
+        </div>
     )
 }

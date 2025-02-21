@@ -35,18 +35,16 @@ const CheckOut = () => {
   const [selshipping, setSelshipping] = useState<Shipping | null>(null);
 
   //direcciones
-
-
   useEffect(() => {
-    console.log(userActive)
     const defaultAddress = userActive?.addresses?.find(address => address.default_address) || userActive?.addresses[0] || null;
+    setSelAddress(defaultAddress)
     setDefaultAddress(defaultAddress)
-  }, []);
+  }, [userActive]);
 
   useEffect(() => {
     if (selAddress) {
       const updatedAddress = userActive?.addresses?.find(
-        addr => addr.id === selAddress.id
+        addr => addr.id_address === selAddress.id_address
       );
 
       if (updatedAddress && updatedAddress !== selAddress) {
@@ -59,12 +57,10 @@ const CheckOut = () => {
     if (userActive?.addresses?.length === 1) {
       setSelAddress(userActive?.addresses[0]);
     }
-
-    console.log(selAddress)
   }, [userActive?.addresses]);
 
   const handleSelectAddress = (addressId: number) => {
-    const address = userActive?.addresses?.find(addr => addr.id === addressId);
+    const address = userActive?.addresses?.find(addr => addr.id_address === addressId);
 
     if (address) {
       setSelAddress(address);
@@ -73,7 +69,6 @@ const CheckOut = () => {
 
   const handleConfirmAddress = () => {
     setIsEditingAddress(false);
-    console.log(selAddress)
   };
 
   //envío
@@ -183,177 +178,199 @@ const CheckOut = () => {
             <Link to='/registro'>¿No tienes cuenta aún?</Link>
           </>
           :
-          <div className="container">
-            <div className="row checkOut">
-              <div className="checkOut-info col-lg-7">
-                <span className="email"><p>Sesión inciada con {userActive?.email}</p><button className="no-button" onClick={() => userLogout(navigate)}>Cerrar sesión</button></span>
-                <div className="item-cont">
-                  <span>
-                    <div className="title-page">
-                      <h4>Método de envío</h4>
-                      {!isEditingshipping &&
-                        <button className="general-button" onClick={() => setIsEditingshipping(!isEditingshipping)}>Cambiar</button>
-                      }
-                    </div>
-                  </span>
-                  {isEditingshipping ? (
-                    <div className="opc-cont">
-                      <h5>Envío y entrega</h5>
-                      {shipping
-                        .filter(option => option.id_shipping !== 'min_free_shipping')
-                        .map(option => (
-                          <div key={option.id_shipping} className={`option-cont ${selshipping === option ? 'selected' : ''}`}>
-                            <div className="option-radio">
-                              <input
-                                type="radio"
-                                name="shipping"
-                                id={option.id_shipping}
-                                onChange={() => handleConfirmShipping(option)}
-                                disabled={option.id_shipping === 'free' && totalPrice < valueFree()} />
-                            </div>
-                            <div className="option-info">
-                              <span>
-                                <p>{option.description}</p>
-                                <p>{formatCurrency(option.price)}</p>
-                              </span>
-                              <p className="small">{shippingsMessages(option.id_shipping)}</p>
-                            </div>
-
+          <div className="row checkOut">
+            <div className="checkOut-info col-lg-7">
+              <span className="email"><p>Sesión inciada con {userActive?.email}</p><button className="no-button" onClick={() => userLogout(navigate)}>Cerrar sesión</button></span>
+              <div className="item-cont">
+                <span>
+                  <div className="title-page">
+                    <h4>Método de envío</h4>
+                    {!isEditingshipping &&
+                      <button className="general-button" onClick={() => setIsEditingshipping(!isEditingshipping)}>Cambiar</button>
+                    }
+                  </div>
+                </span>
+                {isEditingshipping ? (
+                  <div className="opc-cont">
+                    <h5>Envío y entrega</h5>
+                    {shipping
+                      .filter(option => option.id_shipping !== 'min_free_shipping')
+                      .map(option => (
+                        <div key={option.id_shipping} className={`option-cont ${selshipping === option ? 'selected' : ''}`}>
+                          <div className="option-radio">
+                            <input
+                              type="radio"
+                              name="shipping"
+                              id={option.id_shipping}
+                              onChange={() => handleConfirmShipping(option)}
+                              disabled={option.id_shipping === 'free' && totalPrice < valueFree()} />
                           </div>
-                        ))}
-                      <button className="light-button" onClick={() => setIsEditingshipping(false)}>Confirmar</button>
+                          <div className="option-info">
+                            <span>
+                              <p>{option.description}</p>
+                              <p>{formatCurrency(option.price)}</p>
+                            </span>
+                            <p className="small">{shippingsMessages(option.id_shipping)}</p>
+                          </div>
+
+                        </div>
+                      ))}
+                    <button className="light-button" onClick={() => setIsEditingshipping(false)}>Confirmar</button>
+                  </div>
+                ) : (
+                  <>
+                    {selshipping &&
+                      <div className="info-save">
+                        <p>{selshipping.description}</p>
+                        <p>{shippingsMessages(selshipping.id_shipping)}</p>
+                        <p>{formatCurrency(selshipping.price)}</p>
+                      </div>
+                    }
+                  </>
+                )}
+              </div>
+              {!isEditingshipping && selshipping?.id_shipping !== 'pickup' && (
+                <div className="item-cont">
+                  <div className="title-page">
+                    <h4>Detalle de envío</h4>
+                    {!isEditingAddress &&
+                      <button className="general-button" onClick={() => setIsEditingAddress(!isEditingAddress)}>Cambiar</button>
+                    }
+                  </div>
+                  {!isEditingAddress ? (
+                    <div className="">
+                      <span className="opc-cont">
+                        {selAddress ? (
+                          <div className="info-save">
+                            <p>{selAddress.name_address}, {selAddress.last_name}</p>
+                            <p>{selAddress.street}, {selAddress.street2}</p>
+                            <p>{selAddress.city}, {selAddress.province}</p>
+                            <p>{selAddress.cp}</p>
+                            <p>{selAddress.tel_address}</p>
+                          </div>
+                        ) : (
+                          defaultAddress && (
+                            <div className="info-save">
+                              <p>{defaultAddress.name_address}, {defaultAddress.last_name}</p>
+                              <p>{defaultAddress.street}, {defaultAddress.street2}</p>
+                              <p>{defaultAddress.city}, {defaultAddress.province}</p>
+                              <p>{defaultAddress.cp}</p>
+                              <p>{defaultAddress.tel_address}</p>
+                            </div>
+                          )
+                        )}
+                      </span>
                     </div>
                   ) : (
-                    <>
-                      {selshipping &&
-                        <div className="info-save">
-                          <p>{selshipping.description}</p>
-                          <p>{shippingsMessages(selshipping.id_shipping)}</p>
-                          <p>{formatCurrency(selshipping.price)}</p>
-                        </div>
-                      }
-                    </>
-                  )}
-                </div>
-                {!isEditingshipping && selshipping?.id_shipping !== 'pickup' && (
-                  <div className="item-cont">
-                    <div className="title-page">
-                      <h4>Detalle de envío</h4>
-                      {!isEditingAddress &&
-                        <button className="general-button" onClick={() => setIsEditingAddress(!isEditingAddress)}>Cambiar</button>
-                      }
-                    </div>
-                    {!isEditingAddress ? (
-                      <div className="">
-                        <span className="opc-cont">
-                          {selAddress ? (
-                            <div className="info-save">
+                    <div className="opc-cont">
+                      <div>
+                        <p>Elige una dirección:</p>
+                        <span className="d-flex flex-column gap-1 align-items-start">
+                          <select
+                            onChange={(e) => handleSelectAddress(Number(e.target.value))}
+                            defaultValue={selAddress ? selAddress.id_address : defaultAddress?.id_address}>
+                            <option key="default-option" value="" disabled>Seleccione una dirección</option>
+                            {userActive?.addresses?.map((address, index) => (
+                              <option key={address.id_address || index} value={address.id_address}>
+                                {address.street}, {address.city} ({address.province})
+                              </option>
+                            ))}
+                          </select>
+                          <button className="no-button" onClick={() => openModalAddress()}>Agregar nueva dirección</button>
+                        </span>
+                      </div>
+                      <span>
+                        {selAddress && (
+                          <div className="">
+                            <span>
                               <p>{selAddress.name_address}, {selAddress.last_name}</p>
                               <p>{selAddress.street}, {selAddress.street2}</p>
                               <p>{selAddress.city}, {selAddress.province}</p>
                               <p>{selAddress.cp}</p>
                               <p>{selAddress.tel_address}</p>
-                            </div>
-                          ) : (
-                            defaultAddress && (
-                              <div className="info-save">
-                                <p>{defaultAddress.name_address}, {defaultAddress.last_name}</p>
-                                <p>{defaultAddress.street}, {defaultAddress.street2}</p>
-                                <p>{defaultAddress.city}, {defaultAddress.province}</p>
-                                <p>{defaultAddress.cp}</p>
-                                <p>{defaultAddress.tel_address}</p>
+                            </span>
+                            <span>
+                              <button className="no-button" onClick={() => openModalAddress(selAddress)}>Editar</button>
+                            </span>
+                            {userActive?.id && isModalOpen && (
+                              <div className="modal">
+                                <FormAddresses
+                                  address={selectedAddress}
+                                  id_user={userActive?.id}
+                                  onClose={closeModalAddress}
+                                />
                               </div>
-                            )
-                          )}
-                        </span>
-                      </div>
-                    ) : (
-                      <div className="opc-cont">
-                        <div>
-                          <p>Elige una dirección:</p>
-                          <span className="d-flex flex-column gap-1 align-items-start">
-                            <select
-                              onChange={(e) => handleSelectAddress(Number(e.target.value))}
-                              defaultValue={selAddress ? selAddress.id : defaultAddress?.id}>
-                              <option key="default-option" value="" disabled>Seleccione una dirección</option>
-                              {userActive?.addresses?.map((address, index) => (
-                                <option key={address.id || index} value={address.id}>
-                                  {address.street}, {address.city} ({address.province})
-                                </option>
-                              ))}
-                            </select>
-                            <button className="no-button" onClick={() => openModalAddress()}>Agregar nueva dirección</button>
-                          </span>
-                        </div>
-                        <span>
-                          {selAddress && (
-                            <div className="info-save">
-                              <span>
-                                <p>{selAddress.name_address}, {selAddress.last_name}</p>
-                                <p>{selAddress.street}, {selAddress.street2}</p>
-                                <p>{selAddress.city}, {selAddress.province}</p>
-                                <p>{selAddress.cp}</p>
-                                <p>{selAddress.tel_address}</p>
-                              </span>
-                              <span>
-                                <button className="no-button" onClick={() => openModalAddress(selAddress)}>Editar</button>
-                              </span>
-                              {userActive?.id && isModalOpen && (
-                                <div className="modal">
-                                  <FormAddresses
-                                    address={selectedAddress}
-                                    id_user={userActive?.id}
-                                    onClose={closeModalAddress}
-                                  />
-                                </div>
-                              )}
-                            </div>
-                          )}
-                        </span>
-                        <button className="light-button" onClick={handleConfirmAddress}>Confirmar Dirección</button>
-                      </div>
-                    )}
-                  </div>
-                )}
-                <div className="pay-cont">
-
-                  {!isEditingshipping && !isEditingAddress &&
-                    <div className="item-cont">
-                      <div className="title-page">
-                        <h4>Pago</h4>
-                      </div>
-                      <div>
-                        <p>Nos pondremos en contacto para coordinar el pago y la facturación correspondiente.</p>
-                      </div>
-                      <p>Revisa la información anterior y continúa cuando esté todo listo.</p>
-                      <button onClick={handleAddtoOrder}>Finalizar Pedido</button>
+                            )}
+                          </div>
+                        )}
+                      </span>
+                      <button className="light-button" onClick={handleConfirmAddress}>Confirmar Dirección</button>
                     </div>
-                  }
+                  )}
                 </div>
-                <span>
-                  <h5>Envío</h5>
+              )}
+              <div className="pay-cont">
+                {!isEditingshipping && !isEditingAddress &&
+                  <div className="item-cont">
+                    <div className="title-page">
+                      <h4>Pago</h4>
+                    </div>
+                    <div>
+                      <p>Nos pondremos en contacto para coordinar el pago y la facturación correspondiente.</p>
+                      <p>Revisa la información anterior y continúa cuando esté todo listo.</p>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+            <div className="prod-chekout-container col-lg-4">
+              <div className="title-page">
+                <h4>Resumen de pedido</h4>
+              </div>
+              <Link to="#" onClick={(e) => {
+                e.preventDefault();
+                window.history.back();
+              }}>
+                ← Editar pedido
+              </Link>
+              <ProductsInCart price='subtotal' editable={false} ></ProductsInCart>
+              <div>
+                <div className="checkout-total-item">
+                  <span className="cart-total">
+                    <h6>Subtotal</h6>
+                  </span>
+                  <span>
+                    {formatCurrency(totalPrice - (totalPrice * 0.21))}
+                  </span>
+                </div>
+                <div className="checkout-total-item">
+                  <span className="cart-total">
+                    <h6>Envío</h6>
+                  </span>
                   {selshipping &&
                     <div className="total-shipping">
                       <p>{selshipping.id_shipping}</p>
                       <p>{formatCurrency(selshipping.price)}</p>
                     </div>}
-                </span>
-                <p>Total: {!selshipping ? (<p>{totalPrice}</p>) : (<p>{formatCurrency(totalPrice + selshipping.price)}</p>)}</p>
-              </div>
-              <div className="prod-chekout-container col-lg-4">
-                <div className="title-page">
-                  <h4>Resumen de pedido</h4>
                 </div>
-                <Link to="#" onClick={(e) => {
-                  e.preventDefault();
-                  window.history.back();
-                }}>
-                  ← Editar pedido
-                </Link>
-                <ProductsInCart price='subtotal' editable={false} ></ProductsInCart>
-
+                <div className="checkout-total-item">
+                  <span className="cart-total">
+                    <h6>IVA</h6>
+                  </span>
+                  <span>
+                    {formatCurrency(totalPrice * 0.21)}
+                  </span>
+                </div>
+                <div className="checkout-total-item total">
+                  <span className="cart-total">
+                    <h5>Total</h5>
+                  </span>
+                  <span>{!selshipping ? (<p>{formatCurrency(totalPrice)}</p>) : (<p>{formatCurrency(totalPrice + selshipping.price)}</p>)}</span>
+                </div>
               </div>
+              <button className="general-button" onClick={handleAddtoOrder}>Finalizar Pedido</button>
             </div>
+
             <ModalMesagge
               isOpen={modalConfig.isOpen}
               title={modalConfig.title}

@@ -26,29 +26,38 @@ export const AdminPanel = () => {
             case 'imagenes':
                 return <AdminImages />;
             case 'cuenta':
-                return <AdminAccount/>;
-            case 'envios': 
-                return <AdminShipping/>
+                return <AdminAccount />;
+            case 'envios':
+                return <AdminShipping />
             case 'preguntas-frecuentes':
-                return <AdminFrequentlyAskedQuestions/>
+                return <AdminFrequentlyAskedQuestions />
         }
     }
 
     return (
         <div className="cont container">
-            <h4>AdminPanel</h4>
+            <div className="title-page">
+                <h5>Panel de administrador</h5>
+                <span className="line"></span>
+            </div>
             <div className="nav-opc">
-                <ul className="ul-row-nopadding">
-                    <li><button onClick={() => setSelectedOption('pedidos')}>Pedidos</button></li>
-                    <li><button onClick={() => setSelectedOption('usuarios')}>Usuarios</button></li>
-                    <li><button onClick={() => setSelectedOption('productos')}>Productos</button></li>
-                    <li><button onClick={() => setSelectedOption('envios')}>Envios</button></li>
-                    <li><button onClick={() => setSelectedOption('preguntas-frecuentes')}>Preguntas Frecuentes</button></li>
-                    <li><button onClick={() => setSelectedOption('imagenes')}>Imágenes</button></li>                                      
-                    <li><button onClick={() => setSelectedOption('cuenta')}>Cuenta</button></li>
+                <ul className="ul-row-nopadding opc-adm">
+                {[
+                        { id: 'pedidos', label: 'Pedidos' },
+                        { id: 'usuarios', label: 'Usuarios' },
+                        { id: 'productos', label: 'Productos' },
+                        { id: 'envios', label: 'Envíos' },
+                        { id: 'preguntas-frecuentes', label: 'Preguntas Frecuentes' },
+                        { id: 'imagenes', label: 'Imágenes' },
+                        { id: 'cuenta', label: 'Cuenta' }
+                    ].map(({ id, label }) => (
+                        <li key={id} className={selectedOption === id ? 'active' : ''}>
+                            <button onClick={() => setSelectedOption(id)}>{label}</button>
+                        </li>
+                    ))}
                 </ul>
             </div>
-            <div className="opc-render">
+            <div className="opc-render container">
                 {selectedOption && renderOpc(selectedOption)}
             </div>
         </div>

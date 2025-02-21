@@ -23,7 +23,6 @@ export const ProductProvider = ({ children }: Props) => {
     }
 
     const token = localStorage.getItem('user_token')
-    console.log(data)
 
     try {
       const response = await fetch(`${dev}/index.php?action=register-product`, {
@@ -155,8 +154,7 @@ export const ProductProvider = ({ children }: Props) => {
 
     const formData = new FormData();
     formData.append("productId", productId);
-
-
+    
     images.forEach((image, index) => {
       if (image.url instanceof File) {
         formData.append(`image${index}`, image.url);
@@ -209,7 +207,6 @@ export const ProductProvider = ({ children }: Props) => {
       return { success: false, message: "Token inválido." };
     }
 
-    console.log(productData)
     const formData = new FormData();
 
     formData.append("id", productData.id);

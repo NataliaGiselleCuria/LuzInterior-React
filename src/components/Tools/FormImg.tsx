@@ -94,26 +94,32 @@ const FormImg: React.FC<ImageFormProps> = ({ productId, setData }) => {
     }
   }, [productId, products, dev, setData]);
 
-return (
-  <div className="ul-row-nopadding img-form">
-    <h4>Subir Imágenes</h4>
-    <form onSubmit={addImages}>
+  return (
+    <div className="img-form w-100">
       <div>
-        <input
-          type="file"
-          id="url"
-          accept="image/*"
-          {...register('url')}
-          onChange={handleFileChange}
-          multiple
-        />
+        <div className="title-page">
+          <h5>Subir Imágenes</h5>
+        </div>
+        <form onSubmit={addImages} className="button-cont align-items-start">
+          <input
+            type="file"
+            id="url"
+            accept="image/*"
+            {...register('url')}
+            onChange={handleFileChange}
+            multiple
+          />
+          <button className="general-button" type="submit">Agregar imagen</button>
+        </form>
       </div>
-      <button type="submit">Agregar imagen</button>
-    </form>
-    <h4>Imágenes añadidas:</h4>
-    <SortableImageList images={images} setImages={setImages} setData={setData} />
-  </div>
-);
+      <div>
+        <div className="title-page">
+          <h5>Imágenes añadidas:</h5>
+        </div>
+        <SortableImageList images={images} setImages={setImages} setData={setData} />
+      </div>
+    </div>
+  );
 };
 
 export default FormImg;

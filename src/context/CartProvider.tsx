@@ -57,10 +57,6 @@ export const CartProvider = ({ children }: CartContextProps) => {
         dispatch({ type: 'clear_cart' });
     };
 
-    // useEffect(() => {
-    //     console.log('carrito:', state.cart)
-    // },[state.cart])
-
     const cartValue = useMemo(() => {
     
         return {

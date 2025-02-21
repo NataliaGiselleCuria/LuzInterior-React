@@ -98,7 +98,7 @@ span.line {
     min-width: 100dvw;
     height: calc(100% + 100px);
     top: -100px;
-    background-color: #d9cebe;
+    background-color: #bbb3a98f;
     overflow: hidden;
     filter: opacity(0.5);
   }
@@ -129,15 +129,27 @@ span.line {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     justify-items: center;
     justify-content: center;
+    gap: 5px;
+   
 }
 
 .latest-releases-list {
     width: 330px;
-    height: 450px;
+    height: 500px;
     max-width: 90%;
     margin: 10px 0;
+    position: relative;
 }
 
+.arrow-prod{
+    position: absolute;
+    width: 12px;
+    height: auto;
+    bottom: 10px;
+    right: 5px;
+    object-fit: contain;
+    filter: contrast(0.3);
+}
 
 @media (max-width: 768px) {
     #carousel-home-mobile {
@@ -174,8 +186,6 @@ span.line {
         margin: 0;
     }
 
-    
-
     .latest-releases-cont {
         grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
         padding: 0;
@@ -184,11 +194,6 @@ span.line {
     .latest-releases-list {
         width: 200px;
         height: 300px;
-    }
-
-    .latest-releases-list .prod-name {
-        flex-direction: column;
-        border: none;
     }
 }
 
@@ -202,7 +207,7 @@ span.line {
     }
 
     .latest-releases-list {
-        height: 250px;
+        height: 280px;
         max-width: 95%;
         margin: 5px 0;
     }

@@ -15,7 +15,7 @@ const Cart = () => {
     <div className="cont container">
       <div className="cart-container container">
         <div className="row justify-content-evenly">
-          <div className="col-lg-6 cart-prod-list">
+          <div className="col-lg-7 cart-prod-list">
             <div className="title-page">
               <h4> Mi Carrito</h4><span className="line"></span>
               <Link to="#" onClick={(e) => {
@@ -29,13 +29,14 @@ const Cart = () => {
           </div>
           <div className="col-lg-4 cart-info">
             <div className="cart-info-container">
+              <span className="back"></span>
               <div className="title-page">
                 <h4>Resumen del pedido</h4><span className="line"></span>
               </div>
               <div className="cart-total">
                 {isLogin ? (
                   <>
-                    <span className="d-flex align-items-center gap-2">
+                    <span className="d-flex align-items-baseline gap-2">
                     <h6>Subtotal:</h6><h5>{formatCurrency(totalPrice)}</h5>
                     </span>                    
                     <p className="small">IVA incluido</p>

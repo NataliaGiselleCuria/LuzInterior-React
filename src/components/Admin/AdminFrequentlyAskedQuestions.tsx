@@ -25,8 +25,6 @@ const AdminFrequentlyAskedQuestions = () => {
             return false;
         }
 
-        console.log(data)
-
         const token = localStorage.getItem('user_token')
 
         try {

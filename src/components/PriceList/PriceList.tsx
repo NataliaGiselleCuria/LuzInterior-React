@@ -7,22 +7,29 @@ const ListaDePrecios = () => {
   const { listPrice, fileUrl } = useApi();
 
   return (
-    <div className="cont container">
-      <h2>Lista de precios</h2>
-      <div>
-
+    <div className="cont container list-price">
+       <div className="title-page">
+        <h1>Lista de precios</h1>
+        <span className="line"></span>
+      </div>
+      <div className="list-price-cont">
+      <span className="back"></span>
         {listPrice[0] ? (
           <>
-            <span>
+            <div>
               <p>Ultima actualización:</p>
               <p>{new Date(new Date(listPrice[0].date + "T00:00:00")).toLocaleDateString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' })}</p>
-            </span>
+            </div>
             {fileUrl ? (
-              <span>
-                <LazyLoadImage src={priceList} alt="lista de precios"></LazyLoadImage>
-                <button><a href={fileUrl} download>Descargar lista de precios</a></button>
-              </span>
-              
+              <>
+              <LazyLoadImage src={priceList} alt="lista de precios"></LazyLoadImage>
+              <button className="general-button">              
+                <a href={fileUrl} download> 
+                
+                <p>Descargar</p>
+                </a>
+              </button>
+              </>
             ) : (
               <p>No hay archivos disponibles.</p>
             )}

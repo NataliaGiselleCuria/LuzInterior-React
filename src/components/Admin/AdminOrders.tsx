@@ -15,15 +15,28 @@ const AdminOrders = () => {
     const { updateOrderState, updateNew, deleteOrder } = useOrder();
     const { validateToken } = useVerifyToken();
     const { modalConfig, openModal, closeModal } = useModal();
-    const [ filteredOrders, setFilteredOrders] = useState(orders);
+    const [filteredOrders, setFilteredOrders] = useState(orders);
     const { searchQuery, filteredResults, handleSearchChange } = useSearch(orders, true);
 
-   
+
     useEffect(() => {
         setFilteredOrders(orders);
     }, [orders]);
 
     const handleStateChange = async (orderId: number, newState: string) => {
+
+        const order = orders.find(order => order.id === orderId);
+        if (!order) {
+            openModal("Error", "Orden no encontrada", closeModal);
+            return;
+        }
+
+        const currentState = order.state;
+
+        if (newState === currentState) {
+            return;
+        }
+
         const isTokenValid = await validateToken();
         if (!isTokenValid) {
             return false;
@@ -31,15 +44,9 @@ const AdminOrders = () => {
 
         try {
             const response = await updateOrderState(orderId, newState)
-            if (response.success) {
-                
-                openModal("Éxito", "El estado de la orden se modificó correctamente.", closeModal);
-              
-
-            } else {
+            if (!response.success) {
                 openModal("Error", `Error al actualizar estado de la orden: ${response.message}`, closeModal);
             }
-
         } catch (error) {
             openModal("Error", `Error inesperado al actualizar estado de la orden:${error}`, closeModal);
         };
@@ -54,12 +61,12 @@ const AdminOrders = () => {
         try {
             const response = await deleteOrder(orderId);
             if (response.success) {
-              
+
                 setFilteredOrders((prevOrders) =>
                     prevOrders.filter(order => order.id !== orderId)
                 );
                 openModal("Éxito", "La orden se eliminó correctamente.", closeModal);
-               
+
             } else {
                 openModal("Error", `Error al eliminar la orden: ${response.message}`, closeModal);
             }
@@ -74,45 +81,31 @@ const AdminOrders = () => {
             return false;
         }
 
-        const response = await  updateNew(orderId);
+        const response = await updateNew(orderId);
 
         try {
-           
+
             if (response.success) {
-              
+
                 setFilteredOrders((prevOrders) =>
                     prevOrders.map((order) =>
                         order.id === orderId ? { ...order, new: false } : order
                     )
                 );
-                     
+
             } else {
                 openModal("Error", `Error al eliminar la orden: ${response.message}`, closeModal);
             }
         } catch (error) {
             openModal("Error", `Error inesperado al eliminar la orden: ${error}`, closeModal);
-        }   
+        }
     }
 
     return (
-        <div>
-            <h3>Ordenes de pedido</h3>
-            <div>
-                <h5>Nuevas ordenes de pedido:</h5>
-                <div className="accordion" id="accordionPanelsStayOpenExample">
-                    {filteredOrders.filter((order) => order.new).map((order) => {
-                        return <ItemListOrder
-                            key={order.id}
-                            order={order}
-                            onStateChange={handleStateChange}
-                            handleUpdateNew={handleUpdateNew}
-                            handleDeletOrder={handleDeletOrder}
-                            openModal={openModal}
-                        />;
-                    })}
-                </div>
+        <div className='w-100 orders'>
+            <div className="title-page">
+                <h4>Ordenes de pedido</h4>
             </div>
-            <h4>Ordenes</h4>
             <div className="search-container">
                 <input
                     className="admin-search"
@@ -122,17 +115,41 @@ const AdminOrders = () => {
                     placeholder="Buscar orden..."
                 />
             </div>
-            <div className="accordion" id="accordionPanelsStayOpenExample">
-                {filteredResults.filter((order):order is Orders => 'new' in order && !order.new).map((order) => {
-                    return <ItemListOrder
-                        key={order.id}
-                        order={order}
-                        onStateChange={handleStateChange}
-                        handleUpdateNew={handleUpdateNew}
-                        handleDeletOrder={handleDeletOrder}
-                        openModal={openModal}
-                    />;
-                })}
+            <div className='row gap-4'>
+                <div className='col-lg'>
+                    <div className="title-page">
+                        <h5>Nuevas ordenes de pedido:</h5>
+                    </div>
+                    <div className="accordion" id="accordionPanelsStayOpenExample">
+                        {filteredOrders.filter((order) => order.new).map((order) => {
+                            return <ItemListOrder
+                                key={order.id}
+                                order={order}
+                                onStateChange={handleStateChange}
+                                handleUpdateNew={handleUpdateNew}
+                                handleDeletOrder={handleDeletOrder}
+                                openModal={openModal}
+                            />;
+                        })}
+                    </div>
+                </div>
+                <div className='col-lg'>
+                    <div className="title-page">
+                        <h5>Ordenes vistas:</h5>
+                    </div>
+                    <div className="accordion" id="accordionPanelsStayOpenExample">
+                        {filteredResults.filter((order): order is Orders => 'new' in order && !order.new).map((order) => {
+                            return <ItemListOrder
+                                key={order.id}
+                                order={order}
+                                onStateChange={handleStateChange}
+                                handleUpdateNew={handleUpdateNew}
+                                handleDeletOrder={handleDeletOrder}
+                                openModal={openModal}
+                            />;
+                        })}
+                    </div>
+                </div>
             </div>
             <ModalMesagge
                 isOpen={modalConfig.isOpen}

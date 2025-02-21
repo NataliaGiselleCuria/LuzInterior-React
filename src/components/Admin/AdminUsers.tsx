@@ -49,7 +49,7 @@ const AdminUsers = () => {
                 openModal("Error", `Error al eliminar el usuario: ${response.message}`, closeModal);
             }
         } catch (error) {
-            openModal("Error", `Error inesperado al eliminar el usuario: ${error}` , closeModal);
+            openModal("Error", `Error inesperado al eliminar el usuario: ${error}`, closeModal);
         }
     }
 
@@ -74,60 +74,57 @@ const AdminUsers = () => {
     }
 
     return (
-        <div>
-            <div>
-                <h3>Nuevos usuarios</h3>
-                <p>Los siguientes usuarios esperan aprovación para activar su cuenta:</p>
-                <ul>
-                    {users.filter((user) => user.new).map((user) => {
-                        return <ItemListUser
-                            key={user.id}
-                            user={user}
-                            openModal={openModal}
-                            handleUpdateUserApproved={handleUpdateUserApproved}
-                            handleDeleteUser={handleDeleteUser}
-                            handleUpdateUserRole={handleUpdateUserRole}
-                        />
-                    })}
-                </ul>
+        <div className="w-100 users">
+            <div className="title-page">
+                <h4>Usuarios</h4>
             </div>
-            <div>
-                <h4>Usuarios:</h4>
-                <div className="accordion" id="accordionPanelsStayOpenExample">
-                    <div className="accordion-item">
-                        <h2 className="accordion-header">
-                            <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
-                                Usuarios
-                            </button>
-                        </h2>
-                        <div id="panelsStayOpen-collapseOne" className="accordion-collapse collapse">
-                            <div className="accordion-body">
-                                <div className="search-container">
-                                    <input
-                                        className="admin-search"
-                                        type="text"
-                                        value={searchQuery}
-                                        onChange={handleSearchChange}
-                                        placeholder="Buscar usuarios..."
-                                    />
-                                </div>
-                                <ul className="list-acordeon">
-                                    {filteredResults.filter((item): item is Users => 'approved' in item && !item.new).map((user) => {
-                                        return <ItemListUser
-                                            key={user.id}
-                                            user={user}
-                                            openModal={openModal}
-                                            handleUpdateUserApproved={handleUpdateUserApproved}
-                                            handleDeleteUser={handleDeleteUser}
-                                            handleUpdateUserRole={handleUpdateUserRole}
-                                        />
-                                    })}
-                                </ul>
-                            </div>
+            <div className='row gap-4'>
+                <div className='col-lg'>
+                    <div className="title-page">
+                        <h5>Nuevos usuarios:</h5>
+                        <p>Los siguientes usuarios esperan aprovación para activar su cuenta:</p>
+                    </div>
+                    <ul>
+                        {users.filter((user) => user.new).map((user) => {
+                            return <ItemListUser
+                                key={user.id}
+                                user={user}
+                                openModal={openModal}
+                                handleUpdateUserApproved={handleUpdateUserApproved}
+                                handleDeleteUser={handleDeleteUser}
+                                handleUpdateUserRole={handleUpdateUserRole}
+                            />
+                        })}
+                    </ul>
+                </div>
+                <div className="col-lg">
+                    <div className="title-page">
+                        <h5>Usuarios activos:</h5>
+                        <div className="search-container">
+                            <input
+                                className="admin-search"
+                                type="text"
+                                value={searchQuery}
+                                onChange={handleSearchChange}
+                                placeholder="Buscar usuarios..."
+                            />
                         </div>
                     </div>
+                    <ul>
+                        {filteredResults.filter((item): item is Users => 'approved' in item && !item.new).map((user) => {
+                            return <ItemListUser
+                                key={user.id}
+                                user={user}
+                                openModal={openModal}
+                                handleUpdateUserApproved={handleUpdateUserApproved}
+                                handleDeleteUser={handleDeleteUser}
+                                handleUpdateUserRole={handleUpdateUserRole}
+                            />
+                        })}
+                    </ul>
                 </div>
             </div>
+
             <ModalMesagge
                 isOpen={modalConfig.isOpen}
                 title={modalConfig.title}

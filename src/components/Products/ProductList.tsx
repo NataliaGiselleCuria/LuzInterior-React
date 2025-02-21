@@ -1,17 +1,35 @@
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useApi } from "../../context/ApiProvider"
 import ProductCard from "./ProductCard";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useUser } from "../../context/UserContext";
+import { useCart } from "../../context/CartProvider";
+import { Products } from "../../Interfaces/interfaces";
+import add from "../../assets/add.png";
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import './products.css'
 
-const ProductList = () => {
+interface ProductListProps {
+    openCart: () => void;
+}
 
+const ProductList:  React.FC<ProductListProps> = ({ openCart }) =>{
+    const { addToCart } =useCart();
     const { products, categories } = useApi();
     const { isLogin} = useUser();
     const { category } = useParams<{ category?: string }>();
     const navigate = useNavigate();
+     const [showMessage, setShowMessage] = useState(!isLogin);
+    
+        useEffect(() => {
+            if (!isLogin) {
+                const timer = setTimeout(() => {
+                    setShowMessage(false);
+                }, 10000); // 10 segundos
+    
+                return () => clearTimeout(timer);
+            }
+        }, [isLogin]);
 
     const productFilter = category
         ? products.filter((product) => product.category === category)
@@ -30,16 +48,23 @@ const ProductList = () => {
         navigate(`/productos/id/${productId}`);
     };
 
+    const handleAddToCart = (product:Products) => {
+        addToCart(product, 1);
+        openCart();
+    };
+
     return (
         <div className="cont container prod-list">
-            {!isLogin && <div className="login-mesagge"><span><Link to='/login'>Inicie sesión </Link><span> para acceder a los precios de los productos.</span></span></div>}
+            {showMessage && (
+                <div className={`login-message ${showMessage ? "show" : "hide"}`}><span><Link to='/login'>Inicie sesión</Link><span> para acceder a los precios de los productos.</span></span></div>
+            )}
             <div className="title-page">
                 <h1>{category ? `${category}` : 'PRODUCTOS'}</h1>
                 <span className="line"></span>
             </div>
             {!category && (
                 <div>
-                    <ul className=" categories ul-row-nopadding">
+                    <ul className=" ul-categories ul-row-nopadding">
                         {categories.map((cat) => (
                             <li key={cat} className="categories ">
                                 <Link to={`/productos/categoria/${cat}`}>{cat}</Link>
@@ -64,8 +89,8 @@ const ProductList = () => {
                                     product={product}
                                 />
                             </Link>
+                            <button className='item-add' onClick={() => handleAddToCart(product)}><img src={add} alt="agregar al carrito"></img></button>
                         </li>
-
                     ))}
                 </ul>
             </div>

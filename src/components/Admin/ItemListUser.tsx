@@ -8,7 +8,7 @@ interface Props {
     handleUpdateUserRole: (id: number) => void;
 }
 
-export const ItemListUser: React.FC<Props> = ({ user, openModal, handleUpdateUserApproved, handleDeleteUser, handleUpdateUserRole}) => {
+export const ItemListUser: React.FC<Props> = ({ user, openModal, handleUpdateUserApproved, handleDeleteUser, handleUpdateUserRole }) => {
 
     const alertdeleteUser = (id: number) => {
         openModal("Advertencia", "Este usuario perderá su registro en la página ¿Eliminar de todas formas?", () => handleDeleteUser(id));
@@ -25,28 +25,33 @@ export const ItemListUser: React.FC<Props> = ({ user, openModal, handleUpdateUse
     const date = new Date(user.register_date + "T00:00:00");
 
     return (
-        <li key={user.id}>
-            <div>
-                <span>{new Date(date).toLocaleDateString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' })}</span>
-                <span>{user.name}</span>
-                <span>{user.email}</span>
-                <span>{user.cuit}</span>
+        <li key={user.id} className='item'>
+            <div className="item-info">
+                <div><span className="fw-medium">Registro: </span> {new Date(date).toLocaleDateString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' })}</div>
+                <div><span className="fw-medium">Nombre: </span> {user.name}</div>
             </div>
-            <div>
-                <span>{user.approved ? 'Sí' : 'No'}</span>
-                <button onClick={() => handleUpdateUserApproved(user.id)}>{user.approved ? 'Dar de baja' : 'Habilitar'}</button>
+            <div className="item-info">
+                <div><span className="fw-medium">Email: </span> {user.email}</div>
+                <div><span className="fw-medium">CUIT: </span> {user.cuit}</div>
             </div>
-            {user.approved ? (
-                <div>
-                    <span>{user.role}</span>
-                    <button onClick={() => alertUpdateUserRole(user.id, user.role)}>
-                        Cambiar rol
-                    </button>
+            <div className="item-info  buttons">
+                <div className="item-info users-button-cont">
+                    <div><span className="fw-medium">Aprovado: </span>{user.approved ? 'Sí' : 'No'}</div>
+                    <button className="general-button" onClick={() => handleUpdateUserApproved(user.id)}>{user.approved ? 'Dar de baja' : 'Habilitar'}</button>
                 </div>
-            ) : (
-                <></>
-            )}
-            <button onClick={() => alertdeleteUser(user.id)}>Eliminar</button>
+                {user.approved ? (
+                    <div className="item-info users-button-cont">
+                        <div><span className="fw-medium">Rol: </span>{user.role}</div>
+                        <button className="general-button" onClick={() => alertUpdateUserRole(user.id, user.role)}>
+                            Cambiar rol
+                        </button>
+                    </div>
+                ) : (
+                    <></>
+                )}
+                <button className="no-button" onClick={() => alertdeleteUser(user.id)}>Eliminar</button>
+            </div>
+
         </li>
     )
 }
