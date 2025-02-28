@@ -26,6 +26,7 @@ const SortableItem: React.FC<SortableItemProps> = ({ id, img, onRemove }) => {
     background: "#f9f9f9",
     borderRadius: "5px",
     gap: "10px",
+    touchAction: "manipulation"
   };
 
   return (
@@ -40,7 +41,7 @@ const SortableItem: React.FC<SortableItemProps> = ({ id, img, onRemove }) => {
       </li>
       <button onClick={() => { onRemove(img.id) }}>
         <LazyLoadImage className="w100 h100 fix-img" src={trash} alt="eliminar"></LazyLoadImage>
-        </button>
+      </button>
     </div>
   );
 };

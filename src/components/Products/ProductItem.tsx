@@ -3,10 +3,11 @@ import { useUser } from "../../context/UserContext";
 import { useApi } from "../../context/ApiProvider";
 import { useCart } from "../../context/CartProvider";
 import { useEffect, useState } from "react";
-import useCurrencyFormat from "../../CustomHooks/currencyFormat";
+import useCurrencyFormat from "../../CustomHooks/useCurrencyFormat";
 import QuantitySelector from "../Tools/QuantitySelector";
 import ProductsImages from "../Tools/ProductsImages";
 import './products.css'
+import SpinnerLoading from "../Tools/SpinnerLoading";
 
 
 interface ProductItemProps {
@@ -43,7 +44,7 @@ const ProductItem: React.FC<ProductItemProps> = ({ openCart }) => {
     }, [products]);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <SpinnerLoading/>;
     }
 
     const productItem = products.find((product) => product.id === id);
@@ -82,7 +83,7 @@ const ProductItem: React.FC<ProductItemProps> = ({ openCart }) => {
                                     <h5>{productItem.id}</h5>
                                 </span>
                                 <span>
-                                    {isLogin ? <p className="fs-4">{formatCurrency(productItem.price)}</p> : <></>}
+                                    {isLogin ? <p className="fs-3">{formatCurrency(productItem.price)}</p> : <p className="fs-3">$ ---</p>}
                                     <p className="small">IVA incluido</p>
                                 </span>
 
@@ -101,11 +102,11 @@ const ProductItem: React.FC<ProductItemProps> = ({ openCart }) => {
                         <div className="frequently-asked-questions">
                             <div className="accordion" id="accordionPanelsStayOpenExample">
                                 <div className="accordion-item">
-                                    <h5 className="accordion-header">
+                                    <div className="accordion-header">
                                         <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
-                                            Preguntas frecuentes
+                                            <h6>Preguntas frecuentes</h6>
                                         </button>
-                                    </h5>
+                                    </div>
                                     <div id="panelsStayOpen-collapseOne" className="accordion-collapse collapse">
                                         <div className="accordion-body">
                                             <ul className="list-acordeon">

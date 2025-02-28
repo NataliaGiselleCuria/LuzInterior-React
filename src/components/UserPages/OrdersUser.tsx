@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { useUser } from "../../context/UserContext";
 import { Link, useNavigate } from "react-router-dom";
 import { useApi } from "../../context/ApiProvider";
-import useCurrencyFormat from "../../CustomHooks/currencyFormat";
-import { LazyLoadImage } from "react-lazy-load-image-component";
+import useCurrencyFormat from "../../CustomHooks/useCurrencyFormat";
+import ProductDetail from "../Tools/ProductDetail";
 
 const OrdersUser = () => {
-  const { dev, orders, shipping, products } = useApi();
+  const {orders, shipping } = useApi();
   const { isLogin, userActive } = useUser();
   const navigate = useNavigate();
   const formatCurrency = useCurrencyFormat();
@@ -31,36 +31,10 @@ const OrdersUser = () => {
     shippingDetails: getShippingDetails(String(order.shipping)), // Asocia los detalles completos
   }));
 
-  const getProductbyId = (id: string) => {
-    const prodResult = products.find(prod => prod.id === id);
-    if (!prodResult) {
-      return <div><span><p>El producto con ID `{id}` ya no se encuentra en el sistema</p></span></div>
-    } else {
-      const mainImage = prodResult.img_url
-        ?.sort((a, b) => a.priority - b.priority)[0]?.url || 'ruta/a/imagen/default.png';
-
-      return (
-        <>
-          <div className="order-prod-img">
-            <LazyLoadImage src={`${dev}/${mainImage}`} alt={`Imagen de ${prodResult.name}`} />
-          </div>
-          <div className="item-info">
-            <div><span className="fw-medium">id:</span> {prodResult.id}</div>
-            <div><span className="fw-medium">Nombre:</span> {prodResult.name}</div>
-            <div><span className="fw-medium">Categoría:</span> {prodResult.category}</div>
-            <div><span className="fw-medium">Precio:</span> {prodResult.price}</div>
-          </div>
-        </>
-      );
-    }
-  }
-
-
-
   return (
     <div className="cont container">
       <div className="row account-user">
-        <div className="col-md-2 col-name-user">
+        <div className="col-md-3 col-xl-2 col-name-user">
           <span className="back"></span>
           <div className="icon-user">
             {userActive?.name
@@ -113,39 +87,48 @@ const OrdersUser = () => {
                           }`}
                       >
                         <div className="accordion-body">
-                          <div className='item'>
+                          <div className='item-cont border-top'>
                             <h5>Envío</h5>
                             <div className="item-info">
-                              <div><span className="fw-medium">Envío:</span>{String(order.shipping).toUpperCase()}</div>
-                              <div>{order.shippingDetails?.description}</div>
-                              <div><span className="fw-medium">Valor: </span>{formatCurrency(order.shippingDetails?.price || 0)}</div>
+                              <div className="pr-20">
+                                <span className="fw-medium">Envío:</span>
+                                {String(order.shipping).toUpperCase()}
+                              </div>
+                              <div className="pr-20">{order.shippingDetails?.description}</div>
+                              <div className="pr-20">
+                                <span className="fw-medium">Valor: </span>
+                                {formatCurrency(order.shippingDetails?.price || 0)}
+                              </div>
                               <div className="item-info w-100">
-                                <span className="fw-medium">Dirección:</span>
+                                <span className="fw-medium">Dirección: </span>
                                 <span>{order.address.street} -</span>
-                                <span>{order.address.street2?.trim() ? order.address.street2 : "información adicional no especificada"} -</span>
-                                <span> CP: {order.address.cp} -</span>
                                 <span>{order.address.city} -</span>
                                 <span>{order.address.province} -</span>
+                                <span> CP: {order.address.cp} -</span>
+                                <span>{order.address.street2?.trim() ? order.address.street2 : "información adicional no especificada"}</span>
                               </div>
                             </div>
 
                           </div>
-                          <div className='item'>
+                          <div className='item-cont border-top'>
                             <h5>Productos</h5>
                             <div className="item-info">
                               <ul className="order-prods">
                                 {order.products.map((prod) => (
                                   <li key={prod.product_id}>
-                                    {getProductbyId(prod.product_id)}
+                                    <ProductDetail id={prod.product_id} />
                                     <div><span className="fw-medium">cantidad:</span> {prod.quantity}</div>
                                   </li>
                                 ))}
                               </ul>
                             </div>
                           </div>
-                          <div>
-                            <h5>Total</h5>
-                            <span>{formatCurrency(order.total_price)}</span>
+                          <div className="cart-total item-cont">
+                            <div>
+                              <div className="d-flex align-items-baseline gap-2"><h6>Subtotal</h6>{formatCurrency(order.total_price)}</div>
+                              <div className="d-flex align-items-baseline gap-2"><h6>Envío</h6>{formatCurrency(order.shippingDetails?.price || 0)}</div>
+                              <div className="d-flex align-items-baseline border-top gap-2"><h6>Total</h6>{formatCurrency(order.total_price + (order.shippingDetails?.price || 0))}</div>
+                            </div>
                           </div>
                         </div>
                       </div>

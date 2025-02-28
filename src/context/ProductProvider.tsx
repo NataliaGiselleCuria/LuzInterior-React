@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useMemo } from "react";
 import { FormImgsProduct, FormProduct, ListPrice, ProductContextType, Response } from "../Interfaces/interfaces";
 import { useApi } from "./ApiProvider";
-import useVerifyToken from "../CustomHooks/verefyToken";
+import useVerifyToken from "../CustomHooks/useVerefyToken";
 
 
 export const ProductContext = createContext<ProductContextType>({} as ProductContextType);

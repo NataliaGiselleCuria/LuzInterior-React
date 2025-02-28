@@ -24,10 +24,7 @@ const ListaDePrecios = () => {
               <>
               <LazyLoadImage src={priceList} alt="lista de precios"></LazyLoadImage>
               <button className="general-button">              
-                <a href={fileUrl} download> 
-                
-                <p>Descargar</p>
-                </a>
+                <a href={fileUrl} download aria-label="Descargar lista de precios de los productos de Luz Interior">Descargar</a>
               </button>
               </>
             ) : (

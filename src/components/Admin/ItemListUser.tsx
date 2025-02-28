@@ -25,14 +25,14 @@ export const ItemListUser: React.FC<Props> = ({ user, openModal, handleUpdateUse
     const date = new Date(user.register_date + "T00:00:00");
 
     return (
-        <li key={user.id} className='item'>
+        <>
             <div className="item-info">
-                <div><span className="fw-medium">Registro: </span> {new Date(date).toLocaleDateString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' })}</div>
-                <div><span className="fw-medium">Nombre: </span> {user.name}</div>
+                <div className="pr-20"><span className="fw-medium">Registro: </span> {new Date(date).toLocaleDateString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' })}</div>
+                <div className="pr-20"><span className="fw-medium">Nombre: </span> {user.name}</div>
             </div>
             <div className="item-info">
-                <div><span className="fw-medium">Email: </span> {user.email}</div>
-                <div><span className="fw-medium">CUIT: </span> {user.cuit}</div>
+                <div className="pr-20"><span className="fw-medium">Email: </span> {user.email}</div>
+                <div className="pr-20"><span className="fw-medium">CUIT: </span> {user.cuit}</div>
             </div>
             <div className="item-info  buttons">
                 <div className="item-info users-button-cont">
@@ -52,6 +52,6 @@ export const ItemListUser: React.FC<Props> = ({ user, openModal, handleUpdateUse
                 <button className="no-button" onClick={() => alertdeleteUser(user.id)}>Eliminar</button>
             </div>
 
-        </li>
+        </>
     )
 }

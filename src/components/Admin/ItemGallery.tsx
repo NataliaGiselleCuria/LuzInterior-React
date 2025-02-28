@@ -5,9 +5,9 @@ import { arrayMove, SortableContext, rectSwappingStrategy } from "@dnd-kit/sorta
 import SortableItem from "../Tools/SortableItem";
 import { FormImgs } from "../../Interfaces/interfaces";
 import { useApi } from "../../context/ApiProvider";
-import useVerifyToken from "../../CustomHooks/verefyToken";
+import useVerifyToken from "../../CustomHooks/useVerefyToken";
 import ModalMesagge from "../Tools/ModalMesagge";
-import useModal from "../../CustomHooks/modal";
+import useModal from "../../CustomHooks/useModal";
 
 const ItemGallery: React.FC = () => {
   const { dev, gallery, refreshGallery } = useApi();
@@ -40,35 +40,35 @@ const ItemGallery: React.FC = () => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
-        const previews = Array.from(files).map(file => URL.createObjectURL(file));
-        setPreview(previews);
-        setCurrentFile(Array.from(files));
+      const previews = Array.from(files).map(file => URL.createObjectURL(file));
+      setPreview(previews);
+      setCurrentFile(Array.from(files));
     }
   };
 
   const addImage = async (event: React.FormEvent) => {
     event.preventDefault();
-  
+
     if (!currentFile || currentFile.length === 0) {
       openModal("Error", "No se ha seleccionado una imagen válida.", closeModal);
       return;
     }
-  
+
     try {
       const isTokenValid = await validateToken();
-  
+
       if (!isTokenValid) {
         openModal("Error", "Token inválido. Por favor, inicie sesión nuevamente.", closeModal);
         return;
       }
-  
+
       const token = localStorage.getItem('user_token');
-  
+
       for (let i = 0; i < currentFile.length; i++) {
         const formData = new FormData();
         formData.append("image", currentFile[i]);
-        formData.append("priority", (images.length + 1 + i).toString()); 
-  
+        formData.append("priority", (images.length + 1 + i).toString());
+
         formData.append("token", token || '')
         const response = await fetch(`${dev}/index.php?action=add-gallery`, {
           method: "POST",
@@ -76,7 +76,7 @@ const ItemGallery: React.FC = () => {
           },
           body: formData,
         });
-  
+
         const result = await response.json();
         if (result.success) {
           const newImage: FormImgs = {
@@ -86,18 +86,18 @@ const ItemGallery: React.FC = () => {
             preview: preview && preview[i] ? preview[i] : "",
             link: null
           };
-  
+
           setImages((prev) => [...prev, newImage]); // Añadir la nueva imagen al estado
         } else {
           openModal("Error", `Error al actualizar la galería: ${result.message}`, closeModal);
         }
       }
-  
+
       setCurrentFile(null);
       setPreview(null);
       refreshGallery();
       reset();
-  
+
     } catch (error) {
       openModal("Error", `Error en la conexión: ${error}`, closeModal);
     }
@@ -165,12 +165,12 @@ const ItemGallery: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({payload, token}),
+        body: JSON.stringify({ payload, token }),
       })
         .then((response) => response.json())
         .then((data) => {
           if (!data.success) {
-             openModal("Error", `Error al actualizar la galería: ${data.message}`, closeModal);
+            openModal("Error", `Error al actualizar la galería: ${data.message}`, closeModal);
           }
           refreshGallery();
         })
@@ -181,9 +181,9 @@ const ItemGallery: React.FC = () => {
   };
 
   return (
-    <div className="ul-row-nopadding img-form">    
-      <form onSubmit={addImage}>
-        <div>
+    <div className="img-form">
+      <form className="item-cont" onSubmit={addImage}>
+        <div className="button-cont align-items-start">
           <input
             type="file"
             id="url"
@@ -192,24 +192,29 @@ const ItemGallery: React.FC = () => {
             onChange={handleFileChange}
             multiple
           />
+          <button className="general-button" type="submit">Agregar imagen</button>
         </div>
-        <button type="submit">Agregar imagen</button>
+
       </form>
-      <h4>Imágenes añadidas:</h4>
-      <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-        <ul className="ul-row-nopadding">
-          <SortableContext items={images} strategy={rectSwappingStrategy}>
-            {images.map((img) => (
-              <SortableItem
-                key={img.id}
-                id={img.id}
-                img={img}
-                onRemove={removeImage}
-              />
-            ))}
-          </SortableContext>
-        </ul>
-      </DndContext>
+      <div className="item-cont">
+        <div className='title'>
+          <h5>Imágenes añadidas:</h5>
+        </div>
+        <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <ul className="ul-row-nopadding sortableContext">
+            <SortableContext items={images} strategy={rectSwappingStrategy}>
+              {images.map((img) => (
+                <SortableItem
+                  key={img.id}
+                  id={img.id}
+                  img={img}
+                  onRemove={removeImage}
+                />
+              ))}
+            </SortableContext>
+          </ul>
+        </DndContext>
+      </div>
       <ModalMesagge
         isOpen={modalConfig.isOpen}
         title={modalConfig.title}

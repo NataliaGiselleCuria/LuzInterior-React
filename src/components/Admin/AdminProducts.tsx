@@ -4,8 +4,8 @@ import { ListPrice, Products } from "../../Interfaces/interfaces";
 import { useSearch } from "../../CustomHooks/useSearch";
 import AddProductForm from "./AddProductForm";
 import ItemListProduct from "./ItemListProduct";
-import useVerifyToken from "../../CustomHooks/verefyToken";
-import useModal from "../../CustomHooks/modal";
+import useVerifyToken from "../../CustomHooks/useVerefyToken";
+import useModal from "../../CustomHooks/useModal";
 import ModalMesagge from "../Tools/ModalMesagge";
 import { useProduct } from "../../context/ProductProvider";
 import { useForm } from "react-hook-form";
@@ -116,7 +116,7 @@ export const AdminProducts = () => {
                         </button>
                     </div>
                     <div id="panelsStayOpen-collapseOne" className="accordion-collapse collapse">
-                        <div className="accordion-body">
+                        <div className="accordion-body item-cont">
                             <div className="search-container">
                                 <input
                                     className="admin-search"
@@ -126,15 +126,15 @@ export const AdminProducts = () => {
                                     placeholder="Buscar productos..."
                                 />
                             </div>
-                            <ul className="">
+                            <ul className="item-cont column-g-20">
                                 {filteredResults.filter((item): item is Products => 'category' in item && 'price' in item)
                                     .map((prod) => (
                                         <li
                                             key={prod.id}
-                                            className={focusedProductId === prod.id ? 'focused' : ''}
+                                            className={`item-cont shadow-sm left-decoration-grey border-bottom border-top ${focusedProductId === prod.id ? 'focused' : ''}`}
                                             onFocus={() => setFocusedProductId(prod.id)}
                                             onBlur={() => setFocusedProductId(null)}
-                                            tabIndex={0} // Permite que el li pueda recibir foco
+                                            tabIndex={0}
                                         >
                                             <ItemListProduct key={prod.id} product={prod} />
                                         </li>
@@ -164,10 +164,12 @@ export const AdminProducts = () => {
                     </div>
                     <div id="panelsStayOpen-collapseThree" className="accordion-collapse collapse">
                         <div className="accordion-body">
-                            <div className="row li-acordeon">
+                            <div className="row">
                                 <div className="col-md-3">
-                                    <div className="item">
-                                        <h6>Ingrese el porcentaje de aumento</h6>
+                                    <div className="item-cont">
+                                        <label htmlFor="percentageInput">
+                                            <h6>Ingrese el porcentaje de aumento</h6>
+                                        </label>
                                         <input
                                             type="number"
                                             step="0.1"
@@ -177,13 +179,13 @@ export const AdminProducts = () => {
                                             onChange={(e) => setPercentage(parseFloat(e.target.value) || 0)}
                                         />
                                     </div>
-                                    <div className="item">
+                                    <div className="item-cont">
                                         <button className="general-button" onClick={() => handleIncreasePrices(false)}>Aumentar a Todos</button>
                                         <button className="light-button" onClick={() => handleIncreasePrices(true)}>Aumentar a Seleccionados</button>
                                     </div>
                                 </div>
                                 <div className="prods-price-cont col-md-9">
-                                    <div className="item">
+                                    <div className="item-cont">
                                         <h6>Seleccionar productos:</h6>
                                         <div className="search-container">
                                             <input
@@ -197,15 +199,12 @@ export const AdminProducts = () => {
                                         <ul className="ul-prod-price">
                                             {filteredResults.filter((item): item is Products => 'category' in item && 'price' in item).map((product) => (
                                                 <li key={product.id}>
-                                                    
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={selectedProducts.includes(Number(product.id))}
-                                                            onChange={() => toggleProductSelection(Number(product.id))}
-                                                        />
-                                                        <div><p>{product.id} -</p> <p>{product.name} - </p><p>{product.category} -</p><p> ${product.price}</p></div>
-                                                        
-                                                    
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={selectedProducts.includes(Number(product.id))}
+                                                        onChange={() => toggleProductSelection(Number(product.id))}
+                                                    />
+                                                    <div><p>{product.id} -</p> <p>{product.name} - </p><p>{product.category} -</p><p> ${product.price}</p></div>
                                                 </li>
                                             ))}
                                         </ul>
@@ -223,27 +222,42 @@ export const AdminProducts = () => {
                     </div>
                     <div id="panelsStayOpen-collapseFour" className="accordion-collapse collapse">
                         <div className="accordion-body">
-                            <span>
-                                {listPrice[0] ? (
-                                    <>
-                                        <p>Ultima actualización:</p>
-                                        <p>{new Date(new Date(listPrice[0].date + "T00:00:00")).toLocaleDateString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' })}</p>
-                                        {fileUrl ? (
-                                            <a href={fileUrl} download>Descargar última lista cargada.</a>
-                                        ) : (
-                                            <p>No hay archivos disponibles.</p>
-                                        )}
-                                        <button onClick={handleDeleteListPrice}>Eliminar lista actual</button>
-                                    </>
-                                ) : (
-                                    <p>No hay ningun archivo cargado.</p>
-                                )}
-                            </span>
-                            <form onSubmit={handleSubmit(saveNewListPrice)}>
-                                <p>Subir nueva lista de precios:</p>
-                                <input id="pdf-list-price" type="File" {...register('list_price', { required: true })}></input>
-                                <button>Guardar</button>
-                            </form>
+                            <div className="row">
+                                <div className="col-md-5">
+                                    {listPrice[0] ? (
+                                        <>
+                                            <div className="item-cont">
+                                                <div className="item-info align-items-center">
+                                                    <h6 className="pr-20">Ultima actualización:</h6>
+                                                    <p className="fw-medium fs-6">{new Date(new Date(listPrice[0].date + "T00:00:00")).toLocaleDateString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' })}</p>
+                                                </div>
+                                                <div className="button-cont">
+                                                    {fileUrl ? (
+                                                        <button className="light-button"><a href={fileUrl} download>Descargar última lista cargada.</a></button>
+                                                    ) : (
+                                                        <p>No hay archivos disponibles.</p>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <span className="button-cont">
+                                                <button className="no-button" onClick={handleDeleteListPrice}>Eliminar lista actual</button>
+                                            </span>
+                                        </>
+                                    ) : (
+                                        <p>No hay ningun archivo cargado.</p>
+                                    )}
+                                </div>
+                                <form className="col-md-7" onSubmit={handleSubmit(saveNewListPrice)}>
+                                    <div className="item-cont">
+                                        <h6>Subir nueva lista de precios:</h6>
+                                        <div className="button-cont align-items-start">
+                                            <input id="pdf-list-price" type="File" {...register('list_price', { required: true })}></input>
+                                            <button className="general-button">Guardar</button>
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>

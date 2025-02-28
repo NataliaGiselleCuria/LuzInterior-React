@@ -29,7 +29,6 @@ const Login: React.FC<Props> = ({ setRegisterCont, serRecoverCort }) => {
     };
 
     return (
-
         <>
             <h2>Iniciar sesión</h2>
             <div><p>¿Eres un nuevo usuario?</p> <button className="no-button" onClick={() => setRegisterCont(true)}>Crear cuenta</button></div>
@@ -54,9 +53,8 @@ const Login: React.FC<Props> = ({ setRegisterCont, serRecoverCort }) => {
                 </div>
                 <button className="general-button">Ingresar</button>
             </form>
-
             <button className="no-button" onClick={() => serRecoverCort(true)}><p>¿Olvidaste tu contraseña?</p></button>
-            {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+            {errorMessage && <p className='error-login'>{errorMessage}</p>}
         </>
     )
 }

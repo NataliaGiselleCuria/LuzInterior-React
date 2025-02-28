@@ -1,14 +1,7 @@
-- Admin order: las ordenes no pueden filtrarse por email o cuit del usuario. (useSearch).
-- Modal para el mensaje que anunca que no hay ninguna imagen seleccionada cuando se intenta subir una foto con el input vacio.
+
 - arreglar la ruta para mostrar las imagenes del banner en admin.   $targetDir = './uploads/img-banner/mobile/';
-- Las imagenes de los productos deben verse en grande al hacerles click
-- cambiar el tamaño de la cart de 'novedades' en mobile.
 -optimizar imagenes
 -el banner a veces no carga??
--cargar los pedidos del usuario en 'mis pedidos'.
--si se cambia la dirección de la empresa avisar que debería cambiar el iframe del map.
--adm orders -> al total hay que sumarle el envío. detallar subtotal/total
--resatar 'contraseña incorrecta' en login
+
 
 Los email sean mas coherentes con el diseño de la pagina?
-errores ortograficos:

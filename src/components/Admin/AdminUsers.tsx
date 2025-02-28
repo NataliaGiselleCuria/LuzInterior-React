@@ -1,11 +1,12 @@
 import { useApi } from "../../context/ApiProvider"
 import { useUser } from "../../context/UserContext";
-import useModal from "../../CustomHooks/modal";
-import useVerifyToken from "../../CustomHooks/verefyToken";
+import useModal from "../../CustomHooks/useModal";
+import useVerifyToken from "../../CustomHooks/useVerefyToken";
 import ModalMesagge from "../Tools/ModalMesagge";
 import { useSearch } from "../../CustomHooks/useSearch";
 import { Users } from "../../Interfaces/interfaces";
 import { ItemListUser } from "./ItemListUser";
+import { useState } from "react";
 
 
 const AdminUsers = () => {
@@ -14,6 +15,7 @@ const AdminUsers = () => {
     const { validateToken } = useVerifyToken();
     const { modalConfig, openModal, closeModal } = useModal();
     const { searchQuery, filteredResults, handleSearchChange } = useSearch(users, true);
+    const [focusedUsertId, setFocusedUserId] = useState<number | null>(null);
 
     const handleUpdateUserApproved = async (id: number) => {
         const isTokenValid = await validateToken();
@@ -79,29 +81,46 @@ const AdminUsers = () => {
                 <h4>Usuarios</h4>
             </div>
             <div className='row gap-4'>
-                <div className='col-lg'>
-                    <div className="title-page">
+                <div className='col-lg item-cont  border-top'>
+                    <div className="title left-decoration">
                         <h5>Nuevos usuarios:</h5>
                         <p>Los siguientes usuarios esperan aprovación para activar su cuenta:</p>
                     </div>
-                    <ul>
-                        {users.filter((user) => user.new).map((user) => {
-                            return <ItemListUser
-                                key={user.id}
-                                user={user}
-                                openModal={openModal}
-                                handleUpdateUserApproved={handleUpdateUserApproved}
-                                handleDeleteUser={handleDeleteUser}
-                                handleUpdateUserRole={handleUpdateUserRole}
-                            />
-                        })}
-                    </ul>
+                    {users.some(user => user.new) ? (
+                        <ul className=" item-cont column-g-20">
+                            {users.filter(user => user.new).map(user => (
+                                <li key={user.id}
+                                    className={`item-cont shadow-sm left-decoration-grey border-bottom border-top ${focusedUsertId === user.id ? 'focused' : ''}`}
+                                    onFocus={() => setFocusedUserId(user.id)}
+                                    onBlur={() => setFocusedUserId(null)}
+                                    tabIndex={0}>
+
+                                    <ItemListUser
+                                        user={user}
+                                        openModal={openModal}
+                                        handleUpdateUserApproved={handleUpdateUserApproved}
+                                        handleDeleteUser={handleDeleteUser}
+                                        handleUpdateUserRole={handleUpdateUserRole}
+                                    />
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <span className="item-cont">
+                            <p className="text-muted">No hay usuarios nuevos en espera de aprobación.</p>
+                        </span>
+
+                    )}
+
                 </div>
-                <div className="col-lg">
-                    <div className="title-page">
-                        <h5>Usuarios activos:</h5>
+                <div className="col-lg item-cont  border-top">
+                    <div className="title left-decoration">
+                        <label htmlFor="admin-search-users">
+                            <h5>Usuarios activos:</h5>
+                        </label>
                         <div className="search-container">
                             <input
+                                id="admin-search-users"
                                 className="admin-search"
                                 type="text"
                                 value={searchQuery}
@@ -110,17 +129,24 @@ const AdminUsers = () => {
                             />
                         </div>
                     </div>
-                    <ul>
-                        {filteredResults.filter((item): item is Users => 'approved' in item && !item.new).map((user) => {
-                            return <ItemListUser
-                                key={user.id}
-                                user={user}
-                                openModal={openModal}
-                                handleUpdateUserApproved={handleUpdateUserApproved}
-                                handleDeleteUser={handleDeleteUser}
-                                handleUpdateUserRole={handleUpdateUserRole}
-                            />
-                        })}
+                    <ul className=" item-cont column-g-20">
+                        {filteredResults.filter((item): item is Users => 'approved' in item && !item.new).map((user) => (
+                            <li key={user.id}
+                                className={`item-cont shadow-sm left-decoration-grey border-bottom border-top ${focusedUsertId === user.id ? 'focused' : ''}`}
+                                onFocus={() => setFocusedUserId(user.id)}
+                                onBlur={() => setFocusedUserId(null)}
+                                tabIndex={0}>
+
+                                <ItemListUser
+                                    key={user.id}
+                                    user={user}
+                                    openModal={openModal}
+                                    handleUpdateUserApproved={handleUpdateUserApproved}
+                                    handleDeleteUser={handleDeleteUser}
+                                    handleUpdateUserRole={handleUpdateUserRole}
+                                />
+                            </li>
+                        ))}
                     </ul>
                 </div>
             </div>

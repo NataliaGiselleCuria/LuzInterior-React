@@ -36,29 +36,34 @@ export const AdminPanel = () => {
 
     return (
         <div className="cont container">
-            <div className="title-page">
-                <h5>Panel de administrador</h5>
-                <span className="line"></span>
-            </div>
-            <div className="nav-opc">
-                <ul className="ul-row-nopadding opc-adm">
-                {[
-                        { id: 'pedidos', label: 'Pedidos' },
-                        { id: 'usuarios', label: 'Usuarios' },
-                        { id: 'productos', label: 'Productos' },
-                        { id: 'envios', label: 'Envíos' },
-                        { id: 'preguntas-frecuentes', label: 'Preguntas Frecuentes' },
-                        { id: 'imagenes', label: 'Imágenes' },
-                        { id: 'cuenta', label: 'Cuenta' }
-                    ].map(({ id, label }) => (
-                        <li key={id} className={selectedOption === id ? 'active' : ''}>
-                            <button onClick={() => setSelectedOption(id)}>{label}</button>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-            <div className="opc-render container">
-                {selectedOption && renderOpc(selectedOption)}
+            <div className="row h-100">
+                <div className="nav-opc col-md-3 col-lg-2">
+                    <span className="back"></span>
+                    <div className="title-page">
+                        <h6>Panel de administrador</h6>
+                        <span className="line"></span>
+                    </div>
+                    <ul className="ul-row-nopadding opc-adm">
+                        {[
+                            { id: 'pedidos', label: 'Pedidos' },
+                            { id: 'usuarios', label: 'Usuarios' },
+                            { id: 'productos', label: 'Productos' },
+                            { id: 'envios', label: 'Envíos' },
+                            { id: 'preguntas-frecuentes', label: 'Preguntas Frecuentes' },
+                            { id: 'imagenes', label: 'Imágenes' },
+                            { id: 'cuenta', label: 'Cuenta' }
+                        ].map(({ id, label }) => (
+                            <li key={id} className={selectedOption === id ? 'active' : ''}>
+                                <button onClick={() => setSelectedOption(id)}>{label}</button>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+                <div className="opc-render col-md-9 col-lg-10">
+                    <div className="opc-render-cont w-100">
+                        {selectedOption && renderOpc(selectedOption)}
+                    </div>
+                </div>
             </div>
         </div>
     )

@@ -102,6 +102,7 @@
 .login-cont form button {
     margin-top: 10px;
     background-color: rgb(43, 42, 42);
+    box-shadow: 2px 2px 3px #3f3f3fad !important;
 }
 
 .close-login {
@@ -112,12 +113,13 @@
     left: 20px;
 }
 
-p.recover-pass {
+.error-login,
+.recover-pass {
     width: 90%;
     border: 1px solid grey;
-    padding: 10px;
+    text-align: center;
+    padding: 5px;
 }
-
 
 
 /* Account User */
@@ -127,13 +129,11 @@ p.recover-pass {
     gap: 40px;
     height: 100%;
     min-height: fit-content;
-}
-
-.account-user .title-page {
-    padding: 0;
+    max-width: 90dvw;
 }
 
 .col-name-user {
+    min-height: calc(100dvh - 100px);
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -204,12 +204,13 @@ p.recover-pass {
 .form-inputs span {
     display: flex;
     flex-direction: column;
-    width: 180px;
 }
 
 .form-buttons {
     display: flex;
+    justify-content: space-between;
     gap: 10px;
+    margin-top: 10px;
 }
 
 .addresses-ul {
@@ -231,6 +232,7 @@ p.recover-pass {
 }
 
 .address-cont {
+    min-height: 210px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -240,6 +242,8 @@ p.recover-pass {
     display: flex;
     gap: 5px;
     align-items: anchor-center;
+    text-decoration: underline;
+    margin-top: 5px;
 }
 
 .default-address img {
@@ -249,7 +253,6 @@ p.recover-pass {
 
 .address-button {
     width: 300px;
-    margin-left: 20px;
 }
 
 
@@ -257,16 +260,25 @@ p.recover-pass {
 @media (max-width: 768px) {
     .account-user {
         gap: 10px;
+        justify-self: center;
     }
 
     .col-name-user {
-
+        min-height: unset;
         gap: 5px;
     }
 
     .icon-user {
         width: 70px;
         height: 70px;
+    }
+
+    .col-name-user .title-page{
+        margin-top: 0;
+    }
+
+    .form-inputs {
+        grid-template-columns: unset;
     }
 }
 

@@ -2,12 +2,12 @@
 import { useUser } from "../../context/UserContext";
 import { useForm } from "react-hook-form";
 import { FormAccountInformation, FormSocial } from "../../Interfaces/interfaces";
-import useModal from "../../CustomHooks/modal";
-import { useUpdateUserInfo } from "../../CustomHooks/updateUserInfo";
+import useModal from "../../CustomHooks/useModal";
+import { useUpdateUserInfo } from "../../CustomHooks/useUpdateUserInfo";
 import ModalMesagge from "../Tools/ModalMesagge";
 import { useApi } from "../../context/ApiProvider";
 import React from "react";
-import useVerifyToken from "../../CustomHooks/verefyToken";
+import useVerifyToken from "../../CustomHooks/useVerefyToken";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
 
@@ -69,7 +69,7 @@ const AdminAccount = () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({data, token}),
+                body: JSON.stringify({ data, token }),
             });
 
             const result = await response.json();
@@ -104,7 +104,7 @@ const AdminAccount = () => {
             const response = await fetch(`${dev}/index.php?action=update_social`, {
                 method: "POST",
                 headers: {
-                    
+
                 },
                 body: formData,
             });
@@ -133,11 +133,11 @@ const AdminAccount = () => {
             const response = await fetch(`${dev}/index.php?action=delete-social`, {
                 method: "POST",
                 headers: {
-                
+
                 },
                 body: JSON.stringify({ id, token }),
             });
-    
+
             const result = await response.json();
             if (!response.ok || !result.success) {
                 openModal("Error", `Error al eliminar la red social",  ${result.message}`, closeModal);
@@ -152,89 +152,106 @@ const AdminAccount = () => {
     };
 
     const openInfoMap = () => {
-        openModal("Mapa interactivo", 
-            "Este mapa se verá en la página de Contacto. Modifique el valor de este campo si cambia la Dirección de la tienda. Para insertar el nuevo valor, ingresa a Google Maps y busca en el mapa la nueva dirección. Haz clic en el botón de compartir (ícono de enlace), selecciona la opción 'Insertar un mapa' y copia el código <iframe> generado o el enlace de inserción. Pega este enlace en el campo de 'Mapa interactivo' y guarda los cambios.", 
+        openModal("Mapa interactivo",
+            "Este mapa se verá en la página de Contacto. Modifique el valor de este campo si cambia la Dirección de la tienda. Para insertar el nuevo valor, ingresa a Google Maps y busca en el mapa la nueva dirección. Haz clic en el botón de compartir (ícono de enlace), selecciona la opción 'Insertar un mapa' y copia el código <iframe> generado o el enlace de inserción. Pega este enlace en el campo de 'Mapa interactivo' y guarda los cambios.",
             closeModal);
-    } 
-   
-    return (
-        <>
-            <h3>Cuenta</h3>
-            <h5>{userActive?.email}</h5>
-            <div>
-                <h5>Informacion de cuenta</h5>
-                <p>Actualiza tu clave de ingreso</p>
-                <form onSubmit={accountHandleSubmit(handleAccountInformation)}>
-                    <span>
-                        <label htmlFor="password">Contraseña</label>
-                        <input id="password" type="password" {...accountRegister('password')}></input>
-                    </span>
-                    <span><button>Actualizar</button></span>
-                </form>
-            </div>
-            <div>
-                <h5>Información de la empresa</h5>
-                <form onSubmit={companyHandleSubmit(companySubmit)}>
-                    {companyInfo.map((key) => (
-                        <div key={key.key}>
-                            <label>{companyInfoLabels(key.key)}: </label>
-                            <input
-                                type="text"
-                                {...companyRegister(key.key)}
-                                defaultValue={key.value ?? ""}
-                            />
-                        </div>
-                    ))}
-                    <button type='button' onClick={() => openInfoMap()}> Info mapa interactivo</button>
-                    <button type="submit">Guardar Cambios</button>
-                </form>
-            </div>
-            <div>
-                <h5>Redes sociales</h5>
-                <p>Agrega nuevas redes sociales de la empresa o modifica las existentes.</p>
-                <form onSubmit={socialHandleSubmit(socialSubmit)}>
-                    <div>
-                        <label>Nombre de la Red Social:</label>
-                        <input {...socialRegister("id", { required: "Este campo es obligatorio" })} />
-                    </div>
-                    <div>
-                        <label>URL:</label>
-                        <input
-                            type="url"
-                            {...socialRegister("social_url", {
-                                required: "Este campo es obligatorio",
-                                pattern: {
-                                    value: /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w-]*)*\/?$/,
-                                    message: "Ingrese una URL válida",
-                                },
-                            })}
-                        />
-                    </div>
-                    <div>
-                        <label>Imagen</label>
-                        <input
-                            type="file"
-                            {...socialRegister("img_social", { required: "Seleccione una imagen" })}
-                        />
-                    </div>
+    }
 
-                    <button type="submit">Agregar</button>
-                </form>
-                <div>
-                    <ul>
-                        {social.map((item) => (
-                            <li key={item.id}>
-                                <span>
-                                    <p>{item.id}</p>
-                                    <p>{item.url}</p>
-                                    <LazyLoadImage src={`${dev}/${item.img_social}`} alt={item.id} width="50" height="50" />
-                                </span>
-                                <span>
-                                    <button onClick={() => deleteSocial(item.id)}>Eliminar</button>
-                                </span>
-                            </li>
-                        ))}
-                    </ul>
+    return (
+        <div className="w-100 account">
+            <div className="title-page">
+                <h4>Cuenta</h4>
+            </div>
+            <div className="row">
+                <div className="col-md">
+                    <div className="item-cont border-top">
+                        <div className="title left-decoration">
+                            <h5>Informacion de cuenta</h5>
+                            <p>Actualiza tu clave de ingreso</p>
+                        </div>
+                        <form className="item-cont" onSubmit={accountHandleSubmit(handleAccountInformation)}>
+                            <div className="item-form">
+                                <label htmlFor="password">Contraseña</label>
+                                <input id="password" type="password" {...accountRegister('password')}></input>
+                            </div>
+                            <span className="button-cont">
+                                <button className="general-button">Actualizar</button>
+                            </span>
+                        </form>
+                    </div>
+                    <div className="item-cont border-top">
+                        <div className="title  left-decoration">
+                            <h5>Información de la empresa</h5>
+                        </div>
+                        <form className="item-cont" onSubmit={companyHandleSubmit(companySubmit)}>
+                            {companyInfo.map((key) => (
+                                <div className="item-form" key={key.key}>
+                                    <label htmlFor={companyInfoLabels(key.key)}>{companyInfoLabels(key.key)}: </label>
+                                    <input
+                                        id={companyInfoLabels(key.key)}
+                                        type="text"
+                                        {...companyRegister(key.key)}
+                                        defaultValue={key.value ?? ""}
+                                    />
+                                </div>
+                            ))}
+                            <div className="button-cont">
+                                <button className="light-button" type='button' onClick={() => openInfoMap()}> Info mapa interactivo</button>
+                                <button className="general-button" type="submit">Guardar Cambios</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div className="col-md">
+                    <div className="item-cont border-top">
+                        <div className="title  left-decoration">
+                            <h5>Redes sociales</h5>
+                            <p>Agrega nuevas redes sociales de la empresa o modifica las existentes.</p>
+                        </div>
+                        <form className="item-cont" onSubmit={socialHandleSubmit(socialSubmit)}>
+                            <div className="item-form">
+                                <label htmlFor="id">Nombre de la Red Social:</label>
+                                <input {...socialRegister("id", { required: "Este campo es obligatorio" })} />
+                            </div>
+                            <div className="item-form">
+                                <label htmlFor="social_url">URL:</label>
+                                <input
+                                    type="url"
+                                    {...socialRegister("social_url", {
+                                        required: "Este campo es obligatorio",
+                                        pattern: {
+                                            value: /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w-]*)*\/?$/,
+                                            message: "Ingrese una URL válida",
+                                        },
+                                    })}
+                                />
+                            </div>
+                            <div className="item-form">
+                                <label htmlFor="img_social">Imagen</label>
+                                <div className="button-cont align-items-start">
+                                    <input
+                                        type="file"
+                                        {...socialRegister("img_social", { required: "Seleccione una imagen" })}
+                                    />
+                                    <button className="general-button" type="submit">Agregar</button>
+                                </div>
+                            </div>
+                        </form>
+                        <ul className="ul-row-nopadding">
+                            {social.map((item) => (
+                                <li key={item.id} className="li-social">
+                                    <div className="item-cont">
+                                        <p>{item.id}</p>
+                                        <p>{item.url}</p>
+                                        <span className="button-cont">
+                                            <LazyLoadImage src={`${dev}/${item.img_social}`} alt={item.id} width="50" height="50" />
+                                            <button className="no-button" onClick={() => deleteSocial(item.id)}>Eliminar</button>
+                                        </span>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
                 </div>
             </div>
             <ModalMesagge
@@ -246,7 +263,7 @@ const AdminAccount = () => {
                 confirmText={modalConfig.confirmText}
                 cancelText={modalConfig.cancelText}
             />
-        </>
+        </div>
 
     )
 }

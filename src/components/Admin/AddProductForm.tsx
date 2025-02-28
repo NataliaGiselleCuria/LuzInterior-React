@@ -6,8 +6,8 @@ import FormImg from "../Tools/FormImg";
 import { useApi } from "../../context/ApiProvider";
 import { useProduct } from "../../context/ProductProvider";
 import ModalMesagge from "../Tools/ModalMesagge";
-import useModal from "../../CustomHooks/modal";
-import useVerifyToken from "../../CustomHooks/verefyToken";
+import useModal from "../../CustomHooks/useModal";
+import useVerifyToken from "../../CustomHooks/useVerefyToken";
 import './admin.css'
 
 
@@ -129,7 +129,7 @@ const AddProductForm = () => {
     return (
         <div className="">
             <form className="add-prod">
-                <div className="item">
+                <div className="item-cont">
                     <h6>Categorías actuales:</h6>
                     <p>Elige una de las categorías existentes o ingresa una nueva.</p>
                     <ul className="ul-row-nopadding ul-categories">
@@ -140,21 +140,21 @@ const AddProductForm = () => {
                 </div>
                 <div className="li-product-cont">
                     <div className="item-info">
-                        <div className="item-form">
-                            <label className="fw-medium" htmlFor="id">ID: </label>
+                        <div className="item-form pr-20">
+                            <label htmlFor="id">ID: </label>
                             <input id="id" type="text" {...register('id', { required: true })} onChange={handleIdChange}></input>
                             {!isIdValid && <p style={{ color: "red" }}>El ID ya está registrado</p>}
                         </div>
-                        <div className="item-form">
-                            <label className="fw-medium" htmlFor="name">Nombre: </label>
+                        <div className="item-form pr-20">
+                            <label htmlFor="name">Nombre: </label>
                             <input id="name" type="text" {...register('name', { required: true })} disabled={!isIdValid}></input>
                         </div>
-                        <div className="item-form">
-                            <label className="fw-medium" htmlFor="category">Categoría: </label>
+                        <div className="item-form pr-20">
+                            <label htmlFor="category">Categoría: </label>
                             <input id="category" type="text" {...register('category', { required: true })} disabled={!isIdValid}></input>
                         </div>
-                        <div className="item-form">
-                            <label className="fw-medium" htmlFor="price">Precio: </label>
+                        <div className="item-form pr-20">
+                            <label htmlFor="price">Precio: </label>
                             <input id="price" type="number" {...register('price', { required: true })} disabled={!isIdValid}></input>
                         </div>
                     </div>
@@ -163,7 +163,7 @@ const AddProductForm = () => {
                         apiKey='l8lb42gic93aurxg94l1ijzbitffo8i746rsk9q9fmazi1th'
                         onEditorChange={handleEditorChange}
                         init={{
-                            height: 300,
+                            height: 500,
                             menubar: false,
                             plugins: 'lists link image table code',
                             toolbar:
@@ -172,7 +172,7 @@ const AddProductForm = () => {
                     />
                     <textarea className="description-textarea" id="description" {...register('description', { required: true })}></textarea>
                     <div className="button-cont">
-                        <span className="button-check">Marcar como novedad: <input type="checkbox" id="novelty" {...register('novelty')} disabled={!isIdValid}></input></span>
+                        <span className="button-check"><label htmlFor="novelty">Marcar como novedad: </label><input type="checkbox" id="novelty" {...register('novelty')} disabled={!isIdValid}></input></span>
                         <button className="light-button" type="button" onClick={addImg} disabled={!isIdValid}>Agregar imagenes</button>
                     </div>
                 </div>

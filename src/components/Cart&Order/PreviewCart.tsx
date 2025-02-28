@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import ProductsInCart from '../Tools/ProductsInCart';
 import { useCart } from '../../context/CartProvider';
 import { useUser } from '../../context/UserContext';
-import useCurrencyFormat from '../../CustomHooks/currencyFormat';
+import useCurrencyFormat from '../../CustomHooks/useCurrencyFormat';
 import './cart.css'
 
 interface PreviewCartProps {

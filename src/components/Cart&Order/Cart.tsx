@@ -2,14 +2,15 @@
 import { Link } from "react-router-dom";
 import { useCart } from "../../context/CartProvider";
 import ProductsInCart from "../Tools/ProductsInCart";
-import useCurrencyFormat from "../../CustomHooks/currencyFormat";
+import useCurrencyFormat from "../../CustomHooks/useCurrencyFormat";
 import { useUser } from "../../context/UserContext";
 
 const Cart = () => {
 
   const { isLogin } = useUser();
-  const { totalPrice } = useCart();
+  const { totalPrice, cart } = useCart();
   const formatCurrency = useCurrencyFormat();
+  const isCartEmpty = cart.length === 0;
 
   return (
     <div className="cont container">
@@ -34,7 +35,7 @@ const Cart = () => {
                 <h4>Resumen del pedido</h4><span className="line"></span>
               </div>
               <div className="cart-total">
-                {isLogin ? (
+                {isLogin && !isCartEmpty? (
                   <>
                     <span className="d-flex align-items-baseline gap-2">
                     <h6>Subtotal:</h6><h5>{formatCurrency(totalPrice)}</h5>
@@ -43,7 +44,12 @@ const Cart = () => {
                   </>
                 ) : null}
               </div>
-              <Link to='/checkout'><button className="general-button">Realizar orden de compra</button></Link>
+              <Link to={isCartEmpty ? "#" : "/checkout"}>
+                <button className="general-button" disabled={isCartEmpty}>
+                  Realizar orden de compra
+                </button>
+              </Link>
+              {isCartEmpty && <p className="empty-cart-warning">Agrega productos para continuar con la compra.</p>}
             </div>
           </div>
         </div>

@@ -3,15 +3,17 @@ import AdminGallery from "./ItemGallery"
 
 const AdminImages = () => {
     return (
-        <div>
-            <h3>Galería de Imágenes / Imagenes de banner</h3>
-            <div className="accordion" id="accordionPanelsStayOpenExample">
+        <div className="w-100">
+             <div className="title-page">
+                <h4>Imágenes</h4>
+            </div>
+            <div className="accordion images" id="accordionPanelsStayOpenExample">
                 <div id="gallery" className="accordion-item">
-                    <h2 className="accordion-header">
+                    <div className="accordion-header">
                         <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
-                            Galería
+                            <h6>Imagenes de la Galería</h6>
                         </button>
-                    </h2>
+                    </div>
                     <div id="panelsStayOpen-collapseOne" className="accordion-collapse collapse">
                         <div className="accordion-body">
                             <AdminGallery></AdminGallery>
@@ -19,11 +21,11 @@ const AdminImages = () => {
                     </div>
                 </div>
                 <div id="prods-list-price" className="accordion-item">
-                    <h2 className="accordion-header">
+                    <div className="accordion-header">
                         <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour">
-                           Banner home
+                        <h6>Imágenes del Banner-home</h6>  
                         </button>
-                    </h2>
+                    </div>
                     <div id="panelsStayOpen-collapseFour" className="accordion-collapse collapse">
                         <div className="accordion-body">
                             <ItemBanner></ItemBanner>

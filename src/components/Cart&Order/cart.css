@@ -225,7 +225,6 @@
 .cart-prod-list .ul-cart li .cart-prod-info .prod-info,
 .ul-cart li .cart-prod-info,
 .prod-chekout-container .ul-cart li .cart-prod-info .prod-info {
-    align-items: flex-start;
     width: 80%;
 }
 
@@ -261,6 +260,10 @@
     position: relative;
 }
 
+.empty-cart-warning{
+    margin-top: 20px!important;
+}
+
 /* checkOut */
 
 .checkOut{
@@ -272,6 +275,10 @@
     width: 1200px !important;
     margin: 50px;
     margin-top: 25px;
+}
+
+.ckeckout.login-cont {
+    min-height: unset;
 }
 
 .nav-checkout {
@@ -288,10 +295,8 @@
     object-fit: contain;
 }
 
-.checkOut-info {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+.checkout-button {
+    padding: 2px 14px;
 }
 
 .no-button {
@@ -304,16 +309,16 @@
     border-radius: 0;
 }
 
-.checkOut-info .title-page {
-    padding: 0;
-}
-
-.checkOut-info .title-page button {
-    padding: 2px 15px;
-}
-
 .info-save {
     color: var(--grey);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.checkOut .item-cont span{
+    margin-bottom: 5px;
+
 }
 
 .item-cont,
@@ -322,14 +327,14 @@
     max-width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-
+    gap: 5px;
+    
 }
 
 .item-cont {
-    padding-top: 10px;
-    border-top: 1px solid #7d7d7d6e;
+    padding: 15px 0;
     width: 100%;
+    border-radius: 5px;
 }
 
 .option-cont {
@@ -407,6 +412,8 @@
     display: flex;
     align-items: baseline;
     justify-content: space-between;
+    line-height: normal;
+    margin-bottom: 5px;
 }
 
 .checkout-total-item.total span:last-child {
@@ -423,6 +430,27 @@
 
 .checkout-total-item.total {
     border-top: 1px solid var(--grey);
+    padding-top: 5px;
+}
+
+/* confirmation */
+
+.confirmation-message {
+    position: relative;
+    border: 1px solid var(--light);
+    padding: 20px;
+}
+
+.confirmation-message p:first-of-type{
+    font-size: 20px;
+    font-weight: 500;
+    text-transform: uppercase;
+    margin-bottom: 5px !important;
+}
+
+.order-details{  
+    padding: 20px 30px 0 30px;
+    border: 1px solid var(--light);
 }
 
 @media (max-width: 992px) {

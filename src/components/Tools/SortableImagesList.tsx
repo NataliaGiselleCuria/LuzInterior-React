@@ -1,5 +1,5 @@
 import { DndContext, closestCenter } from "@dnd-kit/core";
-import { SortableContext, arrayMove, horizontalListSortingStrategy } from "@dnd-kit/sortable";
+import { SortableContext, arrayMove, rectSwappingStrategy } from "@dnd-kit/sortable";
 import SortableItem from "./SortableItem";
 import { FormImgsProduct } from "../../Interfaces/interfaces";
 import { useCallback } from "react";
@@ -51,8 +51,8 @@ const SortableImageList: React.FC<SortableImageListProps> = ({ images, setImages
 
     return (
         <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-            <ul className="ul-row-nopadding">
-                <SortableContext items={images} strategy={horizontalListSortingStrategy}>
+            <ul className="ul-row-nopadding sortableContext">
+                <SortableContext items={images} strategy={rectSwappingStrategy}>
                     {images.map((img, index) => (
                         <SortableItem key={`${img.id}-${index}`} id={img.id} img={img} onRemove={removeImage} />
                     ))}

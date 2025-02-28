@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import ModalMesagge from '../Tools/ModalMesagge';
-import useVerifyToken from '../../CustomHooks/verefyToken';
+import useVerifyToken from '../../CustomHooks/useVerefyToken';
 import { useForm } from 'react-hook-form';
-import useModal from '../../CustomHooks/modal';
+import useModal from '../../CustomHooks/useModal';
 import { useApi } from '../../context/ApiProvider';
 import { FormImgs } from '../../Interfaces/interfaces';
 import { DndContext, closestCenter } from '@dnd-kit/core';
@@ -81,8 +81,8 @@ const ItemBanner = () => {
                 updateBanner(updatedPriorities, 'mobile'); // Actualiza tanto las prioridades como el link
                 return updatedImages;
             });
-           
-            
+
+
         }
     };
 
@@ -115,8 +115,8 @@ const ItemBanner = () => {
 
                 formData.append("link", imageLink || "");
                 formData.append("type", uploadType);
-                formData.append("token", token || "");   
-              
+                formData.append("token", token || "");
+
                 const response = await fetch(`${dev}/index.php?action=add-banner`, {
                     method: "POST",
                     body: formData,
@@ -201,7 +201,7 @@ const ItemBanner = () => {
             const updatedPriorities = updatedImages.map((img) => ({
                 id: img.id,
                 priority: img.priority,
-                link:img.link
+                link: img.link
             }));
 
             updateBanner(updatedPriorities, 'mobile');
@@ -222,7 +222,7 @@ const ItemBanner = () => {
         const updatedPriorities = updatedImages.map((img) => ({
             id: img.id,
             priority: img.priority,
-            link:img.link
+            link: img.link
         }));
 
         updateBanner(updatedPriorities, 'desktop');
@@ -248,7 +248,7 @@ const ItemBanner = () => {
         updateBanner(updatedPriorities, 'mobile');
     };
 
-    const updateBanner = async (updatedPriorities: Array<{ id: string; priority: number, link:string | null}>, uploadType: string) => {
+    const updateBanner = async (updatedPriorities: Array<{ id: string; priority: number, link: string | null }>, uploadType: string) => {
         const payload = {
             images: updatedPriorities.map((img) => ({
                 id: img.id,
@@ -266,11 +266,11 @@ const ItemBanner = () => {
             }
 
             const token = localStorage.getItem('user_token')
-            
+
             const url = uploadType === 'desktop'
-            ? `${dev}/index.php?action=update-banner-desktop`
-            : `${dev}/index.php?action=update-banner-mobile`;
-        
+                ? `${dev}/index.php?action=update-banner-desktop`
+                : `${dev}/index.php?action=update-banner-mobile`;
+
             fetch(url, {
                 method: 'POST',
                 headers: {
@@ -292,93 +292,110 @@ const ItemBanner = () => {
     };
 
     return (
-        <div className="ul-row-nopadding img-form">
-            <span>
-                <h4>Desktop:</h4>
-                <form onSubmit={(e) => addImage(e, 'desktop')}>
-                    <div>
-                        <input
-                            type="file"
-                            id="url"
-                            accept="image/*"
-                            {...registerDesktop("url")}
-                            onChange={handleFileChange}
-                            multiple
-                        />
+        <div className="img-form">
+            <div className='item-cont'>
+                <div className='item'>
+                    <div className='title'>
+                        <h5>Desktop:</h5>
                     </div>
-
-                    <button type="submit">Agregar imagen</button>
-                </form>
-                <h5>Imágenes añadidas:</h5>
-                <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEndDesktop}>
-                    <ul className="ul-row-nopadding">
-                        <SortableContext items={desktopImages} strategy={rectSwappingStrategy}>
-                            {desktopImages.map((img) => (
-                                <span key={img.id}>
-                                    <SortableItem
-                                        key={img.id}
-                                        id={img.id}
-                                        img={img}
-                                        onRemove={removeImageDesktop}
-                                    />
-                                    <span>
-                                        <label htmlFor={`link-${img.id}`}>Link</label>
-                                        <input
-                                            id={`link-${img.id}`}
-                                            value={img.link || ""}
-                                            type='text'
-                                            onChange={(e) => handleLinkChange(img.id, e.target.value, 'desktop')}
-                                        ></input>
-                                    </span>
-                                </span>
-                            ))}
-                        </SortableContext>
-                    </ul>
-                </DndContext>
-            </span>
-            <span>
-                <h4>Mobile:</h4>
-                <form onSubmit={(e) => addImage(e, 'mobile')}>
-                    <div>
-                        <input
-                            type="file"
-                            id="url"
-                            accept="image/*"
-                            {...registerMobile("url")}
-                            onChange={handleFileChange}
-                            multiple
-                        />
+                    <form onSubmit={(e) => addImage(e, 'desktop')}>
+                        <div className="button-cont align-items-start">
+                            <input
+                                type="file"
+                                id="url"
+                                accept="image/*"
+                                {...registerDesktop("url")}
+                                onChange={handleFileChange}
+                                multiple
+                            />
+                            <button className="general-button" type="submit">Agregar imagen</button>
+                        </div>
+                    </form>
+                </div>
+                <div className='item'>
+                    <div className='title'>
+                        <h5>Imágenes añadidas:</h5>
                     </div>
-                    <button type="submit">Agregar imagen</button>
-                </form>
-                <h5>Imágenes añadidas:</h5>
-                <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEndMobile}>
-                    <ul className="ul-row-nopadding">
-                        <SortableContext items={mobileImages} strategy={rectSwappingStrategy}>
-                            {mobileImages.map((img) => (
-                                <span key={img.id}>
-                                    <SortableItem
-                                        key={img.id}
-                                        id={img.id}
-                                        img={img}
-                                        onRemove={removeImageMobile}
-                                    />
-                                    <span>
-                                        <label htmlFor={`link-${img.id}`}>Link</label>
-                                        <input
-                                            id={`link-${img.id}`}
-                                            value={img.link || ""}
-                                            type='text'
-                                            onChange={(e) => handleLinkChange(img.id, e.target.value, 'mobile')}>
-                                        </input>
+                    <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEndDesktop}>
+                        <ul className="ul-row-nopadding sortableContext">
+                            <SortableContext items={desktopImages} strategy={rectSwappingStrategy}>
+                                {desktopImages.map((img) => (
+                                    <span key={img.id}>
+                                        <SortableItem
+                                            key={img.id}
+                                            id={img.id}
+                                            img={img}
+                                            onRemove={removeImageDesktop}
+                                        />
+                                        <span>
+                                            <label htmlFor={`link-${img.id}`}>Link</label>
+                                            <input
+                                                id={`link-${img.id}`}
+                                                value={img.link || ""}
+                                                type='text'
+                                                onChange={(e) => handleLinkChange(img.id, e.target.value, 'desktop')}
+                                            ></input>
+                                        </span>
                                     </span>
-                                </span>
-                            ))}
+                                ))}
+                            </SortableContext>
+                        </ul>
+                    </DndContext>
+                </div>
+            </div>
+            <div className='item-cont'>
+                <div className='item'>
+                    <div className='title'>
+                        <h5>Mobile:</h5>
+                    </div>
+                    <form onSubmit={(e) => addImage(e, 'mobile')}>
+                        <div className="button-cont align-items-start">
+                            <input
+                                type="file"
+                                id="url"
+                                accept="image/*"
+                                {...registerMobile("url")}
+                                onChange={handleFileChange}
+                                multiple
+                            />
+                            <button className="general-button" type="submit">Agregar imagen</button>
+                        </div>
 
-                        </SortableContext>
-                    </ul>
-                </DndContext>
-            </span>
+                    </form>
+                </div>
+                <div className='item'>
+                    <div className='title'>
+                        <h5>Imágenes añadidas:</h5>
+                    </div>
+                    <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEndMobile}>
+                        <ul className="ul-row-nopadding sortableContext">
+                            <SortableContext items={mobileImages} strategy={rectSwappingStrategy}>
+                                {mobileImages.map((img) => (
+                                    <span key={img.id}>
+                                        <SortableItem
+                                            key={img.id}
+                                            id={img.id}
+                                            img={img}
+                                            onRemove={removeImageMobile}
+                                        />
+                                        <span>
+                                            <label htmlFor={`link-${img.id}`}>Link</label>
+                                            <input
+                                                id={`link-${img.id}`}
+                                                value={img.link || ""}
+                                                type='text'
+                                                onChange={(e) => handleLinkChange(img.id, e.target.value, 'mobile')}>
+                                            </input>
+                                        </span>
+                                    </span>
+                                ))}
+
+                            </SortableContext>
+                        </ul>
+                    </DndContext>
+                </div>
+
+            </div>
             <ModalMesagge
                 isOpen={modalConfig.isOpen}
                 title={modalConfig.title}

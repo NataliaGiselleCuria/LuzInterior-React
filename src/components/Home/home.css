@@ -2,7 +2,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 15px;
+    padding: 10px;
 }
 
 .banner-wholesalers span:not(.line) {
@@ -41,9 +41,11 @@ span.line {
 }
 
 #carousel-home-desktop {
-    height: calc(100dvh - 300px);
+    height: calc(100dvh - 235px);
     min-height: 600px;
-    margin-bottom: 50px;
+    display: flex;
+    justify-content: center;
+    overflow-y: clip;
 }
 
 .carousel-inner,
@@ -52,13 +54,24 @@ span.line {
     width: auto;
     object-fit: contain;
     justify-items: center;
+    position: relative;
+    overflow: visible!important;
 }
 
-.carousel-item img {
+.back-carousel{
+    position: absolute;
+    top: 0;
+    align-self: center;
+    min-width: 100dvw;
+    height: 100%;
+    background-color: var(--back-light);
+    overflow: hidden;
+}
+
+#carousel-home-mobile .carousel-item img {
     height: 100%;
     width: auto;
-    max-width: 100%;
-    object-fit: contain;
+    object-fit: cover;
     justify-self: center;
 }
 
@@ -93,25 +106,13 @@ span.line {
 
 .custom-shape-divider-top-1687544512 {
     position: absolute;
+    top: 0;
     align-self: center;
     width: 2000px;
     min-width: 100dvw;
-    height: calc(100% + 100px);
-    top: -100px;
-    background-color: #bbb3a98f;
+    height: calc(100% + 70px);
+    background-color: var(--back-light);
     overflow: hidden;
-    filter: opacity(0.5);
-  }
-  
-  .custom-shape-divider-top-1687544512 svg {
-    position: relative;
-    display: block;
-    width: calc(100% + 1.3px);
-    height: 150px;
-  }
-  
-  .custom-shape-divider-top-1687544512 .shape-fill {
-    fill: #FFFFFF;
   }
 
 .latest-releases .title-page {
@@ -152,16 +153,14 @@ span.line {
 }
 
 @media (max-width: 768px) {
-    #carousel-home-mobile {
-        height: calc(100dvh - 200px);
-        max-height: 700px;
-        min-height: 500px;
-        margin-bottom: 50px;
+    #carousel-home-desktop{
+        display: none;
     }
 
-    .custom-shape-divider-top-1687544512 {
-        height: calc(100% + 45px);
-        top: -45px;
+    #carousel-home-mobile {
+        height: calc(100vh - 190px);
+        max-height: 700px;
+        min-height: 80dvh;
     }
 }
 
@@ -198,9 +197,6 @@ span.line {
 }
 
 @media (max-width: 400px) {
-    #carousel-home-mobile {
-        max-height: 400px;
-    }
 
     .latest-releases-cont {
         grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));

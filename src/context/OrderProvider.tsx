@@ -3,7 +3,7 @@ import { Address, Orders, OrderContextType, ProductInCart, Shipping, Response, U
 import { useApi } from "./ApiProvider";
 import { useUser } from "./UserContext";
 import { NavigateFunction } from "react-router-dom";
-import useVerifyToken from "../CustomHooks/verefyToken";
+import useVerifyToken from "../CustomHooks/useVerefyToken";
 import { useCart } from "./CartProvider";
 
 

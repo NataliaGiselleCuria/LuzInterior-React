@@ -5,7 +5,7 @@ import { Editor } from '@tinymce/tinymce-react';
 
 export interface ItemListFaqtProps {
     faq: Faq;
-    updateFaq: (data: Faq) => Promise<boolean>; 
+    updateFaq: (data: Faq) => Promise<boolean>;
 }
 
 const ItemListFaq = ({ faq, updateFaq }: ItemListFaqtProps) => {
@@ -26,38 +26,42 @@ const ItemListFaq = ({ faq, updateFaq }: ItemListFaqtProps) => {
     };
 
     return (
-        <li className="li-acordeon">
+        <>
             {!isEditing ? (
                 <>
-                    <h5 >{faq.question}</h5>
+                    <h6>{faq.question}</h6>
                     <p dangerouslySetInnerHTML={{ __html: faq.answer }}></p>
-                    <button onClick={() => setIsEditing(true)}>Editar Información</button>
+                    <div className="item-info buttons">
+                        <button className="general-button" onClick={() => setIsEditing(true)}>Editar Información</button>
+                    </div>
                 </>
             ) : (
-                <form className="d-flex flex-column">
-                    <span>Pregunta: <input id="question" type="text" {...register('question')} defaultValue={faq.question}></input></span>
-                    <span>Descripción:</span>
-                    {/* TinyMCE Editor */}
+                <form className="item-cont">
+                    <div className="item-form description">
+                        <label  htmlFor="question">Pregunta: </label>
+                        <input id="question" type="text" {...register('question')} defaultValue={faq.question}></input>
+                    </div>
+                    <label htmlFor="answer">Descripción:</label>
                     <Editor
                         apiKey='l8lb42gic93aurxg94l1ijzbitffo8i746rsk9q9fmazi1th'
                         initialValue={faq.answer}
                         onEditorChange={handleEditorChange}
                         init={{
-                            height: 300,
+                            height: 500,
                             menubar: false,
                             plugins: 'lists link image table code',
                             toolbar:
                                 'undo redo | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | code',
                         }}
                     />
-                    <textarea id="description" {...register('answer', { required: true })} defaultValue={faq.answer}></textarea>
-                    <span>
-                    <button type="submit" onClick={handleSubmit(onSubmitFaq)}>Guardar Información</button>
-                    <button type='reset'  onClick={() => setIsEditing(false)}>Volver</button>
-                    </span>
+                    <textarea className="description-textarea" id="description" {...register('answer', { required: true })} defaultValue={faq.answer}></textarea>
+                    <div className="button-cont">
+                        <button className="general-button" type="submit" onClick={handleSubmit(onSubmitFaq)}>Guardar Información</button>
+                        <button className="no-button" type='reset' onClick={() => setIsEditing(false)}>Volver</button>
+                    </div>
                 </form>
             )}
-        </li>
+        </>
     )
 }
 

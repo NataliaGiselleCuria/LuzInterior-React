@@ -82,7 +82,7 @@ const ProductList:  React.FC<ProductListProps> = ({ openCart }) =>{
             <div className="">
                 <ul className="prod-list-cont">
                     {productFilter.map((product) => (
-                        <li key={product.id} className="prod-list-li">
+                        <li key={product.id} className="prod-list-li  shadow-sm">
                             <Link to={`/productos/id/${product.id}`} className="h100 w100" onClick={() => handleProductClick(product.id)}>
                                 <ProductCard
                                     key={product.id}

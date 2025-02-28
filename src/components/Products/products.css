@@ -3,6 +3,7 @@
     width: 100dvw;
     top: -50px;
     left: 50%;
+    text-align: center;
     transform: translateX(-50%);
     background-color: rgba(59, 58, 58, 0.89);
     color: white;
@@ -13,7 +14,7 @@
 }
 
 .login-message.show {
-    top: 60px;
+    top: 90px;
     z-index: 1;
 }
 
@@ -21,7 +22,7 @@
     top: -50px;
 }
 
-.login-mesagge span {
+.login-mesagge.show span {
     width: 80%;
     text-align: center;
 }
@@ -36,7 +37,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 80%;
+    height: 82%;
     width: 100%;
     padding: 10px;
     overflow: hidden;
@@ -54,7 +55,7 @@
 
 .novelty-mark {
     position: absolute;
-    top: 7px;
+    top: 0px;
     right: 5px;
     background-color: var(--light);
     color: var(--font-light);
@@ -63,11 +64,10 @@
 }
 
 .prod-card-description {
-    height: 10%;
-    width: 80%;
     display: flex;
     flex-direction: column;
     min-height: fit-content;
+    gap: 10px;
 }
 
 .prod-card-description p {
@@ -100,11 +100,11 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content:flex-end;
     width: 100%;
     height: 100%;
     gap: 10px;
-    padding-bottom: 4px;
+    padding-bottom: 10px;
     border-bottom: 1px solid var(--grey);
 }
 
@@ -167,12 +167,9 @@ img.img-category {
     width: auto;
     object-fit: contain;
     right: 0;
-    /* filter: opacity(0.5); */
 }
 
-
 /* Page Product Item */
-
 .prod-item .route {
     padding-top: 35px;
     height: 55px;
@@ -191,10 +188,10 @@ img.img-category {
 }
 
 .prod-item-info {
-
     height: auto;
     display: flex;
     flex-direction: column;
+    padding: 0!important;
     gap: 25px;
 }
 
@@ -231,7 +228,11 @@ img.img-category {
 }
 
 .prod-item-info-con .prod-card-description {
-    gap: 10px;
+    gap: 15px;
+}
+
+.prod-item-info-con .prod-card-description .prod-name h4{
+    text-wrap: wrap;
 }
 
 .prod-card-characteristics {
@@ -280,10 +281,6 @@ img.img-category {
 
 @media (max-width: 1200px) {
 
-    .prod-item-cont {
-        width: 100%;
-    }
-
     .prod-list-cont {
         grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     }
@@ -306,6 +303,10 @@ img.img-category {
 
     .frequently-asked-questions {
         width: 100%;
+    }
+
+    .login-message.show {
+        top: 60px;
     }
 }
 
@@ -357,10 +358,6 @@ img.img-category {
     .prod-item-info {
         margin: 0 !important;
         padding: 0;
-    }
-
-    .prod-item-info .prod-card-description {
-        height: 50px;
     }
 
 }

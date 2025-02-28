@@ -2,8 +2,8 @@
 import { useEffect, useState } from 'react';
 import { useApi } from '../../context/ApiProvider'
 import { useOrder } from '../../context/OrderProvider';
-import useModal from '../../CustomHooks/modal';
-import useVerifyToken from '../../CustomHooks/verefyToken';
+import useModal from '../../CustomHooks/useModal';
+import useVerifyToken from '../../CustomHooks/useVerefyToken';
 import ModalMesagge from '../Tools/ModalMesagge';
 import { useSearch } from '../../CustomHooks/useSearch';
 import { Orders } from '../../Interfaces/interfaces';
@@ -102,25 +102,16 @@ const AdminOrders = () => {
     }
 
     return (
-        <div className='w-100 orders'>
+        <>
             <div className="title-page">
                 <h4>Ordenes de pedido</h4>
             </div>
-            <div className="search-container">
-                <input
-                    className="admin-search"
-                    type="text"
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                    placeholder="Buscar orden..."
-                />
-            </div>
             <div className='row gap-4'>
-                <div className='col-lg'>
-                    <div className="title-page">
+                <div className='col-lg item-cont  border-top'>
+                    <div className="title left-decoration">
                         <h5>Nuevas ordenes de pedido:</h5>
                     </div>
-                    <div className="accordion" id="accordionPanelsStayOpenExample">
+                    <div className="item-cont accordion" id="accordionPanelsStayOpenExample">
                         {filteredOrders.filter((order) => order.new).map((order) => {
                             return <ItemListOrder
                                 key={order.id}
@@ -133,11 +124,24 @@ const AdminOrders = () => {
                         })}
                     </div>
                 </div>
-                <div className='col-lg'>
-                    <div className="title-page">
+                <div className='col-lg item-cont  border-top'>
+                    <div className="title left-decoration">
+                        <label htmlFor='admin-searc-order'>
                         <h5>Ordenes vistas:</h5>
+                        </label>
+                        <div className="search-container">
+                        <input
+                            id='admin-searc-order'
+                            className="admin-search"
+                            type="text"
+                            value={searchQuery}
+                            onChange={handleSearchChange}
+                            placeholder="Buscar orden..."
+                        />
                     </div>
-                    <div className="accordion" id="accordionPanelsStayOpenExample">
+                    </div>
+                    
+                    <div className="item-cont accordion" id="accordionPanelsStayOpenExample">
                         {filteredResults.filter((order): order is Orders => 'new' in order && !order.new).map((order) => {
                             return <ItemListOrder
                                 key={order.id}
@@ -160,8 +164,7 @@ const AdminOrders = () => {
                 confirmText={modalConfig.confirmText}
                 cancelText={modalConfig.cancelText}
             />
-        </div>
-
+        </>
     );
 }
 

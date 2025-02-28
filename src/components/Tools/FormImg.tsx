@@ -4,6 +4,8 @@ import { FormImgsProduct } from "../../Interfaces/interfaces";
 import SortableImageList from "./SortableImagesList";
 import { useApi } from "../../context/ApiProvider";
 import './tools.css'
+import ModalMesagge from "./ModalMesagge";
+import useModal from "../../CustomHooks/useModal";
 
 interface ImageFormProps {
   productId: string;
@@ -13,6 +15,7 @@ interface ImageFormProps {
 const FormImg: React.FC<ImageFormProps> = ({ productId, setData }) => {
 
   const { dev, products } = useApi();
+  const { modalConfig, openModal, closeModal } = useModal();
   const { register, reset } = useForm<FormImgsProduct>();
   const [images, setImages] = useState<(FormImgsProduct & { preview: string })[]>([]);
   const [currentFiles, setCurrentFiles] = useState<File[] | null>(null);
@@ -33,7 +36,7 @@ const FormImg: React.FC<ImageFormProps> = ({ productId, setData }) => {
     event.preventDefault();
 
     if (!currentFiles || currentFiles.length === 0) {
-      alert("No se ha seleccionado una imagen válida.");
+      openModal("Error", "No se ha seleccionado una imagen válida.", closeModal);
       return;
     }
 
@@ -118,7 +121,16 @@ const FormImg: React.FC<ImageFormProps> = ({ productId, setData }) => {
         </div>
         <SortableImageList images={images} setImages={setImages} setData={setData} />
       </div>
-    </div>
+      <ModalMesagge
+                isOpen={modalConfig.isOpen}
+                title={modalConfig.title}
+                content={<p>{modalConfig.content}</p>}
+                onClose={closeModal}
+                onConfirm={modalConfig.onConfirm}
+                confirmText={modalConfig.confirmText}
+                cancelText={modalConfig.cancelText}
+            />
+    </div>   
   );
 };
 

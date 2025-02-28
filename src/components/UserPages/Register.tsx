@@ -1,10 +1,9 @@
 
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom"
 import { useUser } from "../../context/UserContext";
 import { FormRegister } from "../../Interfaces/interfaces";
-import useModal from "../../CustomHooks/modal";
+import useModal from "../../CustomHooks/useModal";
 import ModalMesagge from "../Tools/ModalMesagge";
 
 interface Props {
@@ -124,13 +123,12 @@ const Register: React.FC<Props> = ({ setRegisterCont }) => {
                 <>
                     <h2>Registro exitoso</h2>
                     <div className="form-inputs">
-                    <h5>Gracias por registrate!</h5>
-                    <p>A la brevedad confirmaremos tus datos para que puedas acceder a la plataforma.</p>
-                    <p>Te hemos enviado un email con más información.</p>
+                        <h5>Gracias por registrate!</h5>
+                        <p>A la brevedad confirmaremos tus datos para que puedas acceder a la plataforma.</p>
+                        <p>Te hemos enviado un email con más información.</p>
                     </div>
                 </>
             )}
-
             <ModalMesagge
                 isOpen={modalConfig.isOpen}
                 title={modalConfig.title}

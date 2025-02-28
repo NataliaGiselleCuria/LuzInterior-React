@@ -18,7 +18,7 @@ const Gallery = () => {
           {gallery
             .sort((a, b) => a.priority - b.priority) // Ordena por prioridad (puedes ajustar según cómo esté definida la prioridad)
             .map((item) => (
-              <li onClick={() => setSelectedImage(`${dev}/${item.img_url}`)}>
+              <li key={item.id} onClick={() => setSelectedImage(`${dev}/${item.img_url}`)}>
                 <LazyLoadImage
                   key={item.id}
                   src={`${dev}/${item.img_url}`}

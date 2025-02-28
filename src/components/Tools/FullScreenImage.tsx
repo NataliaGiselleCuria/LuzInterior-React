@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const FullScreenImage = ({ src, alt, onClose }: { src: string; alt?: string; onClose: () => void }) => {
   useEffect(() => {
@@ -12,11 +12,19 @@ const FullScreenImage = ({ src, alt, onClose }: { src: string; alt?: string; onC
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [onClose]);
 
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggleZoom = () => {
+    setIsExpanded(!isExpanded);
+  };
+
   return (
-    <div className="fullscreen-overlay">
+    <div className="fullscreen-overlay" >
       <button className="close-btn" onClick={onClose}>✖</button>
-      <div className="fullscreen-content">
-        <img src={src} alt={alt || "Imagen en pantalla completa"} className="fullscreen-img" />
+      <div className={`fullscreen-content ${isExpanded ? "expanded" : ""}`} onClick={toggleZoom}>
+        <img src={src} alt={alt || "Imagen en pantalla completa"}
+          className={`fullscreen-img ${isExpanded ? "expanded" : ""}`}>
+        </img>
       </div>
     </div>
   );

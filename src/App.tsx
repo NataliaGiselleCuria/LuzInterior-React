@@ -20,8 +20,11 @@ import Contact from './components/Contact/Contact';
 import Footer from './components/Footer/Footer';
 import { useUser } from './context/UserContext';
 import { AdminPanel } from './components/Admin/AdminPanel';
+import SpinnerLoading from './components/Tools/SpinnerLoading';
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
+import ConfirmationOrder from './components/Cart&Order/ConfirmationOrder';
+
 
 function App() {
   const { checkToken, getUserActive } = useUser();
@@ -46,7 +49,7 @@ function App() {
   }, [checkToken]);
 
   if (loading) {
-    return <div className='loading'>Loading...</div>;  // loading o spinner mientras se verifica el token
+    return <SpinnerLoading/>;
   }
 
   return (  
@@ -69,7 +72,8 @@ function AppWithNavBar({ openCart, cartOpen, closeCart, setLoading}: any) {
     '/registro_finalizado', 
     '/recuperar_contrasea', 
     '/restablecer_contrasenia', 
-    '/checkout' 
+    '/checkout' ,
+    '/confirmacion'
   ];
 
   const showNavBar = !hideNavBarRoutes.includes(location.pathname);
@@ -90,6 +94,7 @@ function AppWithNavBar({ openCart, cartOpen, closeCart, setLoading}: any) {
         <Route path="/mis_pedidos" element={<OrdersUser />} />
         <Route path="/carrito" element={<Cart />} />
         <Route path="/checkout" element={<CheckOut />} />
+        <Route path='/confirmacion' element={<ConfirmationOrder />} />
         <Route path="/galeria" element={<Gallery />} />
         <Route path="/contacto" element={<Contact />}/>
         <Route path="/error" element={<ErrorPage />} />

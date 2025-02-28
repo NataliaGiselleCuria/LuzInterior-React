@@ -1,7 +1,21 @@
+
 .opc-adm {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start !important;
     margin: 0;
     overflow: auto;
-    padding: 10px 0!important;
+    padding-top: 10px;
+    padding-bottom: 5px !important;
+}
+
+.nav-opc {
+    position: relative;
+    border: 1px solid var(--light);
+}
+
+.nav-opc>*:not(.back) {
+    position: relative;
 }
 
 .opc-adm::-webkit-scrollbar,
@@ -14,27 +28,60 @@
     background: white;
 }
 
-.opc-adm li{
-    padding: 0!important;
+.opc-adm li {
+    width: 100%;
+    padding: 0 !important;
+    border-radius: 0;
+    border: 1px solid var(--black);
 }
+
 .opc-adm li button {
+    width: 100%;
     transition: background-color 0.3s ease, color 0.3s ease;
+    border-bottom: none;
+    box-shadow: 2px 2px 3px #8080806e;
+}
+
+.opc-adm button:hover {
+    background: var(--back-light);
+    box-shadow: none;
 }
 
 .opc-adm li.active button {
-    background-color: var(--light);
-    border-radius: 5px;
+    border-radius: 0;
+    background-color: var(--black);
+    color: white;
+    box-shadow: 1px 1px 5px var(--light);
 }
 
-.opc-render,
-.opc-dender div {
+.opc-render {
+    height: 100%;
     width: 100%;
+    min-height: fit-content;
     display: flex;
     justify-content: center;
 }
 
-.opc-dender .accordion-body {
-    border: 1px solid var(--black);
+.opc-render-cont {
+    height: 100%;
+    margin-top: 30px;
+    padding-left: 30px;
+    min-height: fit-content;
+}
+
+.item-cont.accordion {
+    gap: 0;
+}
+
+.shipping h6,
+.img-form h6,
+.fsq h6,
+.prods h6,
+.account h6,
+.accordion-header h6 {
+    font-family: 'Roboto Flex';
+    text-transform: uppercase;
+    font-size: 14px;
 }
 
 .button-cont {
@@ -47,10 +94,16 @@
 
 .button-cont button {
     width: 190px;
+    min-width: fit-content;
 }
 
 .button-cont select {
     padding: 0 15px;
+}
+
+.button-cont img {
+    object-fit: contain;
+    width: fit-content;
 }
 
 .admin-search {
@@ -68,31 +121,17 @@
 }
 
 .focused {
-    background-color: #f0f0f0;
-    /* Color de fondo cuando está en foco */
-    outline: 2px solid #007bff;
-    /* Borde azul para resaltar */
+    background-color: #e7e7e759;
+    border: none !important;
+    outline: 1px solid var(--back-light);
     transition: background-color 0.3s ease;
 }
 
-/* users */
-
-.users .row .title-page {
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 0;
-    height: 72px;
+button.accordion-button.collapsed:hover {
+    background: var(--back-light);
 }
 
-.item {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    padding: 10px 0;
-    margin: 5px 0;
-    gap: 5px;
-}
+/* order */
 
 .item-info.buttons {
     justify-content: space-between;
@@ -100,7 +139,7 @@
 }
 
 .item-info.buttons .item-info {
-    width: 272px;
+    width: 280px;
     align-items: center;
     justify-content: space-between;
     border: 1px solid var(--black);
@@ -117,26 +156,16 @@
 }
 
 /* lista de productos */
-.prods h6 {
-    font-family: 'Roboto Flex';
-    text-transform: uppercase;
-    font-size: 14px;
-}
-
 .search-container {
     display: flex;
     justify-content: center;
+    width: 100%;
 }
 
 .list-acordeon:not(.faq) {
     width: 95%;
     margin: auto;
     padding: 0;
-}
-
-.li-acordeon {
-    /* border-bottom: 1px solid rgb(212, 210, 210); */
-    margin: 16px 0;
 }
 
 .li-product-cont {
@@ -150,7 +179,9 @@
     flex-direction: column;
 }
 
-.li-product-cont .ul-row-nopadding {
+.li-product-cont .ul-row-nopadding,
+.img-form .ul-row-nopadding,
+.account .ul-row-nopadding {
     display: flex;
     flex-wrap: wrap;
     width: 100%;
@@ -167,6 +198,7 @@
     overflow: hidden;
     border: 1px solid var(--light);
     padding: 5px;
+    background-color: white;
 }
 
 .priority-mark {
@@ -211,16 +243,71 @@
     margin: 2px 0;
 }
 
-.ul-prod-price li div{
+.ul-prod-price li div {
     display: flex;
     flex-wrap: wrap;
 }
 
-.ul-prod-price li div p{
-    margin-right: 5px!important;
+.ul-prod-price li div p {
+    margin-right: 5px !important;
+}
+
+/* shipping */
+
+.shipping .title-page {
+    display: block;
+}
+
+.shipping form li {
+    height: 40px;
+    min-height: fit-content;
+    padding: 10px 0;
+}
+
+.shipping form h6 {
+    width: 165px;
+    align-content: center;
+}
+
+.description input {
+    width: 300px;
+}
+
+/* account */
+li.li-social {
+    border: 1px solid var(--light);
+    padding: 0 10px;
+}
+
+.account .item-cont {
+    width: 600px;
+    max-width: 100%;
+}
+
+.account input {
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .opc-adm {
+        flex-direction: row;
+    }
+
+    .opc-render-cont {
+        padding-left: 0;
+        margin-top: 0;
+    }
 }
 
 @media (max-width: 576px) {
+
+    .opc-adm {
+        flex-direction: row;
+    }
+
+    .opc-render-cont {
+        padding-left: 0;
+    }
 
     .item-form {
         display: flex;
@@ -236,8 +323,13 @@
         justify-content: center;
     }
 
-    .ul-prod-price{
+    .ul-prod-price {
         display: contents;
     }
 
+    .li-product-cont .ul-row-nopadding,
+    .img-form .ul-row-nopadding,
+    .account .ul-row-nopadding{
+        justify-content: center;
+    }
 }

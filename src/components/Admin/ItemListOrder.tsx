@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Orders, OrderStatus } from "../../Interfaces/interfaces";
-import useCurrencyFormat from "../../CustomHooks/currencyFormat";
+import useCurrencyFormat from "../../CustomHooks/useCurrencyFormat";
 import { useApi } from "../../context/ApiProvider";
-import { LazyLoadImage } from "react-lazy-load-image-component";
+import ProductDetail from "../Tools/ProductDetail";
 
 interface Props {
     order: Orders;
@@ -14,7 +14,7 @@ interface Props {
 
 const ItemListOrder: React.FC<Props> = ({ order, onStateChange, handleUpdateNew, handleDeletOrder, openModal }) => {
 
-    const { dev, products, shipping } = useApi();
+    const {shipping } = useApi();
     const formatCurrency = useCurrencyFormat();
     const [openAccordion, setOpenAccordion] = useState<number | null>(null);
     const [isEditing, setIsEditing] = useState(false);
@@ -33,30 +33,6 @@ const ItemListOrder: React.FC<Props> = ({ order, onStateChange, handleUpdateNew,
         ...order,
         shippingDetails: getShippingDetails(String(order.shipping)),
     };
-
-    const getProductbyId = (id: string) => {
-        const prodResult = products.find(prod => prod.id === id);
-        if (!prodResult) {
-            return <div><span><p>El producto con ID `{id}` ya no se encuentra en el sistema</p></span></div>
-        } else {
-            const mainImage = prodResult.img_url
-                ?.sort((a, b) => a.priority - b.priority)[0]?.url || 'ruta/a/imagen/default.png';
-
-            return (
-                <>
-                    <div className="order-prod-img">
-                        <LazyLoadImage src={`${dev}/${mainImage}`} alt={`Imagen de ${prodResult.name}`} />
-                    </div>
-                    <div className="item-info">
-                        <div><span className="fw-medium">id:</span> {prodResult.id}</div>
-                        <div><span className="fw-medium">Nombre:</span> {prodResult.name}</div>
-                        <div><span className="fw-medium">Categoría:</span> {prodResult.category}</div>
-                        <div><span className="fw-medium">Precio:</span> {prodResult.price}</div>
-                    </div>
-                </>
-            );
-        }
-    }
 
     const handleStateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setNewState(e.target.value as OrderStatus);
@@ -86,10 +62,10 @@ const ItemListOrder: React.FC<Props> = ({ order, onStateChange, handleUpdateNew,
                     onClick={() => handleAccordionToggle(currentOrder.id)}
                 >
                     <div className="fw-medium">
-                        <span>Orden n°{order.id}</span>
-                        <span>{new Date(order.date).toLocaleDateString()}</span>
-                        <span>{order.user.name}</span>
-                        <span>Total: {formatCurrency(order.total_price)}</span>
+                        <span className="pr-20">Orden n°{order.id}</span>
+                        <span className="pr-20">{new Date(order.date).toLocaleDateString()}</span>
+                        <span className="pr-20">{order.user.name}</span>
+                        <span className="pr-20">Total: {formatCurrency(order.total_price)}</span>
                         <span className={`state-${currentOrder.state.toLowerCase().replace(/\s+/g, "-")}`}>{currentOrder.state}</span>
                     </div>
                 </button>
@@ -98,22 +74,26 @@ const ItemListOrder: React.FC<Props> = ({ order, onStateChange, handleUpdateNew,
                 id={`panelsStayOpen-${order.id}`}
                 className={`accordion-collapse collapse ${openAccordion === order.id ? 'show' : ''}`}
             >
-                <div className="accordion-body">
-                    <div className='item'>
-                        <h5>Cliente</h5>
+                <div className="accordion-body shadow-sm">
+                    <div className='item-cont'>
+                        <div className="title">
+                            <h5>Cliente</h5>
+                        </div>
                         <div className="item-info">
-                            <div><span className="fw-medium">Nombre:</span> {order.user.name}</div>
-                            <div><span className="fw-medium">Email:</span> {order.user.email}</div>
-                            <div><span className="fw-medium">CUIT:</span> {order.user.cuit}</div>
+                            <div className="pr-20"><span className="fw-medium">Nombre:</span> {order.user.name}</div>
+                            <div className="pr-20"><span className="fw-medium">Email:</span> {order.user.email}</div>
+                            <div className="pr-20"><span className="fw-medium">CUIT:</span> {order.user.cuit}</div>
                         </div>
                     </div>
-                    <div className='item'>
-                        <h5>Envío</h5>
+                    <div className='item-cont border-top'>
+                        <div className="title">
+                            <h5>Envío</h5>
+                        </div>
                         <div className="item-info">
                             {enhancedOrder.shippingDetails ? (
                                 <>
-                                    <div><span className="fw-medium">Envío: </span> {enhancedOrder.shippingDetails.description}</div>
-                                    <div><span className="fw-medium">Valor: </span> {formatCurrency(enhancedOrder.shippingDetails.price)}</div>
+                                    <div className="pr-20"><span className="fw-medium">Envío: </span> {enhancedOrder.shippingDetails.description}</div>
+                                    <div className="pr-20"><span className="fw-medium">Valor: </span> {formatCurrency(enhancedOrder.shippingDetails.price)}</div>
                                 </>
                             ) : (
                                 <span>Información de envío no disponible</span>
@@ -121,21 +101,23 @@ const ItemListOrder: React.FC<Props> = ({ order, onStateChange, handleUpdateNew,
                             <div className="item-info w-100">
                                 <span className="fw-medium">Dirección: </span>
                                 <span>{order.address.street} -</span>
-                                <span>{order.address.street2?.trim() ? order.address.street2 : "información adicional no especificada"} -</span>
-                                <span> CP: {order.address.cp} -</span>
                                 <span>{order.address.city} -</span>
                                 <span>{order.address.province} -</span>
+                                <span> CP: {order.address.cp} -</span>
+                                <span>{order.address.street2?.trim() ? order.address.street2 : "información adicional no especificada"}</span>
                             </div>
                         </div>
                     </div>
-                    <div className='item'>
-                        <h5>Productos</h5>
+                    <div className='item-cont border-top'>
+                        <div className="title">
+                            <h5>Productos</h5>
+                        </div>
                         <div className="item-info">
                             <ul className="order-prods">
                                 {order.products.map((prod) => {
                                     return (
                                         <li key={prod.product_id}>
-                                            {getProductbyId(prod.product_id)}
+                                            <ProductDetail id={prod.product_id} />
                                             <div><span className="fw-medium">cantidad:</span> {prod.quantity}</div>
                                         </li>
                                     );
@@ -143,29 +125,42 @@ const ItemListOrder: React.FC<Props> = ({ order, onStateChange, handleUpdateNew,
                             </ul>
                         </div>
                     </div>
-                    <div className="d-flex align-items-baseline fs-5 gap-2"><h5>Total</h5>{formatCurrency(order.total_price)}</div>
-                    <div className="button-cont">
-                        {!isEditing ? (
-                            <button className="general-button" onClick={() => setIsEditing(true)}>Cambiar estado</button>
-                        ) : (
-                            <div className="button-cont">
-                                <select name="option" defaultValue={newState} onChange={handleStateChange}>
-                                    <option value="En proceso">En proceso</option>
-                                    <option value="Entregado">Entregado</option>
-                                    <option value="Cancelado">Cancelado</option>
-                                </select>
-                                <button className="general-button" onClick={() => handleSaveState()}>Guardar</button>
-                            </div>
-                        )}
+                    <div className="cart-total item-cont">
+                        <div>
+                            <div className="d-flex align-items-baseline gap-2"><h6>Subtotal</h6>{formatCurrency(order.total_price)}</div>
+                            {enhancedOrder.shippingDetails ? (
+                                <>
+                                    <div className="d-flex align-items-baseline gap-2"><h6>Envío</h6>{formatCurrency(enhancedOrder.shippingDetails.price)}</div>
+                                    <div className="d-flex align-items-baseline border-top gap-2"><h6>Total</h6>{formatCurrency(order.total_price + enhancedOrder.shippingDetails.price)}</div>
+                                </>
+                            ) : (
+                                <div className="d-flex align-items-baseline gap-2 border-top"><h6>Total</h6>{formatCurrency(order.total_price)}</div>
+                            )}
+                        </div>
+                        <div className="button-cont">
+                            {!isEditing ? (
+                                <button className="general-button" onClick={() => setIsEditing(true)}>Cambiar estado</button>
+                            ) : (
+                                <div className="button-cont">
+                                    <select name="option" defaultValue={newState} onChange={handleStateChange}>
+                                        <option value="En proceso">En proceso</option>
+                                        <option value="Entregado">Entregado</option>
+                                        <option value="Cancelado">Cancelado</option>
+                                    </select>
+                                    <button className="general-button" onClick={() => handleSaveState()}>Guardar</button>
+                                </div>
+                            )}
 
-                    </div>
-                    <div className="item-info buttons">
-                        {order.new ? (
-                            <button className="light-button" onClick={() => handleUpdateNew(order.id)}>Marcar como visto</button>
-                        ) : (
-                            <></>
-                        )}
-                        <button className="no-button" onClick={() => alertDeleteOrden()}>Eliminar</button>
+                        </div>
+
+                        <div className="item-info buttons">
+                            {order.new ? (
+                                <button className="light-button" onClick={() => handleUpdateNew(order.id)}>Marcar como visto</button>
+                            ) : (
+                                <></>
+                            )}
+                            <button className="no-button" onClick={() => alertDeleteOrden()}>Eliminar</button>
+                        </div>
                     </div>
                 </div>
             </div>

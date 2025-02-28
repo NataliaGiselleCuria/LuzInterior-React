@@ -7,13 +7,13 @@ import { useCart } from "../../context/CartProvider";
 import { useOrder } from "../../context/OrderProvider";
 import { useUser } from "../../context/UserContext";
 import { Address, Orders, Shipping } from "../../Interfaces/interfaces";
-import { useUpdateUserInfo } from "../../CustomHooks/updateUserInfo";
-import useCurrencyFormat from "../../CustomHooks/currencyFormat";
+import { useUpdateUserInfo } from "../../CustomHooks/useUpdateUserInfo";
+import useCurrencyFormat from "../../CustomHooks/useCurrencyFormat";
 import ProductsInCart from "../Tools/ProductsInCart";
 import FormAddresses from "../Tools/FormAddresses";
-import useModal from "../../CustomHooks/modal";
+import useModal from "../../CustomHooks/useModal";
 import ModalMesagge from "../Tools/ModalMesagge";
-import useVerifyToken from "../../CustomHooks/verefyToken";
+import useVerifyToken from "../../CustomHooks/useVerefyToken";
 import logo from "../../assets/alt_logo.png"
 import './cart.css'
 
@@ -33,6 +33,8 @@ const CheckOut = () => {
   const [selAddress, setSelAddress] = useState<Address | null>(null);
   const [defaultAddress, setDefaultAddress] = useState<Address | null>(null);
   const [selshipping, setSelshipping] = useState<Shipping | null>(null);
+  const isCartEmpty = cart.length === 0;
+  const [loading, setLoading] = useState(false);
 
   //direcciones
   useEffect(() => {
@@ -127,6 +129,8 @@ const CheckOut = () => {
       return;
     }
 
+    setLoading(true);
+
     const addressOrder = selAddress || defaultAddress;
     const shippingOrder = selshipping;
 
@@ -147,15 +151,19 @@ const CheckOut = () => {
         const response = await sendOrder(order, navigate);
 
         if (response.success) {
-          navigate('/order-confirmation');
+          setLoading(false);
+          navigate('/confirmacion');
         } else {
           openModal("Error", `Error al procesar la orden:', ${response.message}`, closeModal);
+          setLoading(false);
         }
       } catch (error) {
         openModal("Error", `Error inesperado al enviar la orden:', ${error}`, closeModal);
+        setLoading(false);
       }
     } else {
       openModal("Advertencia", "Por favor, completa todos los datos necesarios antes de enviar tu orden.", closeModal);
+      setLoading(false);
     }
   };
 
@@ -170,25 +178,29 @@ const CheckOut = () => {
         </div>
       </nav>
       <div className="cont container">
-
         {(!isLogin) ?
-          <>
-            <h3>Inicie sesión para continuar</h3>
-            <button onClick={() => navigate('/login', { state: { from: '/checkout' } })}>  Iniciar sesión </button>
-            <Link to='/registro'>¿No tienes cuenta aún?</Link>
-          </>
+          <div className="d-flex justify-content-center">
+            <div className="ckeckout login-cont aling-items-center justify-content-center">
+              <span className="back"></span>
+              <h3 className="text-center">Inicie sesión para continuar</h3>
+              <div className="item-cont text-center">
+                <button onClick={() => navigate('/login', { state: { from: '/checkout' } })}>  Iniciar sesión </button>
+                <Link to='/registro'>¿No tienes cuenta aún?</Link>
+              </div>
+            </div>
+          </div>
           :
           <div className="row checkOut">
-            <div className="checkOut-info col-lg-7">
-              <span className="email"><p>Sesión inciada con {userActive?.email}</p><button className="no-button" onClick={() => userLogout(navigate)}>Cerrar sesión</button></span>
-              <div className="item-cont">
-                <span>
-                  <div className="title-page">
+            <div className="column-g-20 col-lg-7">
+              <span className="email"><p>Sesión iniciada con {userActive?.email}</p><button className="no-button" onClick={() => userLogout(navigate)}>Cerrar sesión</button></span>
+              <div className="item-cont border-top">
+                <span className="d-flex gap-2">
+                  <div className="title left-decoration">
                     <h4>Método de envío</h4>
-                    {!isEditingshipping &&
-                      <button className="general-button" onClick={() => setIsEditingshipping(!isEditingshipping)}>Cambiar</button>
-                    }
                   </div>
+                  {!isEditingshipping &&
+                    <button className="general-button checkout-button" onClick={() => setIsEditingshipping(!isEditingshipping)}>Cambiar</button>
+                  }
                 </span>
                 {isEditingshipping ? (
                   <div className="opc-cont">
@@ -230,13 +242,16 @@ const CheckOut = () => {
                 )}
               </div>
               {!isEditingshipping && selshipping?.id_shipping !== 'pickup' && (
-                <div className="item-cont">
-                  <div className="title-page">
-                    <h4>Detalle de envío</h4>
+                <div className="item-cont border-top">
+                  <div className="d-flex gap-2">
+                    <div className="title left-decoration">
+                      <h4>Detalle de envío</h4>
+                    </div>
                     {!isEditingAddress &&
-                      <button className="general-button" onClick={() => setIsEditingAddress(!isEditingAddress)}>Cambiar</button>
+                      <button className="general-button checkout-button" onClick={() => setIsEditingAddress(!isEditingAddress)}>Cambiar</button>
                     }
                   </div>
+
                   {!isEditingAddress ? (
                     <div className="">
                       <span className="opc-cont">
@@ -311,8 +326,8 @@ const CheckOut = () => {
               )}
               <div className="pay-cont">
                 {!isEditingshipping && !isEditingAddress &&
-                  <div className="item-cont">
-                    <div className="title-page">
+                  <div className="item-cont border-top">
+                    <div className="title left-decoration">
                       <h4>Pago</h4>
                     </div>
                     <div>
@@ -333,8 +348,10 @@ const CheckOut = () => {
               }}>
                 ← Editar pedido
               </Link>
-              <ProductsInCart price='subtotal' editable={false} ></ProductsInCart>
-              <div>
+              <div className="item-cont">
+                <ProductsInCart price='subtotal' editable={false} ></ProductsInCart>
+              </div>
+              <div className="">
                 <div className="checkout-total-item">
                   <span className="cart-total">
                     <h6>Subtotal</h6>
@@ -368,7 +385,20 @@ const CheckOut = () => {
                   <span>{!selshipping ? (<p>{formatCurrency(totalPrice)}</p>) : (<p>{formatCurrency(totalPrice + selshipping.price)}</p>)}</span>
                 </div>
               </div>
-              <button className="general-button" onClick={handleAddtoOrder}>Finalizar Pedido</button>
+              <div className="d-flex flex-column text-center">
+                {!loading ? (
+                  <>
+                    <button className="general-button" onClick={handleAddtoOrder} disabled={isCartEmpty}>Finalizar Pedido</button>
+                    {isCartEmpty && <p>Agrege productos para realizar el pedido.</p>}
+                  </>
+                ) : (
+                  <div className="spinner-grow text-secondary" role="status">
+                    <span className="visually-hidden">Enviando...</span>
+                  </div>
+                )
+                }
+              </div>
+
             </div>
 
             <ModalMesagge

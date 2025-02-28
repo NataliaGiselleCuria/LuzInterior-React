@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useUser } from "../context/UserContext";
 import { Address } from "../Interfaces/interfaces";
-import useVerifyToken from "./verefyToken";
+import useVerifyToken from "./useVerefyToken";
 
 
 interface UseUpdateUserInfoReturn {

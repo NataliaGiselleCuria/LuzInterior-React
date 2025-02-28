@@ -42,16 +42,17 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({ quantity, onQuantit
 
 
     return (
-        <div className="quantity-selector">
+        <label htmlFor="quantity" className="quantity-selector">
             <button onClick={handleDecrement}>-</button>
             <input
+                id="quantity"
                 type="number"
                 value={quantity === 0 ? 1 : quantity}
                 onChange={handleChange}
                 min="1"
             />
             <button onClick={handleIncrement}>+</button>
-        </div>
+        </label>
     );
 };
 

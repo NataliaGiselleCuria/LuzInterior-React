@@ -3,8 +3,8 @@
 import { useForm } from "react-hook-form";
 import { Address } from "../../Interfaces/interfaces";
 import { useUser } from "../../context/UserContext";
-import { useUpdateUserInfo } from "../../CustomHooks/updateUserInfo";
-import useModal from "../../CustomHooks/modal";
+import { useUpdateUserInfo } from "../../CustomHooks/useUpdateUserInfo";
+import useModal from "../../CustomHooks/useModal";
 import './tools.css'
 
 export interface FormAddresses {
@@ -51,7 +51,7 @@ const FormAddresses: React.FC<FormAddresses> = ({ address, onClose }) => {
     return (
         <form className='form-modal' onSubmit={handleSubmit(onSubmit)}>
             <div className="title-page">
-                <h5>{address ? 'Editar Dirección' : 'Nueva Dirección'}</h5>
+                <h5 className="left-decoration">{address ? 'Editar Dirección' : 'Nueva Dirección'}</h5>
             </div>
             <span></span>         
             <div className="row">
@@ -72,7 +72,7 @@ const FormAddresses: React.FC<FormAddresses> = ({ address, onClose }) => {
                     </input>
                 </span>
             </div>
-            <div className="row">
+            <div className="row border-top">
                 <span>
                     <label htmlFor="company_name"> Nombre de la empresa </label>
                     <input
@@ -82,7 +82,7 @@ const FormAddresses: React.FC<FormAddresses> = ({ address, onClose }) => {
                     </input>
                 </span>
             </div>
-            <div className="row">
+            <div className="row border-top">
                 <span className="col-6">
                     <label htmlFor="street"> Calle </label>
                     <input
@@ -99,7 +99,7 @@ const FormAddresses: React.FC<FormAddresses> = ({ address, onClose }) => {
                     </input>
                 </span>
             </div>
-            <div className="row">
+            <div className="row border-top">
                 <span className="col-6">
                     <label htmlFor="city">Ciudad</label>
                     <input
@@ -118,7 +118,7 @@ const FormAddresses: React.FC<FormAddresses> = ({ address, onClose }) => {
                     </input>
                 </span>
             </div>
-            <div className="row">
+            <div className="row border-top">
                 <span className="col-6">
                     <label htmlFor="cp"> Codigo Postal</label>
                     <input

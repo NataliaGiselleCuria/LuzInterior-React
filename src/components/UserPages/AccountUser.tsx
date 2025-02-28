@@ -4,8 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../../context/UserContext"
 import { FormAccountInformation, FormPersonalInformation } from "../../Interfaces/interfaces";
 import FormAddresses from "../Tools/FormAddresses";
-import { useUpdateUserInfo } from "../../CustomHooks/updateUserInfo";
-import useModal from "../../CustomHooks/modal";
+import { useUpdateUserInfo } from "../../CustomHooks/useUpdateUserInfo";
+import useModal from "../../CustomHooks/useModal";
 import ModalMesagge from "../Tools/ModalMesagge";
 import check from '../../assets/check.png'
 import './user.css'
@@ -93,7 +93,7 @@ const AccountUser = () => {
   return (
     <div className="cont container">
       <div className="row account-user">
-        <div className="col-md-2 col-name-user">
+        <div className="col-md-3 col-xl-2 col-name-user">
           <span className="back"></span>
           <div className="icon-user">
             {userActive?.name
@@ -115,13 +115,13 @@ const AccountUser = () => {
             <h3>Mi cuenta</h3>
           </span>
           <div className="item-cont">
-            <span className="title-page">
+            <span className="title left-decoration">
               <h5>Informacion personal</h5>
               <p>Actualiza tu informacion personal</p>
             </span>
             <form onSubmit={personalHandleSubmit(handlePersonalInformation)}>
               <div className="form-inputs">
-                <span>
+                <span className="item-form">
                   <label htmlFor="name">Nombre</label>
                   <input
                     id="name"
@@ -129,7 +129,7 @@ const AccountUser = () => {
                     defaultValue={userActive?.name}
                     {...personalRegister('name')}></input>
                 </span>
-                <span>
+                <span className="item-form">
                   <label htmlFor="cuit">Cuit</label>
                   <input
                     id="cuit"
@@ -145,7 +145,7 @@ const AccountUser = () => {
                   </input>
                   {personalErrors.cuit && <p className="error">{personalErrors.cuit.message}</p>}
                 </span>
-                <span>
+                <span className="item-form">
                   <label htmlFor="telefono">Teléfono</label>
                   <input
                     id="tel"
@@ -173,13 +173,13 @@ const AccountUser = () => {
             </form>
           </div>
           <div className="item-cont">
-            <span className="title-page">
+            <span className="title left-decoration">
               <h5>Informacion de cuenta</h5>
               <p>Actualiza tu clave de ingreso</p>
             </span>
             <form onSubmit={accountHandleSubmit(handleAccountInformation)}>
               <div className="form-inputs">
-                <span>
+                <span className="item-form">
                   <label htmlFor="password">Contraseña</label>
                   <input id="password" type="password" {...accountRegister('password')}></input>
                 </span>
@@ -191,11 +191,11 @@ const AccountUser = () => {
             </form>
           </div>
           <div className="item-cont">
-            <span className="title-page">
+            <span className="title left-decoration">
               <h5>Direcciones</h5>
               <p>Agrega y administra las direcciones que utilizas con frecuencia.</p>
             </span>
-            <ul className="addresses-ul">
+            <ul className="ul-row-nopadding addresses-ul">
               {userActive?.addresses
                 .sort((a, b) => (b.default_address ? 1 : 0) - (a.default_address ? 1 : 0))
                 .map((address) => (

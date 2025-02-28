@@ -5,8 +5,8 @@ import { Editor } from '@tinymce/tinymce-react';
 import { FormImgsProduct, FormProduct, Products } from "../../Interfaces/interfaces"
 import { useForm } from "react-hook-form";
 import FormImg from "../Tools/FormImg";
-import useVerifyToken from "../../CustomHooks/verefyToken";
-import useModal from "../../CustomHooks/modal";
+import useVerifyToken from "../../CustomHooks/useVerefyToken";
+import useModal from "../../CustomHooks/useModal";
 import ModalMesagge from "../Tools/ModalMesagge";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
@@ -186,112 +186,113 @@ const ItemListProduct = ({ product }: ItemListProductProps) => {
 
   return (
     <>
-        {!isEditingProduct && !isEditingImages ? (
-          <>
-            <div className="li-product-cont">
-              <div className="item-info">
-                <div><span className="fw-medium">ID:</span> {product.id}</div>
-                <div><span className="fw-medium">Nombre:</span> {product.name}</div>
-                <div><span className="fw-medium">Categoría:</span> {product.category}</div>
-                <div><span className="fw-medium">Precio:</span> {product.price}</div>
-              </div>
-              <div className="li-product-cont-description">
-                <span className="fw-medium">Descripción:</span>
-                <span dangerouslySetInnerHTML={{ __html: product.description }} />
-              </div>
-              <div>
-                <ul className="ul-row-nopadding">
-                  {product.img_url.map((img, index) => (
-                    <li className="h100 " key={`${product.name} - ${index}`}>
-                      <LazyLoadImage className="h100 fix-img" id={img.id_img} src={`${dev}${img.url}`} alt={`${product.name} - ${img.id_img}`} />
-                      {img.priority === 1 &&
-                        <span className="priority-mark">Portada</span>
-                      }
-                    </li>
+      {!isEditingProduct && !isEditingImages ? (
+        <>
+          <div className="li-product-cont item-cont">
+            <div className="item-info">
+              <div className="pr-20"><span className="fw-medium">ID:</span> {product.id}</div>
+              <div className="pr-20"><span className="fw-medium">Nombre:</span> {product.name}</div>
+              <div className="pr-20"><span className="fw-medium">Categoría:</span> {product.category}</div>
+              <div className="pr-20"><span className="fw-medium">Precio:</span> {product.price}</div>
+            </div>
+            <div className="li-product-cont-description">
+              <span className="fw-medium">Descripción:</span>
+              <span dangerouslySetInnerHTML={{ __html: product.description }} />
+            </div>
+            <div>
+              <ul className="ul-row-nopadding">
+                {product.img_url.map((img, index) => (
+                  <li className="h100 " key={`${product.name} - ${index}`}>
+                    <LazyLoadImage className="h100 fix-img" id={img.id_img} src={`${dev}${img.url}`} alt={`${product.name} - ${img.id_img}`} />
+                    {img.priority === 1 &&
+                      <span className="priority-mark">Portada</span>
+                    }
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <div className="item-info buttons">
+            <div className="button-cont">
+              <button className="general-button" onClick={() => editProductInfo(product.id)}>Editar Información</button>
+              <button className="light-button" onClick={() => editProductImages(product.id)}>Editar Imágenes</button>
+            </div>
+            <button className="no-button" onClick={() => deleteProduct(product.id)}>Eliminar producto</button>
+          </div>
+        </>
+      ) : (
+        <>
+          {isEditingProduct && (
+            <form className="li-product-cont">
+              <div className="item-cont">
+                <h6>Categorías actuales:</h6>
+                <p>Elige una de las categorías existentes o ingresa una nueva.</p>
+                <ul className="ul-row-nopadding ul-categories">
+                  {categories.map((category, index) => (
+                    <li key={index} onClick={() => setValue('category', category)}>{category}</li>
                   ))}
                 </ul>
               </div>
-            </div>
-            <div className="item-info buttons">
-              <div className="button-cont">
-                <button className="general-button" onClick={() => editProductInfo(product.id)}>Editar Información</button>
-                <button className="light-button" onClick={() => editProductImages(product.id)}>Editar Imágenes</button>
+              <div className="item-info">
+                <div className="item-form pr-20">
+                  <label htmlFor="id">ID:</label>
+                  <input id="id" type="text" {...register('id', { required: true })} defaultValue={product.id} onChange={handleIdChange}></input>
+                </div>
+                <div className="item-form pr-20">
+                  <label htmlFor="name">Nombre:</label>
+                  <input id="name" type="text" {...register('name', { required: true })} defaultValue={product.name}></input>
+                </div>
+                <div className="item-form pr-20">
+                  <label htmlFor="category">Categoría:</label>
+                  <input id="category" type="text" {...register('category', { required: true })} defaultValue={product.category}></input>
+                </div>
+                <div className="item-form">
+                  <label htmlFor="price">Precio:</label>
+                  <input id="price" type="number" {...register('price', { required: true })} defaultValue={product.price}></input>
+                </div>
               </div>
-              <button className="no-button" onClick={() => deleteProduct(product.id)}>Eliminar producto</button>
-            </div>
-          </>
-        ) : (
-          <>
-            {isEditingProduct && (
-              <form className="li-product-cont">
-                <div className="item">
-                  <h6>Categorías actuales:</h6>
-                  <p>Elige una de las categorías existentes o ingresa una nueva.</p>
-                  <ul className="ul-row-nopadding ul-categories">
-                    {categories.map((category, index) => (
-                      <li key={index} onClick={() => setValue('category', category)}>{category}</li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="item-info">
-                  <div className="item-form">
-                    <label className="fw-medium" htmlFor="id">ID:</label>
-                    <input id="id" type="text" {...register('id', { required: true })} defaultValue={product.id} onChange={handleIdChange}></input>
-                  </div>
-                  <div className="item-form">
-                    <label className="fw-medium" htmlFor="name">Nombre:</label>
-                    <input id="name" type="text" {...register('name', { required: true })} defaultValue={product.name}></input>
-                  </div>
-                  <div className="item-form">
-                    <label className="fw-medium" htmlFor="category">Categoría:</label>
-                    <input id="category" type="text" {...register('category', { required: true })} defaultValue={product.category}></input>
-                  </div>
-                  <div className="item-form">
-                    <label className="fw-medium" htmlFor="price">Precio:</label>
-                    <input id="price" type="number" {...register('price', { required: true })} defaultValue={product.price}></input>
-                  </div>
-                </div>
-                <div className="li-product-cont">
-                  <div>
-                    <label htmlFor="description" className="fw-medium">Descripción:</label>
-                    <Editor
-                      apiKey='l8lb42gic93aurxg94l1ijzbitffo8i746rsk9q9fmazi1th'
-                      initialValue={product.description}
-                      onEditorChange={handleEditorChange}
-                      init={{
-                        height: 400,
-                        menubar: false,
-                        plugins: 'lists link image table code',
-                        toolbar:
-                          'undo redo | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | code',
-                      }}
-                    />
-                  </div>
-                  <textarea className="description-textarea" id="description" {...register('description', { required: true })} defaultValue={product.description}></textarea>
-                </div>
-                <div className="button-cont">
-                  <span className="button-check">Marcar como novedad: <input id="novelty" type="checkbox" {...register('novelty')} defaultChecked={product.novelty}></input></span>
-                  <button className="general-button" type="submit" onClick={handleSubmit(onSubmitProductInfo)}>Guardar Información</button>
-                </div>
-              </form>
-            )}
-
-            {isEditingImages && (
               <div className="li-product-cont">
-                <div className="item-info">
-                  <div><span className="fw-medium">ID:</span> {product.id}</div>
-                  <div><span className="fw-medium">Nombre:</span> {product.name}</div>
-                  <div><span className="fw-medium">Categoría:</span> {product.category}</div>
+                <div>
+                  <label htmlFor="description" className="fw-medium">Descripción:</label>
+                  <Editor
+                    apiKey='l8lb42gic93aurxg94l1ijzbitffo8i746rsk9q9fmazi1th'
+                    initialValue={product.description}
+                    onEditorChange={handleEditorChange}
+                    init={{
+                      height: 500,
+                      menubar: false,
+                      plugins: 'lists link image table code',
+                      toolbar:
+                        'undo redo | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | code',
+                    }}
+                  />
                 </div>
-                <FormImg productId={idEditingProduct} setData={setData} />
-                <div className="button-cont">
-                  <button className="light-button" type="button" onClick={() => onSubmitImages(data.images)}>Guardar Imágenes</button>
-                </div>
+                <textarea className="description-textarea" id="description" {...register('description', { required: true })} defaultValue={product.description}></textarea>
               </div>
-            )}
+              <div className="button-cont">
+                <span className="button-check"><label htmlFor="novvelty">Marcar como novedad: </label><input id="novelty" type="checkbox" {...register('novelty')} defaultChecked={product.novelty}></input></span>
+                <button className="general-button" type="submit" onClick={handleSubmit(onSubmitProductInfo)}>Guardar Información</button>
+              </div>
+            </form>
+          )}
+          {isEditingImages && (
+            <div className="li-product-cont">
+              <div className="item-info">
+                <div className="pr-20"><span className="fw-medium">ID:</span> {product.id}</div>
+                <div className="pr-20"><span className="fw-medium">Nombre:</span> {product.name}</div>
+                <div className="pr-20"><span className="fw-medium">Categoría:</span> {product.category}</div>
+              </div>
+              <FormImg productId={idEditingProduct} setData={setData} />
+              <div className="button-cont">
+                <button className="light-button" type="button" onClick={() => onSubmitImages(data.images)}>Guardar Imágenes</button>
+              </div>
+            </div>
+          )}
+          <div className="button-cont">
             <button className="no-button" type="button" onClick={closeEditProduct}>Volver</button>
-          </>
-        )}
+          </div>
+        </>
+      )}
       <ModalMesagge
         isOpen={modalConfig.isOpen}
         title={modalConfig.title}

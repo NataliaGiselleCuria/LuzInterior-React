@@ -15,8 +15,7 @@ const Contact = () => {
     const mapIframe = companyInfo.find(info => info.key === 'map')?.value || '';
 
     return (
-        <div className="cont container">
-
+        <div className="cont container contact">         
             <div className='row contact-cont'>
                 <div className="contact-info col-md-5">
                     <span className='back'></span>
@@ -26,13 +25,17 @@ const Contact = () => {
                     </div>
                     <div className="info-item">
                         <h4>Email:</h4>
-                        <a href={`mailto:${getCompanyInfoValue('email')}`}>
+                        <a href={`mailto:${getCompanyInfoValue('email')}`}
+                            target="_blank" 
+                            aria-label='Enviar un email a Luz interior'>
                             {getCompanyInfoValue('email')}
                         </a>
                     </div>
                     <div className="info-item">
                         <h4>Teléfono:</h4>
-                        <a href={`https://wa.me/${getCompanyInfoValue('tel')?.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer">
+                        <a href={`https://wa.me/${getCompanyInfoValue('tel')?.replace(/\D/g, '')}`} 
+                            target="_blank" rel="noopener noreferrer"
+                            aria-label='Enviar un whatsapp a Luz interior'>
                             {getCompanyInfoValue('tel')}
                         </a>
                     </div>
@@ -42,9 +45,8 @@ const Contact = () => {
                     </div>
                     <div className="info-item">
                         <h4>Nuestras Redes:</h4>
-
                         {social.map((item) => (
-                            <a href={item.url} key={item.id}><LazyLoadImage src={`${dev}/${item.img_social}`} alt={item.id}></LazyLoadImage></a>
+                            <a href={item.url} key={item.id} aria-label={`Visitar la red social ${item.id} de Luz interior`}><LazyLoadImage src={`${dev}/${item.img_social}`} alt={item.id}></LazyLoadImage></a>
                         ))}
                     </div>
                 </div>

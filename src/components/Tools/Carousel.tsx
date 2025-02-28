@@ -13,6 +13,7 @@ const Carousel : React.FC<CarouselProps> = ({type })  => {
 
     return (
         <div id={`carousel-home-${type}`} className={`carousel slide ${type}`} >
+            <span className='back-carousel'></span>
             <div className="carousel-inner">
                 {images.map((img, i) => (
                     <div className={`carousel-item ${i === 0 ? "active" : ""}`} key={img.id}>
@@ -31,7 +32,6 @@ const Carousel : React.FC<CarouselProps> = ({type })  => {
                             alt={`Banner Mobile ${img.priority}`}
                             />
                         )}
-                       
                     </div>
                 ))}
             </div>
