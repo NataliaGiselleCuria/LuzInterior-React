@@ -19,8 +19,8 @@ import './cart.css'
 
 
 const CheckOut = () => {
-  const { userActive, isLogin, userLogout } = useUser();
-  const { shipping, companyInfo } = useApi();
+  const { isLogin, userLogout } = useUser();
+  const { userActive, shipping, companyInfo } = useApi();
   const { cart, totalPrice } = useCart();
   const { sendOrder } = useOrder();
   const { modalConfig, openModal, closeModal } = useModal();
@@ -118,6 +118,10 @@ const CheckOut = () => {
 
   const handleConfirmShipping = (opc: Shipping) => {
     setSelshipping(opc);
+
+    if (opc.id_shipping === 'pickup') {
+      setSelAddress(defaultAddress);
+    }
   };
 
   //Guardar orden
@@ -152,6 +156,8 @@ const CheckOut = () => {
 
         if (response.success) {
           setLoading(false);
+          sessionStorage.setItem('orderCompleted', 'true');
+          window.location.href = '/confirmacion';
           navigate('/confirmacion');
         } else {
           openModal("Error", `Error al procesar la orden:', ${response.message}`, closeModal);
@@ -208,23 +214,26 @@ const CheckOut = () => {
                     {shipping
                       .filter(option => option.id_shipping !== 'min_free_shipping')
                       .map(option => (
-                        <div key={option.id_shipping} className={`option-cont ${selshipping === option ? 'selected' : ''}`}>
-                          <div className="option-radio">
-                            <input
-                              type="radio"
-                              name="shipping"
-                              id={option.id_shipping}
-                              onChange={() => handleConfirmShipping(option)}
-                              disabled={option.id_shipping === 'free' && totalPrice < valueFree()} />
-                          </div>
-                          <div className="option-info">
-                            <span>
-                              <p>{option.description}</p>
-                              <p>{formatCurrency(option.price)}</p>
-                            </span>
-                            <p className="small">{shippingsMessages(option.id_shipping)}</p>
-                          </div>
+                        <div key={option.id_shipping} className="">
+                          <label htmlFor={option.id_shipping} className={`option-cont ${selshipping === option ? 'selected' : ''}`}>
+                            <div className="option-radio">
 
+                              <input
+                                type="radio"
+                                name="shipping"
+                                id={option.id_shipping}
+                                onChange={() => handleConfirmShipping(option)}
+                                disabled={option.id_shipping === 'free' && totalPrice < valueFree()} />
+
+                            </div>
+                            <div className="option-info">
+                              <span>
+                                <p>{option.description}</p>
+                                <p>{formatCurrency(option.price)}</p>
+                              </span>
+                              <p className="small">{shippingsMessages(option.id_shipping)}</p>
+                            </div>
+                          </label>
                         </div>
                       ))}
                     <button className="light-button" onClick={() => setIsEditingshipping(false)}>Confirmar</button>
@@ -385,7 +394,7 @@ const CheckOut = () => {
                   <span>{!selshipping ? (<p>{formatCurrency(totalPrice)}</p>) : (<p>{formatCurrency(totalPrice + selshipping.price)}</p>)}</span>
                 </div>
               </div>
-              <div className="d-flex flex-column text-center">
+              <div className="d-flex flex-column text-center align-items-center">
                 {!loading ? (
                   <>
                     <button className="general-button" onClick={handleAddtoOrder} disabled={isCartEmpty}>Finalizar Pedido</button>

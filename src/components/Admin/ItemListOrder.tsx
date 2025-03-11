@@ -113,7 +113,7 @@ const ItemListOrder: React.FC<Props> = ({ order, onStateChange, handleUpdateNew,
                             <h5>Productos</h5>
                         </div>
                         <div className="item-info">
-                            <ul className="order-prods">
+                            <ul className="ul-row-nopadding order-prods">
                                 {order.products.map((prod) => {
                                     return (
                                         <li key={prod.product_id}>

@@ -2,6 +2,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useApi } from "../../context/ApiProvider";
 import FullScreenImage from "../Tools/FullScreenImage";
 import { useState } from "react";
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 const Gallery = () => {
   const { dev, gallery } = useApi();
@@ -10,8 +11,9 @@ const Gallery = () => {
   return (
     <>
       <div className="cont container">
+      <h1 className='hidden'>Luz Interior | Galería de imágenes.</h1>
         <div className="title-page">
-          <h1>Galería</h1>
+          <h2>Galería</h2>
           <span className="line"></span>
         </div>
         <ul className="gallery-ul">
@@ -23,6 +25,7 @@ const Gallery = () => {
                   key={item.id}
                   src={`${dev}/${item.img_url}`}
                   alt={`Imagen de la galeria ${item.id}`}
+                  effect='blur'
                 />
               </li>
             ))}

@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useCallback, useContext, useMemo, useState } from "react";
 import { NavigateFunction } from 'react-router-dom';
-import { FormRegister, Response, UserContextType, ApiResponse, Users } from "../Interfaces/interfaces";
+import { FormRegister, Response, UserContextType } from "../Interfaces/interfaces";
 import { useApi } from "./ApiProvider";
 
 export const UserContext = createContext<UserContextType>({} as UserContextType);
@@ -11,29 +11,8 @@ interface Props {
 
 export const UserProvider = ({ children }: Props) => {
 
-    const { users, refreshUser, fetchUserData, dev } = useApi();
+    const { users, refreshUser, dev, getUserActive, setUserActive } = useApi();
     const [isLogin, setIsLogin] = useState(false);
-    const [userActive, setUserActive] = useState<Users | null>(null);
-
-    const getUserActive = useCallback(async (token: string, email: string): Promise<ApiResponse> => {
-        try {
-            const userActiveResponse = await fetchUserData(token, email);
-
-            if (userActiveResponse.success && userActiveResponse.user) {
-                setUserActive(userActiveResponse.user);
-                return { success: true, message: "Inicio de sesión exitoso", user: userActiveResponse.user };
-            } else {
-                return { success: false, message: "No se pudieron obtener los datos del usuario" };
-            }
-        } catch (error) {
-            const errorMessage = error instanceof TypeError
-                ? "Error de conexión. Verifique su conexión a internet."
-                : "Ocurrió un problema inesperado.";
-            return { success: false, message: errorMessage };
-        } finally {
-            // setIsLogin(false); // Finaliza el estado de carga
-        }
-    }, []);
 
     const userLogout = (navigate: NavigateFunction) => {
         localStorage.removeItem('user_token');
@@ -48,27 +27,27 @@ export const UserProvider = ({ children }: Props) => {
                 userLogout(navigate);
                 return { success: false, message: "Token no encontrado. La sesión ha expirado." };
             }
-    
+
             const response = await fetch(`${dev}/index.php?action=verify-token`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    
+
                 },
                 body: JSON.stringify({
                     token: token
                 })
             });
-    
+
             const result = await response.json();
-    
+
             if (result.success) {
                 const email = localStorage.getItem('email');
                 if (!email) {
                     userLogout(navigate);
                     return { success: false, message: "No se encontró el email del usuario en el almacenamiento." };
                 }
-    
+
                 setIsLogin(true);
                 return { success: true, message: "Inicio de sesión exitoso" };
             } else {
@@ -78,7 +57,7 @@ export const UserProvider = ({ children }: Props) => {
                     message: result.message || "Su sesión expiró. Inicie sesión nuevamente"
                 };
             }
-    
+
         } catch (error) {
             console.error("Error en la verificación:", error);
             userLogout(navigate);
@@ -120,7 +99,7 @@ export const UserProvider = ({ children }: Props) => {
                 return { success: false, message: result.message || "Credenciales incorrectas" };
             }
 
-          
+
         } catch (error) {
             const errorMessage = error instanceof TypeError
                 ? "Error de conexión. Verifique su conexión a internet."
@@ -138,13 +117,13 @@ export const UserProvider = ({ children }: Props) => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({data})
+                body: JSON.stringify({ data })
             });
 
             const result = await response.json();
 
-            if (!response.ok  || !result.success) {
-               
+            if (!response.ok || !result.success) {
+
                 if (result.message) {
                     return {
                         success: false,
@@ -257,7 +236,7 @@ export const UserProvider = ({ children }: Props) => {
         }
     }
 
-    const updateUserRole = async (id:number) : Promise<Response> => {
+    const updateUserRole = async (id: number): Promise<Response> => {
         try {
             const token = localStorage.getItem('user_token')
 
@@ -266,7 +245,7 @@ export const UserProvider = ({ children }: Props) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ id, token}),
+                body: JSON.stringify({ id, token }),
             });
 
             const result = await response.json();
@@ -288,7 +267,7 @@ export const UserProvider = ({ children }: Props) => {
         }
     }
 
-    const deletUser = async(id:number): Promise<Response> => {
+    const deletUser = async (id: number): Promise<Response> => {
         try {
             const token = localStorage.getItem('user_token')
 
@@ -296,7 +275,7 @@ export const UserProvider = ({ children }: Props) => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                   
+
                 },
                 body: JSON.stringify({ id, token }),
             });
@@ -322,8 +301,6 @@ export const UserProvider = ({ children }: Props) => {
 
     const userValue = useMemo(() => ({
         isLogin,
-        getUserActive,
-        userActive,
         userLogout,
         checkToken,
         userLogin,
@@ -334,9 +311,10 @@ export const UserProvider = ({ children }: Props) => {
         updateUserRole,
         deletUser
     }),
-        [isLogin,
-            users,
-            userActive
+        [
+        isLogin,
+        users,
+
         ]);
 
     return (

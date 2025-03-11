@@ -40,13 +40,17 @@ span.line {
     margin-top: 15px;
 }
 
+
+
 #carousel-home-desktop {
-    height: calc(100dvh - 235px);
+    height: calc(100dvh - 260px);
     min-height: 600px;
     display: flex;
     justify-content: center;
     overflow-y: clip;
 }
+
+
 
 .carousel-inner,
 .carousel-item {
@@ -68,7 +72,17 @@ span.line {
     overflow: hidden;
 }
 
-#carousel-home-mobile .carousel-item img {
+#carousel-home-desktop .lazy-load-image-background.blur.lazy-load-image-loaded{
+height:100%;
+}
+
+#carousel-home-desktop .lazy-load-image-background.blur.lazy-load-image-loaded img{
+    height: auto;
+    width: auto;
+}
+
+#carousel-home-mobile .carousel-item img,
+#carousel-home-mobile .lazy-load-image-background.blur.lazy-load-image-loaded {
     height: 100%;
     width: auto;
     object-fit: cover;
@@ -160,12 +174,18 @@ span.line {
     #carousel-home-mobile {
         height: calc(100vh - 190px);
         max-height: 700px;
-        min-height: 80dvh;
+        min-height: 80vh;
     }
+
+   
 }
 
 @media (max-width: 576px) {
 
+    .cont.container.app {
+        padding: 0;
+    }
+    
     .banner-wholesalers {
         flex-direction: column;
         align-items: baseline;

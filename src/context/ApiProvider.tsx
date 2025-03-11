@@ -1,6 +1,6 @@
-import { createContext, useContext, ReactNode, useState, useEffect, useMemo } from 'react';
+import { createContext, useContext, ReactNode, useState, useEffect, useMemo, useCallback } from 'react';
 import { Products, ApiContextType, Users, ApiResponse, Shipping, CompanyInfo, Orders, Address, Socials, ListPrice, Faq, Imgs, } from '../Interfaces/interfaces';
-
+import { jwtDecode } from 'jwt-decode';
 export const ApiContext = createContext<ApiContextType>({} as ApiContextType);
 
 interface Props {
@@ -21,6 +21,8 @@ export const ApiProvider = ({ children }: Props) => {
     const [listPrice, setListPrice] = useState<ListPrice[]>([]);
     const [fileUrl, setFileUrl] = useState('');
     const [faq, setFaq] = useState<Faq[]>([]);
+    const [userActive, setUserActive] = useState<Users | null>(null);
+    const [latestOrderActiveUser, setLatestOrderActiveUser] = useState<Orders | null>(null);
 
     const dev = import.meta.env.VITE_API_URL;
 
@@ -45,35 +47,39 @@ export const ApiProvider = ({ children }: Props) => {
                     throw new Error('One or more responses were not ok');
                 }
 
-                const [productsData, usersData, ordersData, shippingData, companyInfoData, galleryData, bannerDesktopData, bannerMobileData, socialData, listPriceData, faqData] = await Promise.all([
+                const [productsData, ordersData, shippingData, companyInfoData, galleryData, bannerDesktopData, bannerMobileData, socialData, listPriceData, faqData] = await Promise.all([
                     productsRes.json(),
-                    usersRes.json(),
                     ordersRes.json(),
                     shippingRes.json(),
                     companyInfoRes.json(),
                     galleryRes.json(),
-                    bannerDesktopRes.json(), 
+                    bannerDesktopRes.json(),
                     bannerMobileRes.json(),
                     socialRes.json(),
                     listPriceRes.json(),
                     faqRes.json(),
                 ]);
-                
-                const mappedOrders = ordersData.map((orderData: any) => ({
-                    
+
+                // Decodificar el JWT recibido en las respuestas
+                const usersData = await usersRes.json();
+                const decodedUsers = jwtDecode(usersData.token) as any;
+                const usersArray = Array.isArray(decodedUsers.data) ? decodedUsers.data : [decodedUsers.data];
+
+                const mappedOrders = ordersData?.map((orderData: any) => ({
+
                     id: orderData.id_order,
-                    user: getUserById(usersData, orderData.id_user),
+                    user: getUserById(usersArray, orderData.id_user),
                     date: new Date(orderData.date + "T00:00:00"),
                     products: orderData.products,
                     total_price: parseFloat(orderData.total_price),
-                    address: getAddressById(usersData, orderData.id_user, orderData.shipping_address),
+                    address: getAddressById(usersArray, orderData.id_user, orderData.shipping_address),
                     shipping: orderData.shipping_type,
                     state: orderData.state,
                     new: orderData.new
                 }));
 
                 setProducts(productsData);
-                setUsers(usersData);
+                setUsers(decodedUsers.data);
                 setOrders(mappedOrders);
                 setShipping(shippingData);
                 setCompanyInfo(companyInfoData);
@@ -103,10 +109,26 @@ export const ApiProvider = ({ children }: Props) => {
                 },
                 body: JSON.stringify({ email, token }),
             });
+
             const data = await response.json();
-            return data;
+
+            if (!data.token) {
+                throw new Error("El token no fue recibido en la respuesta");
+            }
+
+            const decodedUsers = jwtDecode(data.token);
+
+            if (!decodedUsers.data || !decodedUsers.data.user) {
+                throw new Error("El token decodificado no contiene los datos esperados");
+            }
+
+            return {
+                success: true,
+                message: "Datos del usuario obtenidos correctamente",
+                user: decodedUsers.data.user,
+            };
         } catch (error) {
-            throw new Error("Error al obtener los datos del usuario");
+            return { success: false, message: "Error al obtener los datos del usuario", user: null };
         }
     };
 
@@ -115,17 +137,41 @@ export const ApiProvider = ({ children }: Props) => {
         return Array.from(new Set(products.map((product) => product.category)));
     }, [products]);
 
+    const getUserActive = useCallback(async (token: string, email: string): Promise<ApiResponse> => {
+        try {
+            const userActiveResponse = await fetchUserData(token, email);
+
+            if (userActiveResponse.success && userActiveResponse.user) {
+
+                setUserActive(userActiveResponse.user);
+                return { success: true, message: "Inicio de sesión exitoso", user: userActiveResponse.user };
+
+            } else {
+                return { success: false, message: "No se pudieron obtener los datos del usuario" };
+            }
+        } catch (error) {
+            const errorMessage = error instanceof TypeError
+                ? "Error de conexión. Verifique su conexión a internet."
+                : "Ocurrió un problema inesperado.";
+            return { success: false, message: errorMessage };
+        } finally {
+            // setIsLogin(false); // Finaliza el estado de carga
+        }
+    }, []);
+
     // Funciones auxiliares para obtener los detalles de las ordenes.
-    const getUserById = (usersData: Users[], userId: number) => {
-        if (!Array.isArray(usersData)) {
-            console.error('usersData is not an array:', usersData);
+    const getUserById = (decodedUsers: Users[], userId: number): Users | null => {
+        if (!Array.isArray(decodedUsers)) {
+            console.error('decodedUsers is not an array:', decodedUsers);
             return null;
         }
-        return usersData.find(user => user.id === userId) || null;
-    }
 
-    const getAddressById = (usersData: Users[], userId: number, addressId: number): Address | null => {
-        const user = usersData.find(user => user.id === userId) || null;
+        return decodedUsers.find(user => user.id === userId) || null;
+    };
+
+    const getAddressById = (decodedUsers: Users[], userId: number, addressId: number): Address | null => {
+        const user = decodedUsers.find(user => user.id === userId) || null;
+
         if (!user) {
             return null;
         }
@@ -133,11 +179,38 @@ export const ApiProvider = ({ children }: Props) => {
         return address || null;
     };
 
-    const refreshUser = async () => {
-        const updateUsers = await fetch(`${dev}/index.php?action=users`);
-        const data = await updateUsers.json();
-        setUsers(data);
+    const getLatestOrderActiveUser = () => {
+        if (!userActive) return;
+
+        if (orders.length === 0) {
+            setLatestOrderActiveUser(null);
+            return;
+        }
+
+        const userOrders = orders.filter(order => order.user?.id === userActive.id);
+
+        const latestOrder = userOrders.length > 0
+            ? userOrders.reduce((latest, order) => order.id > latest.id ? order : latest)
+            : null;
+
+        setLatestOrderActiveUser(latestOrder);
     }
+
+    const refreshUser = async () => {
+        try {
+            const response = await fetch(`${dev}/index.php?action=users`);
+            const data = await response.json();
+            const decodedData = jwtDecode(data.token) as any;
+
+            if (!decodedData?.data) {
+                throw new Error("Datos de usuario no encontrados en el token");
+            }
+
+            setUsers(Array.isArray(decodedData.data) ? decodedData.data : [decodedData.data]);
+        } catch (error) {
+            console.error("Error al actualizar usuarios:", error);
+        }
+    };
 
     const refreshOrders = async () => {
         try {
@@ -146,26 +219,43 @@ export const ApiProvider = ({ children }: Props) => {
                 fetch(`${dev}/index.php?action=users`),
             ]);
 
+            if (!updateOrders.ok || !updatedUsers.ok) {
+                throw new Error("Error en la respuesta del servidor.");
+            }
+
             const [ordersData, usersData] = await Promise.all([
                 updateOrders.json(),
                 updatedUsers.json(),
             ]);
 
+            if (!usersData.token) {
+                throw new Error("Token de usuarios no recibido.");
+            }
+
+            const decodedUsers = jwtDecode(usersData.token) as any;
+
+            if (!decodedUsers?.data) {
+                throw new Error("Datos de usuario no encontrados en el token");
+            }
+
+            const usersArray = Array.isArray(decodedUsers.data) ? decodedUsers.data : [decodedUsers.data];
+
             const mappedOrders = ordersData.map((orderData: any) => ({
                 id: orderData.id_order,
-                user: getUserById(usersData, orderData.id_user),
+                user: getUserById(usersArray, orderData.id_user),
                 date: new Date(orderData.date + "T00:00:00"),
                 products: orderData.products,
                 total_price: parseFloat(orderData.total_price),
-                address: getAddressById(usersData, orderData.id_user, orderData.shipping_address),
+                address: getAddressById(usersArray, orderData.id_user, orderData.shipping_address),
                 shipping: orderData.shipping_type,
                 state: orderData.state,
                 new: orderData.new,
             }));
 
             setOrders(mappedOrders);
+
         } catch (error) {
-            console.error('Error refreshing orders:', error);
+            console.error('Error al actualizar órdenes:', error);
         }
     };
 
@@ -197,7 +287,7 @@ export const ApiProvider = ({ children }: Props) => {
             const dataD = await updateBannerD.json();
             setBannerDesktop(dataD);
 
-            const updateBannerM = await  fetch(`${dev}/index.php?action=banner-mobile`);
+            const updateBannerM = await fetch(`${dev}/index.php?action=banner-mobile`);
             const dataM = await updateBannerM.json();
             setBannerMobile(dataM);
         } catch (error) {
@@ -224,6 +314,10 @@ export const ApiProvider = ({ children }: Props) => {
     useEffect(() => {
         getFile();
     }, []);
+
+    useEffect(() => {
+        getLatestOrderActiveUser();
+    }, [orders]);
 
     const getFile = async () => {
         try {
@@ -265,8 +359,12 @@ export const ApiProvider = ({ children }: Props) => {
         refreshOrders,
         refreshGallery,
         getFile,
+        getUserActive,
+        userActive,
+        setUserActive,
         faq,
-        refreshFaq
+        refreshFaq,
+        latestOrderActiveUser
 
     }),
         [
@@ -280,7 +378,9 @@ export const ApiProvider = ({ children }: Props) => {
             bannerMobile,
             social,
             fileUrl,
-            faq
+            faq,
+            userActive,
+            latestOrderActiveUser
         ]);
 
     return (

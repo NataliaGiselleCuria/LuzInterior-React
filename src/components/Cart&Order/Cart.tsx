@@ -14,7 +14,7 @@ const Cart = () => {
 
   return (
     <div className="cont container">
-      <div className="cart-container container">
+      <div className="cart-container">
         <div className="row justify-content-evenly">
           <div className="col-lg-7 cart-prod-list">
             <div className="title-page">

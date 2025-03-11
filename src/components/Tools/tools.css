@@ -131,6 +131,10 @@ input:-internal-autofill-selected {
     justify-content: space-between;
 }
 
+.li-img-prod li .lazy-load-image-background.blur.lazy-load-image-loaded{
+    height: 100%;
+}
+
 .li-img-prod button {
     height: 30px;
     width: 30px;

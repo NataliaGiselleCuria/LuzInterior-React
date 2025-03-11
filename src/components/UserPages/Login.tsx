@@ -3,6 +3,8 @@ import { useForm } from 'react-hook-form';
 import { FormLogin } from '../../Interfaces/interfaces';
 import { useUser } from '../../context/UserContext';
 import { useNavigate } from 'react-router-dom';
+import showPass from '../../assets/show-pass.png'
+import hidddenPass from '../../assets/hidden-pass.png'
 
 interface Props {
     setRegisterCont: React.Dispatch<React.SetStateAction<boolean>>;
@@ -15,6 +17,7 @@ const Login: React.FC<Props> = ({ setRegisterCont, serRecoverCort }) => {
     const { userLogin } = useUser();
     const { register, handleSubmit } = useForm<FormLogin>();
     const [errorMessage, setErrorMessage] = useState("");
+    const [visibilityPass, SetVisibilityPass] = useState(false);
 
     const handleLogin = async (data: FormLogin) => {
         const { email, password } = data;
@@ -42,13 +45,18 @@ const Login: React.FC<Props> = ({ setRegisterCont, serRecoverCort }) => {
                             {...register('email', { required: true })}>
                         </input>
                     </span>
-                    <span>
+                    <span className='password'>
                         <label htmlFor="password">Contraseña*</label>
                         <input
                             id="password"
-                            type='password'
+                            type={visibilityPass ? "text" : "password"}
                             {...register('password', { required: true })}>
                         </input>
+                        {!visibilityPass ?
+                            <img className="visibility-pass" onClick={() => SetVisibilityPass(true)} src={hidddenPass} alt="contraseña no visible"></img>
+                            :
+                            <img className="visibility-pass" onClick={() => SetVisibilityPass(false)} src={showPass} alt="contraseña visible"></img>
+                        }
                     </span>
                 </div>
                 <button className="general-button">Ingresar</button>

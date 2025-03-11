@@ -159,7 +159,8 @@ export interface Response {
 export interface ApiResponse {
     success: boolean;
     message: string;
-    user?: Users;
+    user?: Users | null;
+    data?: Users
 }
 
 //context type
@@ -186,17 +187,19 @@ export type ApiContextType = {
     refreshListPrice: () => Promise<void>;
     fileUrl:string;
     getFile: () => void;
+    getUserActive:(token:string, email:string) => Promise<ApiResponse>;
+    userActive: Users | null;
+    setUserActive: React.Dispatch<React.SetStateAction<Users | null>>;
     faq: Faq[];
     refreshFaq: () => Promise<void>;
     categories: string[];
+    latestOrderActiveUser: Orders | null;
 }
 
 export type UserContextType = {
-    isLogin:boolean;
-    userActive: Users | null;
+    isLogin:boolean;   
     userLogout: (navigate:NavigateFunction) => void;
     checkToken: (token:string, navigate: NavigateFunction) => Promise<Response>;
-    getUserActive:(token:string, email:string) => Promise<ApiResponse>;
     userLogin: (email:string, passwordInput:string) => Promise<Response>;
     userRegister: (data: FormRegister) => Promise<Response>
     recoverPassword: (email: string) => Promise<Response>;

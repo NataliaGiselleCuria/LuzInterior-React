@@ -36,6 +36,7 @@ const SortableItem: React.FC<SortableItemProps> = ({ id, img, onRemove }) => {
           className='img-prod'
           src={img.preview}
           alt={`Imagen ${img.priority}`}
+          effect='blur'
         />
         <span>Prioridad: {img.priority}</span>
       </li>

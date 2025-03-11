@@ -35,7 +35,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 <LazyLoadImage
                     className="prod-card-img"
                     src={`${dev}${product.img_url[currentImageIndex]?.url}`}
-                    alt={product.name}
+                    alt={product.name}                
+                    effect='blur'
+                    loading="lazy"
                 />
             </div>
             <div className='prod-card-description'>

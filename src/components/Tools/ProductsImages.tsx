@@ -33,7 +33,7 @@ const ProductsImages: React.FC<Props> = ({ images }) => {
     return (
         <div className="image-gallery h100">
             <div className="main-image img-cont" onClick={() => setSelectedImage(`${dev}/${mainImage.url}`)}>
-                <LazyLoadImage src={`${dev}${mainImage.url}`} alt="Producto principal" />
+                <LazyLoadImage src={`${dev}${mainImage.url}`} alt="Producto principal" effect='blur'/>
             </div>
             <div className="thumbnail-container">
                 {images.map((image, index) => (
@@ -43,7 +43,8 @@ const ProductsImages: React.FC<Props> = ({ images }) => {
                         <LazyLoadImage 
                             key={image.id_img}                          
                             src={`${dev}${image.url}`}
-                            alt={`Vista ${index + 1}`}                      
+                            alt={`Vista ${index + 1}`} 
+                            effect='blur'                     
                         />
                     </div>
                 ))}

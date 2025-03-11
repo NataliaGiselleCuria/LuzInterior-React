@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useUser } from "../context/UserContext";
 import { Address } from "../Interfaces/interfaces";
 import useVerifyToken from "./useVerefyToken";
+import { useApi } from "../context/ApiProvider";
 
 
 interface UseUpdateUserInfoReturn {
@@ -18,7 +19,8 @@ interface UseUpdateUserInfoReturn {
 
 export const useUpdateUserInfo = (openModal: (title: string, content: string) => void): UseUpdateUserInfoReturn => {
 
-  const { getUserActive, updateUserInfo, userActive } = useUser();
+  const {getUserActive, userActive } = useApi();
+  const {updateUserInfo } = useUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
   const { validateToken } = useVerifyToken();

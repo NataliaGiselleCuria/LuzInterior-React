@@ -21,7 +21,6 @@ export const OrderProvider = ({ children }: Props) => {
     const { validateToken } = useVerifyToken();
     const [ order, setOrder ] = useState<Orders | null>(null);
 
-
     const addProductsToOrder = (user: Users, cart: ProductInCart[], totalPrice: number, address: Address, shipping: Shipping) => {
         const newOrder: Orders = {
             id: user.id + Math.random(),
@@ -65,6 +64,7 @@ export const OrderProvider = ({ children }: Props) => {
                     if (result.success) {
                         refreshOrders();
                         clearCart();
+
                         return { success: true, message: "Orden enviada correctamente" };
 
                     } else {

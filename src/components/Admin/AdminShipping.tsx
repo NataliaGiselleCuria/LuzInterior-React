@@ -58,10 +58,10 @@ const AdminShipping = () => {
         <h4>Envíos</h4>
         <p>Actualiza valores de envío.</p>
       </div>
-      <div className="item-cont  border-top">
+      <div className="">
         <form onSubmit={handleSubmit(updateShipping)}>
           {shipping.map((item) => (
-            <li className="item-info" key={item.id_shipping}>
+            <li className="item-info border-top" key={item.id_shipping}>
               <h6 className="left-decoration-grey">ID: {item.id_shipping}</h6>
               <div className="description item-form">
                 <label htmlFor={`description-${item.id_shipping}`}>Descripción: </label>

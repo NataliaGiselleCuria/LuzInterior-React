@@ -81,7 +81,7 @@ const AdminUsers = () => {
                 <h4>Usuarios</h4>
             </div>
             <div className='row gap-4'>
-                <div className='col-lg item-cont  border-top'>
+                <div className='col-lg item-cont border-top no-padding'>
                     <div className="title left-decoration">
                         <h5>Nuevos usuarios:</h5>
                         <p>Los siguientes usuarios esperan aprovación para activar su cuenta:</p>
@@ -113,7 +113,7 @@ const AdminUsers = () => {
                     )}
 
                 </div>
-                <div className="col-lg item-cont  border-top">
+                <div className="col-lg item-cont border-top no-padding">
                     <div className="title left-decoration">
                         <label htmlFor="admin-search-users">
                             <h5>Usuarios activos:</h5>

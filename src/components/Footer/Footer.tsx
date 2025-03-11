@@ -6,6 +6,7 @@ import logo from "../../assets/alt_logo.png"
 import watsapp from "../../assets/whatsapp.png"
 import email from "../../assets/email.png"
 import location from "../../assets/location.png"
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 const Footer = () => {
 
@@ -19,7 +20,7 @@ const Footer = () => {
 
   return (
     <footer className="footer">
-      <div className="container">
+      <div className="container no-padding">
         <div className="row justify-content-between">
           <div className="col-lg d-flex justify-content-center">
             <div className="item-cont nav">
@@ -53,7 +54,9 @@ const Footer = () => {
           <div className="col-lg d-flex">
             <div className="item-cont social">
               {social.map((item) => (
-                <a href={item.url} key={item.id} aria-label={`Visitar la red social ${item.id} de Luz interior`}><LazyLoadImage src={`${dev}/${item.img_social}`} alt={item.id}></LazyLoadImage></a>
+                <a href={item.url} key={item.id} aria-label={`Visitar la red social ${item.id} de Luz interior`}>
+                  <LazyLoadImage src={`${dev}/${item.img_social}`} alt={item.id} effect='blur'></LazyLoadImage>
+                </a>
               ))}
             </div>
           </div>

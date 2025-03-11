@@ -2,10 +2,10 @@
 
 import { useForm } from "react-hook-form";
 import { Address } from "../../Interfaces/interfaces";
-import { useUser } from "../../context/UserContext";
 import { useUpdateUserInfo } from "../../CustomHooks/useUpdateUserInfo";
 import useModal from "../../CustomHooks/useModal";
 import './tools.css'
+import { useApi } from "../../context/ApiProvider";
 
 export interface FormAddresses {
     address: Address | null,
@@ -15,7 +15,7 @@ export interface FormAddresses {
 
 const FormAddresses: React.FC<FormAddresses> = ({ address, onClose }) => {
 
-    const { userActive } = useUser();
+    const { userActive } = useApi();
     const { openModal, closeModal } = useModal();
     const { handleUpdateInformation } = useUpdateUserInfo((title, content) => openModal(title, content, closeModal));
     const { register, handleSubmit, formState: { errors } } = useForm<Address>({

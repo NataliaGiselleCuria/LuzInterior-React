@@ -1,5 +1,4 @@
 
-- arreglar la ruta para mostrar las imagenes del banner en admin.   $targetDir = './uploads/img-banner/mobile/';
 -optimizar imagenes
 -el banner a veces no carga??
 

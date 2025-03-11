@@ -1,5 +1,6 @@
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import useProductById from "../../CustomHooks/useProductById";
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 const ProductDetail = ({ id }: { id: string }) => {
   const { exists, product, imageUrl, message } = useProductById(id);
@@ -19,7 +20,7 @@ const ProductDetail = ({ id }: { id: string }) => {
     {product &&
         <>
       <div className="order-prod-img">
-        <LazyLoadImage src={imageUrl} alt={`Imagen de ${product.name}`} />
+        <LazyLoadImage src={imageUrl} alt={`Imagen de ${product.name}`} effect='blur'/>
       </div>
       <div className="item-info">
         <div>

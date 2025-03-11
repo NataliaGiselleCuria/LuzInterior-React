@@ -60,7 +60,7 @@ const Home: React.FC<HomeProps> = () => {
       {loading && <SpinnerLoading/>}
       {!loading && (
         <main>
-          <h1 className='d-none'>Luz Interior | Fábrica de luminaria de diseño.</h1>
+          <h1 className='hidden'>Luz Interior | Fábrica de luminaria de diseño.</h1>
           <div className='banner-wholesalers'>
             <span className='line'></span>
             <span>

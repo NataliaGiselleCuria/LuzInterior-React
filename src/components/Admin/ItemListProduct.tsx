@@ -9,6 +9,7 @@ import useVerifyToken from "../../CustomHooks/useVerefyToken";
 import useModal from "../../CustomHooks/useModal";
 import ModalMesagge from "../Tools/ModalMesagge";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 export interface ItemListProductProps {
   product: Products;
@@ -203,7 +204,7 @@ const ItemListProduct = ({ product }: ItemListProductProps) => {
               <ul className="ul-row-nopadding">
                 {product.img_url.map((img, index) => (
                   <li className="h100 " key={`${product.name} - ${index}`}>
-                    <LazyLoadImage className="h100 fix-img" id={img.id_img} src={`${dev}${img.url}`} alt={`${product.name} - ${img.id_img}`} />
+                    <LazyLoadImage className="h100 fix-img" id={img.id_img} src={`${dev}${img.url}`} alt={`${product.name} - ${img.id_img}`} effect='blur'/>
                     {img.priority === 1 &&
                       <span className="priority-mark">Portada</span>
                     }

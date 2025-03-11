@@ -23,6 +23,7 @@ const Carousel : React.FC<CarouselProps> = ({type })  => {
                                 className="d-block"
                                 src={`${dev}${img.img_url}`}
                                 alt={`Banner desktop ${img.priority}`}
+                               
                                 />
                             </Link>
                         ):(
@@ -30,6 +31,7 @@ const Carousel : React.FC<CarouselProps> = ({type })  => {
                             className="d-block"
                             src={`${dev}${img.img_url}`}
                             alt={`Banner Mobile ${img.priority}`}
+                            effect='blur'
                             />
                         )}
                     </div>

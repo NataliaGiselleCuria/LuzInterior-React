@@ -28,7 +28,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ data, handleLinkClick }) => {
   return (
     <div className="search-cont">
       <span className="search-input">
-        <LazyLoadImage src={search} alt="buscador" />
+        <LazyLoadImage src={search} alt="buscador"/>
         <input
           type="text"
           value={searchQuery}

@@ -1,6 +1,7 @@
 import { useApi } from "../../context/ApiProvider"
 import priceList from '../../../src/assets/price_list.png'
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 const ListaDePrecios = () => {
 
@@ -22,7 +23,7 @@ const ListaDePrecios = () => {
             </div>
             {fileUrl ? (
               <>
-              <LazyLoadImage src={priceList} alt="lista de precios"></LazyLoadImage>
+              <LazyLoadImage src={priceList} alt="lista de precios" effect='blur'></LazyLoadImage>
               <button className="general-button">              
                 <a href={fileUrl} download aria-label="Descargar lista de precios de los productos de Luz Interior">Descargar</a>
               </button>

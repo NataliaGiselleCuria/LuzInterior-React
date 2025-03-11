@@ -37,7 +37,7 @@ const ProductsInCart = ({ editable }: Props) => {
           return (
             <li key={item.product.id}>
               <div className="ul-cart-img">
-                <LazyLoadImage src={`${dev}${item.product.img_url[0].url}`} alt={item.product.name} />
+                <LazyLoadImage src={`${dev}${item.product.img_url[0].url}`} alt={item.product.name} effect='blur'/>
               </div>
               <div className="cart-prod-info">
                 <span className="prod-info">

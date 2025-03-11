@@ -255,7 +255,16 @@
     width: 300px;
 }
 
+.password{
+    position: relative;
+}
 
+.visibility-pass{
+    position: absolute;
+    height: 15px;
+    right: 0;
+    bottom: 7px;
+}
 
 @media (max-width: 768px) {
     .account-user {
@@ -292,11 +301,8 @@
     .address-button {
         width: 100%;
     }
-}
 
-@media (max-height: 768px) {
-    /* .login {    
-        background-size: 70dvw;    
-        background-position: center -50px ;       
-    } */
+    .col-user-info {
+       padding: 0;
+    }
 }

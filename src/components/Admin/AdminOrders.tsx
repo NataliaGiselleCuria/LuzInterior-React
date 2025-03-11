@@ -107,7 +107,7 @@ const AdminOrders = () => {
                 <h4>Ordenes de pedido</h4>
             </div>
             <div className='row gap-4'>
-                <div className='col-lg item-cont  border-top'>
+                <div className='col-lg item-cont border-top no-padding'>
                     <div className="title left-decoration">
                         <h5>Nuevas ordenes de pedido:</h5>
                     </div>
@@ -124,7 +124,7 @@ const AdminOrders = () => {
                         })}
                     </div>
                 </div>
-                <div className='col-lg item-cont  border-top'>
+                <div className='col-lg item-cont border-top no-padding'>
                     <div className="title left-decoration">
                         <label htmlFor='admin-searc-order'>
                         <h5>Ordenes vistas:</h5>

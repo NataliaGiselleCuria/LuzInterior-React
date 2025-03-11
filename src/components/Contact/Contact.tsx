@@ -15,12 +15,13 @@ const Contact = () => {
     const mapIframe = companyInfo.find(info => info.key === 'map')?.value || '';
 
     return (
-        <div className="cont container contact">         
+        <div className="cont container contact"> 
+            <h1 className='hidden'>Luz Interior | Contacto.</h1>        
             <div className='row contact-cont'>
                 <div className="contact-info col-md-5">
                     <span className='back'></span>
                     <div className="title-page">
-                        <h1>Contactanos</h1>
+                        <h2>Contactanos</h2>
                         <span className="line"></span>
                     </div>
                     <div className="info-item">
@@ -46,7 +47,9 @@ const Contact = () => {
                     <div className="info-item">
                         <h4>Nuestras Redes:</h4>
                         {social.map((item) => (
-                            <a href={item.url} key={item.id} aria-label={`Visitar la red social ${item.id} de Luz interior`}><LazyLoadImage src={`${dev}/${item.img_social}`} alt={item.id}></LazyLoadImage></a>
+                            <a href={item.url} key={item.id} aria-label={`Visitar la red social ${item.id} de Luz interior`}>
+                                <LazyLoadImage src={`${dev}/${item.img_social}`} alt={item.id} effect='blur'></LazyLoadImage>
+                            </a>
                         ))}
                     </div>
                 </div>

@@ -38,6 +38,7 @@ body {
   min-height: calc(100dvh - 100px);
   display: flex;
   flex-direction: column;
+  padding: 0;
   padding-bottom: 70px !important;
 }
 
@@ -85,12 +86,6 @@ li {
   padding: 0;
 }
 
-.ul-column-nopadding {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
 .h100 {
   height: 100%;
   aspect-ratio: 4 / 3;
@@ -109,6 +104,11 @@ li {
 
 .small {
   font-size: 0.875em !important;
+}
+
+.hidden{
+  position: absolute;
+  visibility: hidden;
 }
 
 button {
@@ -157,6 +157,13 @@ select option #select-options:focus {
   /* Fuerza el color azul */
   color: white;
   /* Asegura que el texto sea legible */
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
 }
 
 input:not(.search-input, .light-button, .general-button, .quantity-selector input) {
@@ -467,6 +474,12 @@ input::file-selector-button:hover {
   display: none;
 }
 
+.lazy-load-image-background.blur.lazy-load-image-loaded{
+  display: flex!important;
+  justify-content: center;
+  align-items: center;
+}
+
 /* Orders admin & user */
 .col-user-info .accordion-button:not(.collapsed),
 .opc-render .accordion-button:not(.collapsed) {
@@ -519,6 +532,7 @@ input::file-selector-button:hover {
 .order-prods {
   display: flex;
   flex-wrap: wrap;
+  max-width: 100%;
 }
 
 .order-prods li {
@@ -535,6 +549,11 @@ input::file-selector-button:hover {
   justify-content: center;
   align-items: center;
   overflow: hidden;
+}
+
+.order-prod-img .lazy-load-image-loaded{
+  width: 100%;
+  height: 100%;
 }
 
 .order-prod-img img {
@@ -589,9 +608,10 @@ input::file-selector-button:hover {
   width: 300px;
   border: 1px solid var(--light);
   padding: 25px;
-  margin-top: 10%;
+  margin:auto;
   gap: 20px;
   font-size: 18px;
+ 
 }
 
 .list-price-cont button a {
@@ -607,6 +627,7 @@ input::file-selector-button:hover {
 
 .contact-cont {
   height: 100%;
+  min-height: calc(100dvh - 125px)!important;
   position: relative;
   justify-content: center;
   align-items: center;
@@ -743,6 +764,15 @@ footer .col-lg div {
   align-content: center;
 }
 
+.cont.container.error {
+  align-items: center;
+  justify-content: center;
+}
+
+.cont.container.error a {
+  margin-top: 10px;
+}
+
 @media (min-width: 1400px) {
 
   .container-xxl,
@@ -830,5 +860,14 @@ footer .col-lg div {
 
   .sortableContext {
     touch-action: none;
+  }
+
+  footer .row >*{
+    padding: 0;
+  }
+
+  .no-padding {
+    padding-right: 0!important;
+    padding-left: 0!important;
   }
 }

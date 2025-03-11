@@ -1,13 +1,13 @@
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useApi } from "../../context/ApiProvider"
 import ProductCard from "./ProductCard";
-import { useEffect, useState } from "react";
-import { useUser } from "../../context/UserContext";
+import { useEffect } from "react";
 import { useCart } from "../../context/CartProvider";
 import { Products } from "../../Interfaces/interfaces";
 import add from "../../assets/add.png";
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import './products.css'
+import LoginToSeePrices from "../Tools/LoginToSeePrices";
 
 interface ProductListProps {
     openCart: () => void;
@@ -16,20 +16,8 @@ interface ProductListProps {
 const ProductList:  React.FC<ProductListProps> = ({ openCart }) =>{
     const { addToCart } =useCart();
     const { products, categories } = useApi();
-    const { isLogin} = useUser();
     const { category } = useParams<{ category?: string }>();
     const navigate = useNavigate();
-     const [showMessage, setShowMessage] = useState(!isLogin);
-    
-        useEffect(() => {
-            if (!isLogin) {
-                const timer = setTimeout(() => {
-                    setShowMessage(false);
-                }, 10000); // 10 segundos
-    
-                return () => clearTimeout(timer);
-            }
-        }, [isLogin]);
 
     const productFilter = category
         ? products.filter((product) => product.category === category)
@@ -55,9 +43,7 @@ const ProductList:  React.FC<ProductListProps> = ({ openCart }) =>{
 
     return (
         <div className="cont container prod-list">
-            {showMessage && (
-                <div className={`login-message ${showMessage ? "show" : "hide"}`}><span><Link to='/login'>Inicie sesión</Link><span> para acceder a los precios de los productos.</span></span></div>
-            )}
+            <LoginToSeePrices/>
             <div className="title-page">
                 <h1>{category ? `${category}` : 'PRODUCTOS'}</h1>
                 <span className="line"></span>

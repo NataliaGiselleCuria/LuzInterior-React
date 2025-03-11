@@ -6,12 +6,17 @@
     margin: 0;
     overflow: auto;
     padding-top: 10px;
-    padding-bottom: 5px !important;
+    padding-bottom: 15px !important;
 }
 
 .nav-opc {
     position: relative;
     border: 1px solid var(--light);
+    min-height: calc(100dvh - 100px);
+}
+
+.nav-opc .title-page h6{
+    white-space: normal!important;
 }
 
 .nav-opc>*:not(.back) {
@@ -20,7 +25,7 @@
 
 .opc-adm::-webkit-scrollbar,
 .tox-toolbar.tox-toolbar--scrolling::-webkit-scrollbar {
-    height: 1px;
+    height: 2px;
 }
 
 .opc-adm::-webkit-scrollbar-thumb,
@@ -48,7 +53,7 @@
 }
 
 .opc-adm li.active button {
-    border-radius: 0;
+    border-radius: 0!important;
     background-color: var(--black);
     color: white;
     box-shadow: 1px 1px 5px var(--light);
@@ -258,15 +263,23 @@ button.accordion-button.collapsed:hover {
     display: block;
 }
 
+.shipping form{
+    padding: 0 5px;
+}
+
 .shipping form li {
     height: 40px;
     min-height: fit-content;
-    padding: 10px 0;
+    padding: 15px 0;
 }
 
 .shipping form h6 {
     width: 165px;
     align-content: center;
+}
+
+.shipping .item-info {
+    height: fit-content;
 }
 
 .description input {
@@ -275,6 +288,7 @@ button.accordion-button.collapsed:hover {
 
 /* account */
 li.li-social {
+    width: 250px;
     border: 1px solid var(--light);
     padding: 0 10px;
 }
@@ -305,6 +319,10 @@ li.li-social {
         flex-direction: row;
     }
 
+    .opc-render {
+       padding: 0!important;
+    }
+
     .opc-render-cont {
         padding-left: 0;
     }
@@ -332,4 +350,6 @@ li.li-social {
     .account .ul-row-nopadding{
         justify-content: center;
     }
+
+
 }

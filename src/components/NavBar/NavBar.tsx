@@ -3,14 +3,13 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useApi } from '../../context/ApiProvider'
 import { useCart } from '../../context/CartProvider';
 import { useUser } from '../../context/UserContext';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import { useState } from 'react';
 import SearchBar from '../Tools/SearchBar';
 import logo from '../../assets/logo2.png'
 import cartImg from '../../assets/cart.png'
 import userImg from '../../assets/user.png'
 import './navBar.css'
-import { LazyLoadImage } from 'react-lazy-load-image-component';
-import 'react-lazy-load-image-component/src/effects/blur.css';
-import { useState } from 'react';
 
 export interface NavBarProps {
     openCart: () => void;
@@ -30,7 +29,7 @@ const NavBar: React.FC<NavBarProps> = ({ openCart }) => {
         if (!isLogin) {
             return (
                 <Link to="/login" onClick={handleLinkClick}>
-                    <LazyLoadImage className='h100' src={userImg} alt="usuario" />
+                    <LazyLoadImage className='h100' src={userImg} alt="usuario"/>
                     <span className="button-text">Iniciar sesión</span>
                 </Link>
             );
@@ -39,7 +38,7 @@ const NavBar: React.FC<NavBarProps> = ({ openCart }) => {
         if (role === "user") {
             return (
                 <li>
-                    <LazyLoadImage className='h100' src={userImg} alt="usuario" />
+                    <LazyLoadImage className='h100' src={userImg} alt="usuario"/>
                     <span className="nav-link dropdown-toggle" data-bs-toggle="dropdown"></span>
                     <ul className="dropdown-menu drop-user">
                         <li onClick={handleLinkClick}><Link to="/mi_cuenta" className="dropdown-item" >Mi cuenta</Link></li>
@@ -52,7 +51,7 @@ const NavBar: React.FC<NavBarProps> = ({ openCart }) => {
 
         return (
             <li>
-                <LazyLoadImage className='h100' src={userImg} alt="usuario" />
+                <LazyLoadImage className='h100' src={userImg} alt="usuario"/>
                 <span className="nav-link dropdown-toggle" data-bs-toggle="dropdown"></span>
                 <ul className="dropdown-menu drop-user">
                     <li onClick={handleLinkClick}><Link to="/admin" className="dropdown-item">Panel de Administración</Link></li>
@@ -72,9 +71,9 @@ const NavBar: React.FC<NavBarProps> = ({ openCart }) => {
 
     return (
         <nav id='nav' className='navbar navbar-expand-md bg-body-tertiary' >
-            <div className='container nav-cont'>
+            <div className='container nav-cont no-padding'>
                 <Link to='/' onClick={handleLinkClick}>
-                    <LazyLoadImage className='nav-logo' src={logo} alt="Logo Luz Interior" />
+                    <LazyLoadImage className='nav-logo' src={logo} alt="Logo Luz Interior"/>
                 </Link>
                 <span className='nav-links'>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded={isMenuOpen ? 'true' : 'false'} aria-label="Toggle navigation" onClick={toggleMenu}>

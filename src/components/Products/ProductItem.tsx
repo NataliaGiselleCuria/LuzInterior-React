@@ -6,9 +6,9 @@ import { useEffect, useState } from "react";
 import useCurrencyFormat from "../../CustomHooks/useCurrencyFormat";
 import QuantitySelector from "../Tools/QuantitySelector";
 import ProductsImages from "../Tools/ProductsImages";
-import './products.css'
 import SpinnerLoading from "../Tools/SpinnerLoading";
-
+import LoginToSeePrices from "../Tools/LoginToSeePrices";
+import './products.css'
 
 interface ProductItemProps {
     openCart: () => void;
@@ -25,17 +25,6 @@ const ProductItem: React.FC<ProductItemProps> = ({ openCart }) => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
-    const [showMessage, setShowMessage] = useState(!isLogin);
-
-    useEffect(() => {
-        if (!isLogin) {
-            const timer = setTimeout(() => {
-                setShowMessage(false);
-            }, 10000); // 10 segundos
-
-            return () => clearTimeout(timer);
-        }
-    }, [isLogin]);
 
     useEffect(() => {
         if (products.length) {
@@ -65,9 +54,7 @@ const ProductItem: React.FC<ProductItemProps> = ({ openCart }) => {
 
     return (
         <div className="cont container prod-item">
-            {showMessage && (
-                <div className={`login-message ${showMessage ? "show" : "hide"}`}><span><Link to='/login'>Inicie sesión</Link><span> para acceder a los precios de los productos.</span></span></div>
-            )}
+            <LoginToSeePrices />
             <span className="route"><span><Link to='/'>Inicio</Link><Link to='/productos'>/ Todos los productos</Link><Link to={`/productos/categoria/${productItem.category}`}>/ {productItem.category}</Link><span className="current-route">/ {productItem.name}.{productItem.id}</span></span></span>
             <div className="prod-item-cont container">
                 <div className="row justify-content-between">
@@ -95,9 +82,7 @@ const ProductItem: React.FC<ProductItemProps> = ({ openCart }) => {
                             <div className="product-actions">
                                 <QuantitySelector productId={productItem.id} quantity={quantityToAdd} onQuantityChange={handleQuantityChange} />
                                 <button className='general-button' onClick={handleAddToCart}>Agregar al carrito</button>
-                                {/* <button className='light-button' onClick={handleBuyNow}>Realizar compra</button> */}
                             </div>
-
                         </div>
                         <div className="frequently-asked-questions">
                             <div className="accordion" id="accordionPanelsStayOpenExample">

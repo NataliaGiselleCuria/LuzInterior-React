@@ -9,10 +9,12 @@ import useModal from "../../CustomHooks/useModal";
 import ModalMesagge from "../Tools/ModalMesagge";
 import check from '../../assets/check.png'
 import './user.css'
+import { useApi } from "../../context/ApiProvider";
 
 const AccountUser = () => {
 
-  const { isLogin, userActive } = useUser();
+  const {userActive} = useApi();
+  const { isLogin} = useUser();
   const navigate = useNavigate();
   const { modalConfig, openModal, closeModal } = useModal();
   const { handleUpdateInformation, openModalAddress, closeModalAddress, isModalOpen, selectedAddress } = useUpdateUserInfo((title, content) => openModal(title, content, closeModal));

@@ -5,6 +5,8 @@ import { useUser } from "../../context/UserContext";
 import { FormRegister } from "../../Interfaces/interfaces";
 import useModal from "../../CustomHooks/useModal";
 import ModalMesagge from "../Tools/ModalMesagge";
+import showPass from '../../assets/show-pass.png'
+import hidddenPass from '../../assets/hidden-pass.png'
 
 interface Props {
     setRegisterCont: React.Dispatch<React.SetStateAction<boolean>>;
@@ -18,6 +20,8 @@ const Register: React.FC<Props> = ({ setRegisterCont }) => {
     const { modalConfig, openModal, closeModal } = useModal();
     const [success, setSuccess] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [visibilityPass, SetVisibilityPass] = useState(false);
+    const [visibilityPass2, SetVisibilityPass2] = useState(false);
 
     const handleRegister = async (data: FormRegister) => {
         if (data.password !== data.repeatPass) {
@@ -90,23 +94,31 @@ const Register: React.FC<Props> = ({ setRegisterCont }) => {
                                     {...register('tel', { required: true })}>
                                 </input>
                             </span>
-                            <span>
+                            <span className='password'>
                                 <input
                                     id="password"
-                                    type='password'
+                                    type={visibilityPass ? "text" : "password"}
                                     placeholder="Contraseña *"
                                     {...register('password', { required: true })}>
                                 </input>
-
+                                {!visibilityPass ?
+                                    <img className="visibility-pass" onClick={() => SetVisibilityPass(true)} src={hidddenPass} alt="contraseña no visible"></img>
+                                    :
+                                    <img className="visibility-pass" onClick={() => SetVisibilityPass(false)} src={showPass} alt="contraseña visible"></img>
+                                }
                             </span>
-                            <span>
+                            <span className='password'>
                                 <input
                                     id="repeat-password"
-                                    type='password'
+                                    type={visibilityPass2 ? "text" : "password"}
                                     placeholder="Repita su contraseña *"
                                     {...register('repeatPass', { required: true })}>
                                 </input>
-
+                                {!visibilityPass2 ?
+                                    <img className="visibility-pass" onClick={() => SetVisibilityPass2(true)} src={hidddenPass} alt="contraseña no visible"></img>
+                                    :
+                                    <img className="visibility-pass" onClick={() => SetVisibilityPass2(false)} src={showPass} alt="contraseña visible"></img>
+                                }
                             </span>
                         </div>
                         <button className="general-button">Registrarse</button>

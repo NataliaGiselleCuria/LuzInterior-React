@@ -1,19 +1,17 @@
-
-import { useUser } from "../../context/UserContext";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { FormAccountInformation, FormSocial } from "../../Interfaces/interfaces";
-import useModal from "../../CustomHooks/useModal";
 import { useUpdateUserInfo } from "../../CustomHooks/useUpdateUserInfo";
-import ModalMesagge from "../Tools/ModalMesagge";
 import { useApi } from "../../context/ApiProvider";
-import React from "react";
-import useVerifyToken from "../../CustomHooks/useVerefyToken";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import useModal from "../../CustomHooks/useModal";
+import ModalMesagge from "../Tools/ModalMesagge";
+import useVerifyToken from "../../CustomHooks/useVerefyToken";
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 
 const AdminAccount = () => {
-    const { dev, companyInfo, social, refreshSocial } = useApi();
-    const { userActive } = useUser();
+    const { dev, companyInfo, social, refreshSocial, userActive } = useApi();
     const { modalConfig, openModal, closeModal } = useModal();
     const { validateToken } = useVerifyToken();
     const { handleUpdateInformation } = useUpdateUserInfo((title, content) => openModal(title, content, closeModal));
@@ -163,7 +161,7 @@ const AdminAccount = () => {
                 <h4>Cuenta</h4>
             </div>
             <div className="row">
-                <div className="col-md">
+                <div className="col-lg-6 no-padding">
                     <div className="item-cont border-top">
                         <div className="title left-decoration">
                             <h5>Informacion de cuenta</h5>
@@ -202,7 +200,7 @@ const AdminAccount = () => {
                         </form>
                     </div>
                 </div>
-                <div className="col-md">
+                <div className="col-lg-6 no-padding">
                     <div className="item-cont border-top">
                         <div className="title  left-decoration">
                             <h5>Redes sociales</h5>
@@ -242,9 +240,9 @@ const AdminAccount = () => {
                                 <li key={item.id} className="li-social">
                                     <div className="item-cont">
                                         <p>{item.id}</p>
-                                        <p>{item.url}</p>
+                                        <p className="small">{item.url}</p>
                                         <span className="button-cont">
-                                            <LazyLoadImage src={`${dev}/${item.img_social}`} alt={item.id} width="50" height="50" />
+                                            <LazyLoadImage src={`${dev}/${item.img_social}`} alt={item.id} width="50" height="50" effect='blur' />
                                             <button className="no-button" onClick={() => deleteSocial(item.id)}>Eliminar</button>
                                         </span>
                                     </div>

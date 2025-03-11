@@ -8,7 +8,7 @@ import ProductItem from './components/Products/ProductItem';
 import ProductList from './components/Products/ProductList';
 import Cart from './components/Cart&Order/Cart';
 import Wholesalers from './components/UserPages/Wholesalers';
-import ErrorPage from './components/AdicionalPage/ErrorPage';
+import ErrorPage from './components/ErrorPage/ErrorPage';
 import PriceList from './components/PriceList/PriceList';
 import PasswordRegeneration from './components/UserPages/PasswordRegeneration';
 import AccountUser from './components/UserPages/AccountUser';
@@ -24,10 +24,12 @@ import SpinnerLoading from './components/Tools/SpinnerLoading';
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
 import ConfirmationOrder from './components/Cart&Order/ConfirmationOrder';
+import { useApi } from './context/ApiProvider';
 
 
 function App() {
-  const { checkToken, getUserActive } = useUser();
+  const {getUserActive} = useApi();
+  const { checkToken } = useUser();
   const [loading, setLoading] = useState(true); 
   const [cartOpen, setCartOpen] = useState(false);
   const openCart = () => setCartOpen(true);
@@ -99,6 +101,8 @@ function AppWithNavBar({ openCart, cartOpen, closeCart, setLoading}: any) {
         <Route path="/contacto" element={<Contact />}/>
         <Route path="/error" element={<ErrorPage />} />
         <Route path="/admin" element={<AdminRoute><AdminPanel /></AdminRoute>} />
+        <Route path="*" element={<ErrorPage />} />
+
       </Routes>
       {showNavBar && <Footer />} {/* Agregar el Footer solo si hay NavBar */}
     </>
